@@ -1,0 +1,16 @@
+#define RFM12_SPI SPI2
+
+#define RFM12_RCC_SPIPeriph RCC_APB1Periph_SPI2
+#define RFM12_RCC_PORTPeriph RCC_APB2Periph_GPIOB
+#define RFM12_NIRQ_RCC_PORTPeriph RCC_APB2Periph_GPIOC
+
+
+#define RFM12_PORT GPIOB
+#define RFM12_MOSI_PIN GPIO_Pin_15
+#define RFM12_MISO_PIN GPIO_Pin_14
+#define RFM12_SCK_PIN GPIO_Pin_13
+#define RFM12_SS_PIN GPIO_Pin_12
+//#define RFM12_FFS_PIN GPIO_Pin_8
+
+#define RFM12_NIRQ_PORT GPIOC
+#define RFM12_NIRQ_PIN GPIO_Pin_3
