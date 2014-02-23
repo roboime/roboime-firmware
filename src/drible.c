@@ -4,16 +4,11 @@
 #include "drible.h"
 #include "config.h"
 
-#define DRIBLE_PERIPH RCC_APB2Periph_GPIOC
-#define DRIBLE_PORT GPIOC
+#define DRIBLE_PERIPH RCC_AHB1Periph_GPIOE
+#define DRIBLE_PORT GPIOE
 
-#ifdef CHUTE_BARRO //chute ruim, troca com o drible
-	#define DRIBLE_PIN GPIO_Pin_10
-#else
-	#define DRIBLE_PIN GPIO_Pin_11
-#endif
 
-//#define DRIBLE_PIN GPIO_Pin_11
+#define DRIBLE_PIN GPIO_Pin_11
 
 
 void drible(u8 estado){
@@ -30,7 +25,6 @@ void drible_init(){
 
 	RCC_APB2PeriphClockCmd(DRIBLE_PERIPH,ENABLE);
 
-//	GPIO_InitStructure.GPIO_Mode=GPIO_Mode_Out_PP;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_Pin=DRIBLE_PIN;

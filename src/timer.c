@@ -1,8 +1,9 @@
 #include "stm32f4xx_conf.h"
+#include "stm32f4xx_rcc.h"
 #include "stm32f4xx_tim.h"
+#include "stm32f4xx_gpio.h"
 #include <stdio.h>
 #include "leds.h"
-#include "usart.h"
 #include "pid.h"
 #include "motores.h"
 
@@ -21,7 +22,7 @@ void Timer_Init(u16 freq){
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 	TIM_TimeBaseStructure.TIM_ClockDivision=0;
 	TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up;
-	TIM_TimeBaseStructure.TIM_Prescaler=(SystemCoreClock/10000);
+	TIM_TimeBaseStructure.TIM_Prescaler=(SystemCoreClock/2/10000);
 	TIM_TimeBaseStructure.TIM_Period=10000/freq;
 	TIM_TimeBaseInit(TIM6,&TIM_TimeBaseStructure);
 
@@ -34,13 +35,25 @@ void Timer_Init(u16 freq){
 
 	freq_amost=freq;
 
-	NVIC_SetPriority(TIM6_IRQn,1);
-	NVIC_EnableIRQ(TIM6_IRQn);
+	NVIC_SetPriority(TIM6_DAC_IRQn,1); //Mudado de TIM6_IRQn para TIM6_DAC_IRQn
+	NVIC_EnableIRQ(TIM6_DAC_IRQn);
+
+
+
+
+
 }
 
-void TIM6_IRQHandler(){
+
+
+
+
+void TIM6_DAC_IRQHandler(){
 	if(TIM_GetITStatus(TIM6,TIM_IT_Update)){
 		TIM_ClearITPendingBit(TIM6,TIM_IT_Update);
 		motores_amostrar();
+
+
+
 	}
 }

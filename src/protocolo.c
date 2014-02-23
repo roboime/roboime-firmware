@@ -93,17 +93,19 @@ void protocolo_analisar(char data[], u8 len){
 			for(i=1;i<PAYLOAD_SIZE;i+=7){
 				if(data[i]==ID_ROBO){
 					val=(s8)data[i+1];
-					motor_velocidade(0,val);
+					motor_velocidade(3,val); //0
 					val=(s8)data[i+2];
-					motor_velocidade(1,val);
+					motor_velocidade(0,val); //1
 					val=(s8)data[i+3];
-					motor_velocidade(2,val);
+					motor_velocidade(1,val); //2
 					val=(s8)data[i+4];
-					motor_velocidade(3,val);
+					motor_velocidade(2,val); //3
 					drible(data[i+5]);
 					val=(u8)data[i+6];
-					//chutar((u32)(val*10/17));//val*150/255
-					chutar((u32)(val*50));
+
+					//tar((u32)(val*10/17));//val*150/255
+					chutar_baixo((u32)(val*10)); //*50
+					chutar_alto((u32)(val*10));
 					return;
 				}
 			}
@@ -162,6 +164,7 @@ void protocolo_poll(){
 					status=PROTOCOLO_LIVRE;
 					rfm12_accept_data();
 					Led_Status_off();
+
 					continue;
 				}
 				pos++;
@@ -173,6 +176,7 @@ void protocolo_poll(){
 				if(pos>=(pacote_rx.len+5) || pos>=(PACOTE_DATA_SIZE+5)){
 					status=PROTOCOLO_LIVRE;
 					Led_Status_off();
+
 					if(checksum==0){
 						protocolo_analisar((char*)pacote_rx.data, pacote_rx.len);
 					}
@@ -185,3 +189,63 @@ void protocolo_poll(){
 		}
 	}
 }
+
+void rfm12_receive_callback(u8 c){
+	static u8 status=PROTOCOLO_LIVRE;
+	static u8 pos=0;
+	static u8 checksum=0;
+
+	ultima_recepcao=1;
+	if(status==PROTOCOLO_LIVRE){
+		Led_Status_on();
+		status=PROTOCOLO_RECEBENDO;
+		pos=1;
+		pacote_rx.len=c;
+		checksum=c;
+	} else {//if(status==PROTOCOLO_RECEBENDO){
+		switch(pos){
+		case 1:
+			pacote_rx.type=c;
+			checksum^=c;
+			pos++;
+			break;
+		case 2:
+			pacote_rx.source=c;
+			checksum^=c;
+			pos++;
+			break;
+		case 3:
+			pacote_rx.dest=c;
+			checksum^=c;
+			pos++;
+			break;
+		case 4:
+			checksum^=0xff;
+			pacote_rx.checksum=c;
+			if(checksum!=pacote_rx.checksum){
+				status=PROTOCOLO_LIVRE;
+				rfm12_accept_data();
+				Led_Status_off();
+				break;
+			}
+			pos++;
+			checksum=0;
+			break;
+		default:
+			pacote_rx.data[pos-5]=c;
+			checksum^=c;
+			if(pos>=(pacote_rx.len+5) || pos>=(PACOTE_DATA_SIZE+5)){
+				status=PROTOCOLO_LIVRE;
+				Led_Status_off();
+				if(pacote_rx.type==0 ||  checksum==0){
+					protocolo_analisar((char*)pacote_rx.data, pacote_rx.len);
+				}
+				rfm12_accept_data();
+				break;
+			}
+			pos++;
+			break;
+		}
+	}
+}
+

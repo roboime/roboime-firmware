@@ -1,9 +1,13 @@
-#include "stm32f4xx_conf.h"
-#include "stm32f4xx_spi.h"
-#include "stm32f4xx_gpio.h"
-#include "stm32f4xx_rcc.h"
-#include "stm32f4xx_exti.h"
 #include "rfm12.h"
+#include "stm32f4xx_gpio.h"
+
+#include "stm32f4xx_conf.h"
+#include "stm32f4xx_rcc.h"
+#include "stm32f4xx_gpio.h"
+#include "stm32f4xx_spi.h"
+#include "stm32f4xx_exti.h"
+#include "misc.h"
+
 
 #define PWRMGT_DEFAULT (RFM12_PWRMGT_EX)
 #define FREQ 433432500UL
@@ -25,43 +29,50 @@ void rfm12_init() {
 
 
 	RCC_APB1PeriphClockCmd(RFM12_RCC_SPIPeriph, ENABLE);
-	RCC_APB2PeriphClockCmd(RFM12_RCC_PORTPeriph, ENABLE);
-	RCC_APB2PeriphClockCmd(RFM12_NIRQ_RCC_PORTPeriph, ENABLE);
+	RCC_AHB1PeriphClockCmd(RFM12_RCC_PORTPeriph, ENABLE);
+	RCC_AHB1PeriphClockCmd(RFM12_NIRQ_RCC_PORTPeriph, ENABLE);
+
 
 	GPIO_InitTypeDef GPIO_InitStructure;
 
 	//MOSI
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_OType=GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd=GPIO_PuPd_NOPULL;
+
 	GPIO_InitStructure.GPIO_Pin = RFM12_MOSI_PIN;
 	GPIO_Init(RFM12_PORT, &GPIO_InitStructure);
 
 	//MISO
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+	GPIO_InitStructure.GPIO_OType=GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd=GPIO_PuPd_NOPULL;
 	GPIO_InitStructure.GPIO_Pin = RFM12_MISO_PIN;
 	GPIO_Init(RFM12_PORT, &GPIO_InitStructure);
 
 	//SCK
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_OType=GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd=GPIO_PuPd_NOPULL;
 	GPIO_InitStructure.GPIO_Pin = RFM12_SCK_PIN;
 	GPIO_Init(RFM12_PORT, &GPIO_InitStructure);
 
 	//SS
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_OType=GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd=GPIO_PuPd_NOPULL;
 	GPIO_InitStructure.GPIO_Pin = RFM12_SS_PIN;
-	GPIO_Init(RFM12_PORT, &GPIO_InitStructure);
-	GPIO_SetBits(RFM12_PORT, RFM12_SS_PIN);
+	GPIO_Init(RFM12_SS_PORT, &GPIO_InitStructure);
+	GPIO_SetBits(RFM12_SS_PORT, RFM12_SS_PIN);
+
+	GPIO_PinAFConfig(RFM12_PORT, RFM12_SCK_PIN_AF, RFM12_SPI_AF);
+	GPIO_PinAFConfig(RFM12_PORT, RFM12_MISO_PIN_AF, RFM12_SPI_AF);
+	GPIO_PinAFConfig(RFM12_PORT, RFM12_MOSI_PIN_AF, RFM12_SPI_AF);
+
 
 	//FFS
 //	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
@@ -72,9 +83,9 @@ void rfm12_init() {
 
 	//NIRQ
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+	GPIO_InitStructure.GPIO_OType=GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd=GPIO_PuPd_UP;
 	GPIO_InitStructure.GPIO_Pin = RFM12_NIRQ_PIN;
 	GPIO_Init(RFM12_NIRQ_PORT, &GPIO_InitStructure);
 
@@ -88,7 +99,7 @@ void rfm12_init() {
 	SPI_InitStructure.SPI_CRCPolynomial = 0;
 	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
 	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;
-	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;
+	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_128;
 	SPI_Init(RFM12_SPI, &SPI_InitStructure);
 	SPI_CalculateCRC(RFM12_SPI, DISABLE);
 	SPI_Cmd(RFM12_SPI, ENABLE);
@@ -115,11 +126,11 @@ void rfm12_init() {
 }
 
 void rfm12_ss_assert() {
-	GPIO_ResetBits(RFM12_PORT, RFM12_SS_PIN);
+	GPIO_ResetBits(RFM12_SS_PORT, RFM12_SS_PIN);
 }
 
 void rfm12_ss_release() {
-	GPIO_SetBits(RFM12_PORT, RFM12_SS_PIN);
+	GPIO_SetBits(RFM12_SS_PORT, RFM12_SS_PIN);
 }
 
 u16 rfm12_cmd(u16 cmd) {
@@ -135,7 +146,7 @@ u16 rfm12_cmd(u16 cmd) {
 	resp |= SPI_I2S_ReceiveData(RFM12_SPI);
 //	while (SPI_I2S_GetFlagStatus(RFM12_SPI, SPI_I2S_FLAG_BSY) == SET);//necessário para dar um delay antes do release do SS sem isso não funciona
 	u8 i;
-	for(i = 0; i < 10; i++);
+	for(i = 0; i < 25; i++);
 	rfm12_ss_release();
 	return resp;
 }
@@ -247,13 +258,6 @@ void EXTI3_IRQHandler(void) {
 	}
 }
 
-
-
-
-
-//=================================================================
-
-
 const u16 rssi_level[]={
 		RFM12_RSSI_LNA_TH_73_NEG,
 		RFM12_RSSI_LNA_TH_79_NEG,
@@ -291,3 +295,5 @@ u8 rfm12_spectrum_analyzer(u16 freq){
 	}
 	return rssi_l;
 }
+
+

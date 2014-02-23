@@ -6,11 +6,11 @@
 
 #include "config.h"
 #include "motores.h"
-#include "usart.h"
 #include "pid.h"
 #include "timer.h"
 #include "leds.h"
-#include "linha_comando.h"
+
+
 
 
 
@@ -18,14 +18,14 @@
 #define MOTOR_0_TIM TIM1
 
 #define MOTOR_0_A_H_PORT GPIOA
-#define MOTOR_0_A_L_PORT GPIOA
-#define MOTOR_0_B_H_PORT GPIOA
-#define MOTOR_0_B_L_PORT GPIOA
+#define MOTOR_0_A_L_PORT GPIOE
+#define MOTOR_0_B_H_PORT GPIOE
+#define MOTOR_0_B_L_PORT GPIOE
 
 #define MOTOR_0_A_H_PIN GPIO_Pin_8
-#define MOTOR_0_A_L_PIN GPIO_Pin_12
-#define MOTOR_0_B_H_PIN GPIO_Pin_11
-#define MOTOR_0_B_L_PIN GPIO_Pin_13
+#define MOTOR_0_A_L_PIN GPIO_Pin_0
+#define MOTOR_0_B_H_PIN GPIO_Pin_14
+#define MOTOR_0_B_L_PIN GPIO_Pin_1
 
 #define MOTOR_0_A_H_TIM TIM1
 #define MOTOR_0_B_H_TIM TIM1
@@ -33,17 +33,37 @@
 #define MOTOR_0_A_H_REG TIM1->CCR1
 #define MOTOR_0_B_H_REG TIM1->CCR4
 
+#define MOTOR_0_A_H_AF_PIN GPIO_PinSource8
+#define MOTOR_0_A_H_AF GPIO_AF_TIM1
+#define MOTOR_0_B_H_AF_PIN GPIO_PinSource14
+#define MOTOR_0_B_H_AF GPIO_AF_TIM1
+
+#define MOTOR_0_ENC_A_PIN GPIO_Pin_15
+#define MOTOR_0_ENC_B_PIN GPIO_Pin_3
+#define MOTOR_0_ENC_A_PORT GPIOA
+#define MOTOR_0_ENC_B_PORT GPIOB
+
+#define MOTOR_0_ENC_A_AF_PIN GPIO_PinSource15
+#define MOTOR_0_ENC_A_AF GPIO_AF_TIM2
+#define MOTOR_0_ENC_B_AF_PIN GPIO_PinSource3
+#define MOTOR_0_ENC_B_AF GPIO_AF_TIM2
+
+
+
+
+
+
 //Define Motor 1
 #define MOTOR_1_TIM TIM1
 
 #define MOTOR_1_A_H_PORT GPIOB
-#define MOTOR_1_A_L_PORT GPIOA
+#define MOTOR_1_A_L_PORT GPIOE
 #define MOTOR_1_B_H_PORT GPIOB
 #define MOTOR_1_B_L_PORT GPIOB
 
-#define MOTOR_1_A_H_PIN GPIO_Pin_0 //remapeado
-#define MOTOR_1_A_L_PIN GPIO_Pin_14
-#define MOTOR_1_B_H_PIN GPIO_Pin_1 //remapeado
+#define MOTOR_1_A_H_PIN GPIO_Pin_0
+#define MOTOR_1_A_L_PIN GPIO_Pin_2
+#define MOTOR_1_B_H_PIN GPIO_Pin_1
 #define MOTOR_1_B_L_PIN GPIO_Pin_2
 
 #define MOTOR_1_A_H_TIM TIM1
@@ -52,18 +72,35 @@
 #define MOTOR_1_A_H_REG TIM1->CCR2
 #define MOTOR_1_B_H_REG TIM1->CCR3
 
+#define MOTOR_1_A_H_AF_PIN GPIO_PinSource0
+#define MOTOR_1_A_H_AF GPIO_AF_TIM1
+#define MOTOR_1_B_H_AF_PIN GPIO_PinSource1
+#define MOTOR_1_B_H_AF GPIO_AF_TIM1
+
+#define MOTOR_1_ENC_A_PIN GPIO_Pin_4
+#define MOTOR_1_ENC_B_PIN GPIO_Pin_5
+#define MOTOR_1_ENC_A_PORT GPIOB
+#define MOTOR_1_ENC_B_PORT GPIOB
+
+#define MOTOR_1_ENC_A_AF_PIN GPIO_PinSource4
+#define MOTOR_1_ENC_A_AF GPIO_AF_TIM3
+#define MOTOR_1_ENC_B_AF_PIN GPIO_PinSource5
+#define MOTOR_1_ENC_B_AF GPIO_AF_TIM3
+
+
+
 //Define Motor 2
 #define MOTOR_2_TIM TIM8
 
 #define MOTOR_2_A_H_PORT GPIOC
-#define MOTOR_2_A_L_PORT GPIOB
+#define MOTOR_2_A_L_PORT GPIOE
 #define MOTOR_2_B_H_PORT GPIOC
-#define MOTOR_2_B_L_PORT GPIOB
+#define MOTOR_2_B_L_PORT GPIOE
 
 #define MOTOR_2_A_H_PIN GPIO_Pin_6
-#define MOTOR_2_A_L_PIN GPIO_Pin_4
+#define MOTOR_2_A_L_PIN GPIO_Pin_8
 #define MOTOR_2_B_H_PIN GPIO_Pin_7
-#define MOTOR_2_B_L_PIN GPIO_Pin_5
+#define MOTOR_2_B_L_PIN GPIO_Pin_9
 
 #define MOTOR_2_A_H_TIM TIM8
 #define MOTOR_2_B_H_TIM TIM8
@@ -71,24 +108,57 @@
 #define MOTOR_2_A_H_REG TIM8->CCR1
 #define MOTOR_2_B_H_REG TIM8->CCR2
 
+
+#define MOTOR_2_A_H_AF_PIN GPIO_PinSource6
+#define MOTOR_2_A_H_AF GPIO_AF_TIM8
+#define MOTOR_2_B_H_AF_PIN GPIO_PinSource7
+#define MOTOR_2_B_H_AF GPIO_AF_TIM8
+
+#define MOTOR_2_ENC_A_PIN GPIO_Pin_6
+#define MOTOR_2_ENC_B_PIN GPIO_Pin_7
+#define MOTOR_2_ENC_A_PORT GPIOB
+#define MOTOR_2_ENC_B_PORT GPIOB
+
+#define MOTOR_2_ENC_A_AF_PIN GPIO_PinSource6
+#define MOTOR_2_ENC_A_AF GPIO_AF_TIM4
+#define MOTOR_2_ENC_B_AF_PIN GPIO_PinSource7
+#define MOTOR_2_ENC_B_AF GPIO_AF_TIM4
+
+
 //Define Motor 3
 #define MOTOR_3_TIM TIM8
 
 #define MOTOR_3_A_H_PORT GPIOC
-#define MOTOR_3_A_L_PORT GPIOA
+#define MOTOR_3_A_L_PORT GPIOE
 #define MOTOR_3_B_H_PORT GPIOC
-#define MOTOR_3_B_L_PORT GPIOA
+#define MOTOR_3_B_L_PORT GPIOE
 
 #define MOTOR_3_A_H_PIN GPIO_Pin_8
-#define MOTOR_3_A_L_PIN GPIO_Pin_2
+#define MOTOR_3_A_L_PIN GPIO_Pin_3
 #define MOTOR_3_B_H_PIN GPIO_Pin_9
-#define MOTOR_3_B_L_PIN GPIO_Pin_3
+#define MOTOR_3_B_L_PIN GPIO_Pin_12
 
 #define MOTOR_3_A_H_TIM TIM8
 #define MOTOR_3_B_H_TIM TIM8
 
 #define MOTOR_3_A_H_REG TIM8->CCR3
 #define MOTOR_3_B_H_REG TIM8->CCR4
+
+#define MOTOR_3_A_H_AF_PIN GPIO_PinSource8
+#define MOTOR_3_A_H_AF GPIO_AF_TIM8
+#define MOTOR_3_B_H_AF_PIN GPIO_PinSource9
+#define MOTOR_3_B_H_AF GPIO_AF_TIM8
+
+#define MOTOR_3_ENC_A_PIN GPIO_Pin_0
+#define MOTOR_3_ENC_B_PIN GPIO_Pin_1
+#define MOTOR_3_ENC_A_PORT GPIOA
+#define MOTOR_3_ENC_B_PORT GPIOA
+
+#define MOTOR_3_ENC_A_AF_PIN GPIO_PinSource0
+#define MOTOR_3_ENC_A_AF GPIO_AF_TIM5
+#define MOTOR_3_ENC_B_AF_PIN GPIO_PinSource1
+#define MOTOR_3_ENC_B_AF GPIO_AF_TIM5
+
 
 #define MOTOR_MINIMO 0
 #define MOTOR_MAXIMO 1000
@@ -120,7 +190,7 @@ float motor_get_velocidade(u8 motor){
 	}
 
 }
-
+//-160 até 160
 u8 motor_velocidade(u8 motor, float vel){
 	switch(motor){
 		case 0:
@@ -182,10 +252,10 @@ void motores_amostrar(){
 	motor_tensao(2,(s16)cont_m2.saida);
 	motor_tensao(3,(s16)cont_m3.saida);
 
-	static int temp=0;
-	if((temp++)%50==0){
-		display_matlab(veloc0, veloc1, veloc2, veloc3);
-	}
+	//static int temp=0;
+	//if((temp++)%50==0){
+	//	display_matlab(veloc0, veloc1, veloc2, veloc3);
+	//}
 
 }
 
@@ -216,12 +286,14 @@ u8 motor_frear(u8 motor){
 			MOTOR_2_A_H_REG=MOTOR_2_B_H_REG=MOTOR_MAXIMO;
 			TIM_GenerateEvent(MOTOR_2_A_H_TIM,TIM_EventSource_Update);
 			TIM_GenerateEvent(MOTOR_2_B_H_TIM,TIM_EventSource_Update);
+			return TRUE;
 		case 3:/* Inserido Navarro */
 			GPIO_ResetBits(MOTOR_3_A_L_PORT, MOTOR_3_A_L_PIN);
 			GPIO_ResetBits(MOTOR_3_B_L_PORT, MOTOR_3_B_L_PIN);
 			MOTOR_3_A_H_REG=MOTOR_3_B_H_REG=MOTOR_MAXIMO;
 			TIM_GenerateEvent(MOTOR_3_A_H_TIM,TIM_EventSource_Update);
 			TIM_GenerateEvent(MOTOR_3_B_H_TIM,TIM_EventSource_Update);
+			return TRUE;
 		default:
 			return FALSE;
 	}
@@ -294,7 +366,7 @@ u8 motor_tensao(u8 motor, s16 valor){
 				while(!GPIO_ReadInputDataBit(MOTOR_2_B_H_PORT, MOTOR_2_B_H_PIN));
 				GPIO_SetBits(MOTOR_2_B_L_PORT, MOTOR_2_B_L_PIN);
 			} else if(valor<0){
-				MOTOR_2_B_H_REG=-valor;
+				MOTOR_2_B_H_REG=(-1)*valor;
 				MOTOR_2_A_H_REG=MOTOR_MINIMO;
 				TIM_GenerateEvent(MOTOR_2_A_H_TIM,TIM_EventSource_Update);
 				TIM_GenerateEvent(MOTOR_2_B_H_TIM,TIM_EventSource_Update);
@@ -340,9 +412,14 @@ u8 motor_tensao(u8 motor, s16 valor){
 u16 motor_get_posicao(u8 motor){
 	switch(motor){
 		case 0:
-			return MOTOR_0_POSICAO;/* Dúvida */
+			return MOTOR_0_POSICAO;
 		case 1:
-			return MOTOR_1_POSICAO;/* Dúvida */
+			return MOTOR_1_POSICAO;
+		case 2:
+			return MOTOR_2_POSICAO;
+		case 3:
+			return MOTOR_3_POSICAO;
+
 		default:
 			return 0;
 	}
@@ -377,10 +454,11 @@ void motor_inicializar(){
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 	TIM_OCInitTypeDef TIM_OCInitStructure;
 
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,ENABLE);
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC,ENABLE);
+	//RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE); pensar nisso!!!!!
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA,ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB,ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC,ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE,ENABLE);
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1,ENABLE);
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2,ENABLE);
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3,ENABLE);
@@ -388,41 +466,65 @@ void motor_inicializar(){
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5,ENABLE);
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM8,ENABLE);
 
-	/*
-#ifndef DEBUG_JTAG
-	GPIO_PinRemapConfig(GPIO_Remap_SWJ_Disable, ENABLE);
-#endif
-
-	GPIO_PinRemapConfig(GPIO_PartialRemap_TIM1,ENABLE);
-	GPIO_PinRemapConfig(GPIO_FullRemap_TIM2,ENABLE);
-(Bramigk) I think that GPIO_PinRemapConfig dont exist anymore because of the following:
-
-	Note:
-The locked registers are GPIOx_MODER, GPIOx_OTYPER, GPIOx_OSPEEDR, GPIOx_PUPDR, GPIOx_AFRL and GPIOx_AFRH.
-The configuration of the locked GPIO pins can no longer be modified until the next reset.
 
 
-*/
+//Configurando GPIO's que funcionarão lendo o ENCODER
 
-//	GPIO_InitStructure.GPIO_Mode=GPIO_Mode_IPU;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
+
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_15;
+	GPIO_InitStructure.GPIO_Pin=MOTOR_0_ENC_A_PIN;
 	GPIO_InitStructure.GPIO_Speed=GPIO_Speed_50MHz;
-	GPIO_Init(GPIOA,&GPIO_InitStructure);
+	GPIO_Init(MOTOR_0_ENC_A_PORT,&GPIO_InitStructure);
 
-//	GPIO_InitStructure.GPIO_Mode=GPIO_Mode_IPU;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_3 | GPIO_Pin_6 | GPIO_Pin_7;
-	GPIO_InitStructure.GPIO_Speed=GPIO_Speed_50MHz;
-	GPIO_Init(GPIOB,&GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin=MOTOR_0_ENC_B_PIN;
+	GPIO_Init(MOTOR_0_ENC_B_PORT,&GPIO_InitStructure);
+
+	GPIO_PinAFConfig(MOTOR_0_ENC_A_PORT, MOTOR_0_ENC_A_AF_PIN, MOTOR_0_ENC_A_AF);
+	GPIO_PinAFConfig(MOTOR_0_ENC_B_PORT, MOTOR_0_ENC_B_AF_PIN, MOTOR_0_ENC_B_AF);
+
+	GPIO_InitStructure.GPIO_Pin=MOTOR_1_ENC_A_PIN;
+	GPIO_Init(MOTOR_1_ENC_A_PORT,&GPIO_InitStructure);
+
+
+	GPIO_InitStructure.GPIO_Pin=MOTOR_1_ENC_B_PIN;
+	GPIO_Init(MOTOR_1_ENC_B_PORT,&GPIO_InitStructure);
+
+	GPIO_PinAFConfig(MOTOR_1_ENC_A_PORT, MOTOR_1_ENC_A_AF_PIN, MOTOR_1_ENC_A_AF);
+	GPIO_PinAFConfig(MOTOR_1_ENC_B_PORT, MOTOR_1_ENC_B_AF_PIN, MOTOR_1_ENC_B_AF);
+
+
+	GPIO_InitStructure.GPIO_Pin=MOTOR_2_ENC_A_PIN;
+	GPIO_Init(MOTOR_2_ENC_A_PORT,&GPIO_InitStructure);
+
+	GPIO_InitStructure.GPIO_Pin=MOTOR_2_ENC_B_PIN;
+	GPIO_Init(MOTOR_2_ENC_B_PORT,&GPIO_InitStructure);
+
+	GPIO_PinAFConfig(MOTOR_2_ENC_A_PORT, MOTOR_2_ENC_A_AF_PIN, MOTOR_2_ENC_A_AF);
+	GPIO_PinAFConfig(MOTOR_2_ENC_B_PORT, MOTOR_2_ENC_B_AF_PIN, MOTOR_2_ENC_B_AF);
+
+	GPIO_InitStructure.GPIO_Pin=MOTOR_3_ENC_A_PIN;
+	GPIO_Init(MOTOR_3_ENC_A_PORT,&GPIO_InitStructure);
+
+	GPIO_InitStructure.GPIO_Pin=MOTOR_3_ENC_B_PIN;
+	GPIO_Init(MOTOR_3_ENC_B_PORT,&GPIO_InitStructure);
+
+	GPIO_PinAFConfig(MOTOR_3_ENC_A_PORT, MOTOR_3_ENC_A_AF_PIN, MOTOR_3_ENC_A_AF);
+	GPIO_PinAFConfig(MOTOR_3_ENC_B_PORT, MOTOR_3_ENC_B_AF_PIN, MOTOR_3_ENC_B_AF);
+
+
+
+
+
+
+
 
 
 
 
 	/* Encoder Motor 0*/
 	TIM_EncoderInterfaceConfig(TIM2,TIM_EncoderMode_TI12,TIM_ICPolarity_Rising,TIM_ICPolarity_Rising);
+
 	TIM_Cmd(TIM2,ENABLE);
 
 	/* Encoder Motor 1*/
@@ -445,6 +547,7 @@ The configuration of the locked GPIO pins can no longer be modified until the ne
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_Pin=MOTOR_0_A_H_PIN;
 	GPIO_InitStructure.GPIO_Speed=GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
 	GPIO_Init(MOTOR_0_A_H_PORT,&GPIO_InitStructure);
 
 //	GPIO_InitStructure.GPIO_Mode=GPIO_Mode_AF_PP;
@@ -452,6 +555,7 @@ The configuration of the locked GPIO pins can no longer be modified until the ne
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_Pin=MOTOR_0_B_H_PIN;
 	GPIO_InitStructure.GPIO_Speed=GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
 	GPIO_Init(MOTOR_0_B_H_PORT,&GPIO_InitStructure);
 
 //	GPIO_InitStructure.GPIO_Mode=GPIO_Mode_Out_PP;
@@ -470,10 +574,17 @@ The configuration of the locked GPIO pins can no longer be modified until the ne
 	GPIO_Init(MOTOR_0_B_L_PORT,&GPIO_InitStructure);
 	GPIO_ResetBits(MOTOR_0_B_L_PORT, MOTOR_0_B_L_PIN);
 
+	GPIO_PinAFConfig(MOTOR_0_A_H_PORT, MOTOR_0_A_H_AF_PIN, MOTOR_0_A_H_AF);
+	GPIO_PinAFConfig(MOTOR_0_B_H_PORT, MOTOR_0_B_H_AF_PIN, MOTOR_0_B_H_AF);
+
+
+
+
+
 	TIM_TimeBaseStructure.TIM_ClockDivision=TIM_CKD_DIV1;
 	TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up;
-	TIM_TimeBaseStructure.TIM_Prescaler=(SystemCoreClock/72000000)-1;
-	TIM_TimeBaseStructure.TIM_Period=1000;
+	TIM_TimeBaseStructure.TIM_Prescaler=(SystemCoreClock/168000000)-1;
+	TIM_TimeBaseStructure.TIM_Period=168000000/168000;
 
 	TIM_TimeBaseInit(MOTOR_0_A_H_TIM,&TIM_TimeBaseStructure);
 	TIM_TimeBaseInit(MOTOR_0_B_H_TIM,&TIM_TimeBaseStructure);
@@ -502,6 +613,8 @@ The configuration of the locked GPIO pins can no longer be modified until the ne
 	TIM_CtrlPWMOutputs(MOTOR_0_B_H_TIM,ENABLE);
 
 
+
+
 	/* Configuração Motor 1 */
 
 //	GPIO_InitStructure.GPIO_Mode=GPIO_Mode_AF_PP;
@@ -509,6 +622,7 @@ The configuration of the locked GPIO pins can no longer be modified until the ne
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_Pin=MOTOR_1_A_H_PIN;
 	GPIO_InitStructure.GPIO_Speed=GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
 	GPIO_Init(MOTOR_1_A_H_PORT,&GPIO_InitStructure);
 
 //	GPIO_InitStructure.GPIO_Mode=GPIO_Mode_AF_PP;
@@ -516,6 +630,7 @@ The configuration of the locked GPIO pins can no longer be modified until the ne
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_Pin=MOTOR_1_B_H_PIN;
 	GPIO_InitStructure.GPIO_Speed=GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
 	GPIO_Init(MOTOR_1_B_H_PORT,&GPIO_InitStructure);
 
 //	GPIO_InitStructure.GPIO_Mode=GPIO_Mode_Out_PP;
@@ -534,9 +649,14 @@ The configuration of the locked GPIO pins can no longer be modified until the ne
 	GPIO_Init(MOTOR_1_B_L_PORT,&GPIO_InitStructure);
 	GPIO_ResetBits(MOTOR_1_B_L_PORT, MOTOR_1_B_L_PIN);
 
+
+	GPIO_PinAFConfig(MOTOR_1_A_H_PORT, MOTOR_1_A_H_AF_PIN, MOTOR_1_A_H_AF);
+	GPIO_PinAFConfig(MOTOR_1_B_H_PORT, MOTOR_1_B_H_AF_PIN, MOTOR_1_B_H_AF);
+
+
 	TIM_TimeBaseStructure.TIM_ClockDivision=TIM_CKD_DIV1;
 	TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up;
-	TIM_TimeBaseStructure.TIM_Prescaler=(SystemCoreClock/24000000)-1;
+	TIM_TimeBaseStructure.TIM_Prescaler=(SystemCoreClock/168000000)-1;
 	TIM_TimeBaseStructure.TIM_Period=1000;
 
 	TIM_TimeBaseInit(MOTOR_1_A_H_TIM, &TIM_TimeBaseStructure);
@@ -598,10 +718,13 @@ The configuration of the locked GPIO pins can no longer be modified until the ne
 	GPIO_Init(MOTOR_2_B_L_PORT,&GPIO_InitStructure);
 	GPIO_ResetBits(MOTOR_2_B_L_PORT, MOTOR_2_B_L_PIN);
 
+	GPIO_PinAFConfig(MOTOR_2_A_H_PORT, MOTOR_2_A_H_AF_PIN, MOTOR_2_A_H_AF);
+	GPIO_PinAFConfig(MOTOR_2_B_H_PORT, MOTOR_2_B_H_AF_PIN, MOTOR_2_B_H_AF);
+
 	TIM_TimeBaseStructure.TIM_ClockDivision=TIM_CKD_DIV1;
 	TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up;
-	TIM_TimeBaseStructure.TIM_Prescaler=(SystemCoreClock/72000000)-1;
-	TIM_TimeBaseStructure.TIM_Period=1000;
+	TIM_TimeBaseStructure.TIM_Prescaler=(SystemCoreClock/168000000)-1;
+	TIM_TimeBaseStructure.TIM_Period=168000000/168000;
 
 	TIM_TimeBaseInit(MOTOR_2_A_H_TIM,&TIM_TimeBaseStructure);
 	TIM_TimeBaseInit(MOTOR_2_B_H_TIM,&TIM_TimeBaseStructure);
@@ -660,9 +783,12 @@ The configuration of the locked GPIO pins can no longer be modified until the ne
 	GPIO_Init(MOTOR_3_B_L_PORT,&GPIO_InitStructure);
 	GPIO_ResetBits(MOTOR_3_B_L_PORT, MOTOR_3_B_L_PIN);
 
+	GPIO_PinAFConfig(MOTOR_3_A_H_PORT, MOTOR_3_A_H_AF_PIN, MOTOR_3_A_H_AF);
+	GPIO_PinAFConfig(MOTOR_3_B_H_PORT, MOTOR_3_B_H_AF_PIN, MOTOR_3_B_H_AF);
+
 	TIM_TimeBaseStructure.TIM_ClockDivision=TIM_CKD_DIV1;
 	TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up;
-	TIM_TimeBaseStructure.TIM_Prescaler=(SystemCoreClock/72000000)-1;
+	TIM_TimeBaseStructure.TIM_Prescaler=(SystemCoreClock/168000000)-1;
 	TIM_TimeBaseStructure.TIM_Period=1000;
 
 	TIM_TimeBaseInit(MOTOR_3_A_H_TIM,&TIM_TimeBaseStructure);

@@ -1,10 +1,11 @@
 #include "stm32f4xx_conf.h"
 #include "stm32f4xx_gpio.h"
+#include "stm32f4xx_rcc.h"
 #include "sensor_bola.h"
 #include "config.h"
 
-#define SENSOR_BOLA_0_PERIPH RCC_APB2Periph_GPIOC
-#define SENSOR_BOLA_1_PERIPH RCC_APB2Periph_GPIOC
+#define SENSOR_BOLA_0_PERIPH RCC_AHB1Periph_GPIOC //
+#define SENSOR_BOLA_1_PERIPH RCC_AHB1Periph_GPIOC //
 #define SENSOR_BOLA_0_PORT GPIOC
 #define SENSOR_BOLA_1_PORT GPIOC
 #define SENSOR_BOLA_0_PIN GPIO_Pin_2
@@ -13,8 +14,8 @@
 void sensor_bola_init(){
 	GPIO_InitTypeDef GPIO_InitStructure;
 
-	RCC_APB2PeriphClockCmd(SENSOR_BOLA_0_PERIPH,ENABLE);
-	RCC_APB2PeriphClockCmd(SENSOR_BOLA_1_PERIPH,ENABLE);
+	RCC_AHB1PeriphClockCmd(SENSOR_BOLA_0_PERIPH,ENABLE); //mudado de RCC_APB2PeriphClockCmd para RCC_AHB1PeriphClockCmd
+	RCC_AHB1PeriphClockCmd(SENSOR_BOLA_1_PERIPH,ENABLE); //mudado de RCC_APB2PeriphClockCmd para RCC_AHB1PeriphClockCmd
 
 	//GPIO_InitStructure.GPIO_Mode=GPIO_Mode_IPU;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;

@@ -515,6 +515,7 @@ u8 rfm12_data_available();
 void rfm12_receiver_mode();
 u8 rfm12_receive();
 void rfm12_accept_data();
+u8 rfm12_spectrum_analyzer(u16 freq);
 
 
 

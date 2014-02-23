@@ -7,7 +7,8 @@
 #endif
 
 void chute_init();
-u32 chutar(u32 tempo);
+u32 chutar_alto(u32 tempo);
+u32 chutar_baixo(u32 tempo);
 
 #endif
 
