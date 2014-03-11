@@ -19,7 +19,6 @@
 
 u32 chutar_baixo(u32 tempo)
 {
-
 	if(sensor_bola(0)==0 || sensor_bola(1)==0)
 	{
 		u32 i=0;
@@ -42,7 +41,7 @@ u32 chutar_baixo(u32 tempo)
 
 u32 chutar_alto(u32 tempo)
 {
-	if(/*sensor_bola(0)==0 || sensor_bola(1)==0*/1)
+	if(sensor_bola(0)==0 || sensor_bola(1)==0)
 	{
 		u32 i=0;
 		u32 j=0;

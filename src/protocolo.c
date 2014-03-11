@@ -93,19 +93,26 @@ void protocolo_analisar(char data[], u8 len){
 			for(i=1;i<PAYLOAD_SIZE;i+=7){
 				if(data[i]==ID_ROBO){
 					val=(s8)data[i+1];
-					motor_velocidade(3,val); //0
+					motor_velocidade(0,val);
 					val=(s8)data[i+2];
-					motor_velocidade(0,val); //1
+					motor_velocidade(1,val);
 					val=(s8)data[i+3];
-					motor_velocidade(1,val); //2
+					motor_velocidade(2,val);
 					val=(s8)data[i+4];
-					motor_velocidade(2,val); //3
+					motor_velocidade(3,val);
 					drible(data[i+5]);
-					val=(u8)data[i+6];
+					val=(s8)data[i+6];
 
-					//tar((u32)(val*10/17));//val*150/255
-					chutar_baixo((u32)(val*10)); //*50
-					chutar_alto((u32)(val*10));
+					//chutar((u32)(val*10/17));//val*150/255
+					if(val>0)
+					{
+						chutar_baixo((u32)(val*10));
+					}
+					else if(val<0)
+					{
+						val=-val;
+						chutar_alto((u32)(val*10));
+					}
 					return;
 				}
 			}
@@ -115,7 +122,7 @@ void protocolo_analisar(char data[], u8 len){
 }
 
 unsigned char protocolo_get_robo_id(){
-	return ID_ROBO;
+	return get_robot_id();
 }
 
 unsigned int protocolo_ultima_recepcao(){

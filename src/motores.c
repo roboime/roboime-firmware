@@ -192,6 +192,7 @@ float motor_get_velocidade(u8 motor){
 }
 //-160 até 160
 u8 motor_velocidade(u8 motor, float vel){
+	vel=vel*160/128;
 	switch(motor){
 		case 0:
 			cont_m0.entrada=vel;
@@ -563,6 +564,7 @@ void motor_inicializar(){
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_Pin=MOTOR_0_A_L_PIN;
 	GPIO_InitStructure.GPIO_Speed=GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
 	GPIO_Init(MOTOR_0_A_L_PORT,&GPIO_InitStructure);
 	GPIO_ResetBits(MOTOR_0_A_L_PORT, MOTOR_0_A_L_PIN);
 
@@ -571,6 +573,7 @@ void motor_inicializar(){
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_Pin=MOTOR_0_B_L_PIN;
 	GPIO_InitStructure.GPIO_Speed=GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
 	GPIO_Init(MOTOR_0_B_L_PORT,&GPIO_InitStructure);
 	GPIO_ResetBits(MOTOR_0_B_L_PORT, MOTOR_0_B_L_PIN);
 

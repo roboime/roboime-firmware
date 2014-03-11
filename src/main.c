@@ -1,8 +1,7 @@
 #include <stm32f4xx_gpio.h>
 #include <stm32f4xx_rcc.h>
 
-//#include "rtc.h"
-//#include "usart.h"
+
 #include "motores.h"
 #include "adc.h"
 #include "timer.h"
@@ -12,82 +11,54 @@
 #include "sensor_bola.h"
 #include "rfm12.h"
 #include "protocolo.h"
+#include "dip_switch.h"
+
+
+
 
 s32 time_ms=0;
-
 u8 led_bat_en = 0;
+
 void SysTick_Handler(){
-	s32 tempo = time_ms % 100;
+	s32 tempo = time_ms % 200;
 	if(led_bat_en == 1 && tempo == 0){
-		Led_Pwr_Toggle();
+		//Led_Pwr_Toggle();
 	}
 	time_ms++;
 }
 
-void PORT_Init(){
-	GPIO_InitTypeDef GPIO_InitStructure;
-	RCC_AHB1PeriphClockCmd(	RCC_AHB1Periph_GPIOA | RCC_AHB1Periph_GPIOB |
-			RCC_AHB1Periph_GPIOC | RCC_AHB1Periph_GPIOD |
-			RCC_AHB1Periph_GPIOE, ENABLE);
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;
-//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOB, &GPIO_InitStructure);
-
-}
 
 void wait_ms(u32 ms){
 	u32 tempo_ini=time_ms;
 	while((tempo_ini+ms)>time_ms);
 }
 
-void teste(){
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB,ENABLE);
-	GPIO_InitTypeDef GPIO_InitStructure;
 
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC,ENABLE);
-
-//	GPIO_InitStructure.GPIO_Mode=GPIO_Mode_Out_PP;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOC,&GPIO_InitStructure);
-
-	while(1){
-		GPIOC->ODR=GPIO_Pin_1 | GPIO_Pin_0;
-	}
-
-}
 
 
 int main(void)
-
 {
-	int tempo_ultima_recepcao=-5000;
 	SystemInit();
-	SysTick_Config(SystemCoreClock / 1000);
+	int tempo_ultima_recepcao=-5000;
+
+	SysTick_Config(SystemCoreClock/1000);
 	Leds_init();
 
 	Led_Pwr_on();
 
 
-	motor_inicializar();
-	adc_init();
+    motor_inicializar();
+    adc_init();
 	chute_init();
 	drible_init();
 	sensor_bola_init();
-
-
-
+	dip_switch_init();
 	Timer_Init(1000);
-
 	wait_ms(500);
 	rfm12_init();
 	protocolo_init();
-
+	botao_init();
+	EXTILine0_Config();
 	Led_Pwr_off();
 	wait_ms(500);
 
@@ -95,22 +66,37 @@ int main(void)
 	unsigned char temp;
 	for(temp=0;temp<robo_id;temp++){
 		Led_Pwr_on();
+		Led_Status_on();
 		wait_ms(200);
 		Led_Pwr_off();
+		Led_Status_off();
 		wait_ms(200);
 	}
 
-
-
+ /*    drible(1);
+	motor_velocidade(0,80);
+	motor_velocidade(1,80);
+	motor_velocidade(2,80);
+	motor_velocidade(3,80);
+	while(1){
+		//chutar_alto(255);
+		//wait_ms(3000);
+		//chutar_baixo(255);
+		//wait_ms(255);
+	}*/
 	while(1){
 		//    	wait_ms(1000);
 		//    	protocolo_transmitir(0,6,0xfe,0,"LRBoot");
 
 		protocolo_poll();
 
-		if(protocolo_ultima_recepcao()){
+
+		if(protocolo_ultima_recepcao())
+		{
 			tempo_ultima_recepcao=time_ms;
-		} else if((time_ms-tempo_ultima_recepcao)>500){
+		}
+		else if((time_ms-tempo_ultima_recepcao)>500)
+		{
 			motor_parar(0);
 			motor_parar(1);
 			motor_parar(2);
@@ -118,18 +104,46 @@ int main(void)
 			drible(0);
 		}
 
-		if(adc_getConversion(4) < 2420){
+
+
+
+		if(sensor_bola(0)==0 || sensor_bola(1)==0){
+					Led_Pwr_on();
+					}
+					else
+					{
+						Led_Pwr_off();
+					}
+
+
+		int a1,a2,a3,a4,a5,a6,a7;
+		a1=adc_getConversion(0);
+		a2=adc_getConversion(1);
+		a3=adc_getConversion(2);
+		a4=adc_getConversion(3);
+		a5=adc_getConversion(4);
+		a6=adc_getConversion(5);
+		a7=adc_getConversion(6);
+
+
+
+		if(adc_getConversion(4) < 2420)
+		{
 			led_bat_en = 1;
 		}
-		else{
+		else
+		{
 			led_bat_en = 0;
-			if(sensor_bola(0)==0 || sensor_bola(1)==0){
-				Led_Pwr_on();
-			} else {
+			if(sensor_bola(0)==1 && sensor_bola(1)==1){
+			Led_Pwr_on();
+			}
+			else
+			{
 				Led_Pwr_off();
 			}
-		}
-	}
 
-	//return 0;
+		}
+
+	}
+	return 0;
 }

@@ -8,7 +8,9 @@
 #include "config.h"
 
 #define NR_CANAIS 7
-volatile uint16_t ADC_Conversao[NR_CANAIS];
+#define ADC1_DR_Address ((uint32_t)0x4001244C)
+
+__IO uint32_t ADC_Conversao[NR_CANAIS];
 
 
 /*
@@ -27,7 +29,7 @@ void adc_init(){
 	ADC_InitTypeDef ADC_InitStructure;
 	DMA_InitTypeDef DMA_InitStructure;
 
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1 ,ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1,ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA | RCC_AHB1Periph_GPIOC | RCC_AHB1Periph_DMA1, ENABLE);
 
 
@@ -36,26 +38,32 @@ void adc_init(){
 	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_4 | GPIO_Pin_5;
 	GPIO_Init(GPIOA,&GPIO_InitStructure);
 
+	GPIO_InitStructure.GPIO_Mode=GPIO_Mode_AN;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_4 | GPIO_Pin_5;
 
 	GPIO_Init(GPIOC,&GPIO_InitStructure);
 
-	DMA_DeInit(DMA1_Stream1);
+	//DMA_DeInit(DMA2_Stream0);
 
-	//Checking if the DMA is disable to use the function DMA_Init()
-	if(DMA_GetCmdStatus(DMA1_Stream1) == ENABLE){
-		DMA_Cmd(DMA1_Stream1, DISABLE);
-		while(DMA_GetCmdStatus(DMA1_Stream1) == ENABLE);
-	}
+	////Checking if the DMA is disable to use the function DMA_Init()
+	//if(DMA_GetCmdStatus(DMA2_Stream0) == ENABLE){
+//		DMA_Cmd(DMA2_Stream0, DISABLE);
+//		while(DMA_GetCmdStatus(DMA2_Stream0) == ENABLE);
+//	}
+
+
+
+
 
 	DMA_InitStructure.DMA_Channel = DMA_Channel_1 ;
 	DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&(ADC1->DR);
-	DMA_InitStructure.DMA_Memory0BaseAddr = (uint32_t)ADC_Conversao;
+	DMA_InitStructure.DMA_Memory0BaseAddr = (uint32_t)&ADC_Conversao;
 	DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralToMemory; //DMA_DIR_PeripheralSRC;
 	DMA_InitStructure.DMA_BufferSize = NR_CANAIS;
 	DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
 	DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
-	DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
+	DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord ;
 	DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
 	DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;
 	DMA_InitStructure.DMA_Priority = DMA_Priority_High;
@@ -63,9 +71,10 @@ void adc_init(){
 	DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Disable;          //!< Specifies if the FIFO mode or Direct mode will be used for the specified Stream.
 	DMA_InitStructure.DMA_FIFOThreshold = DMA_FIFOThreshold_HalfFull;      //!< Specifies the FIFO threshold level. Its set to full mode for no special reason. So in the future we need to analyze more carefully
 //quoting page 228: FIFO error will be generated when the stream is enabled, then the stream will be AUTOMATICALLY DISABLED."
-	DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_INC8;        //!< Specifies the Burst transfer configuration for the memory transfers.
+	DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;        //!< Specifies the Burst transfer configuration for the memory transfers.
 //  DMA_InitStructure.DMA_PeripheralBurst: The burst mode is possible only if the address Increment mode is enabled. */
-	DMA_Init(DMA1_Stream1, &DMA_InitStructure);
+	DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;
+	DMA_Init(DMA2_Stream0, &DMA_InitStructure);
 
 	/* Enable DMA1 channel1 */
 	DMA_Cmd(DMA1_Stream1, ENABLE);
@@ -75,7 +84,7 @@ void adc_init(){
 /* ADC Common Init **********************************************************/
 	  ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;
 	  ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div2;
-	  ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;//ADC_Direct_memory_access_mode_for_multi_mode
+	  ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;//ADC_DMAAccessMode_2;//ADC_Direct_memory_access_mode_for_multi_mode
 	  ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles;
 	  ADC_CommonInit(&ADC_CommonInitStructure);
 
@@ -85,7 +94,7 @@ void adc_init(){
 	ADC_InitStructure.ADC_ScanConvMode = ENABLE;
 	ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;
 	ADC_InitStructure.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_None;//!< Select the external trigger edge and enable the trigger of a regular group. */
-	ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConvEdge_None;//ADC_ExternalTrigConv_None;
+	//ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConvEdge_None;//ADC_ExternalTrigConv_None;
 	ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
 	//ADC_InitStructure.ADC_NbrOfChannel = NR_CANAIS;
 	ADC_InitStructure.ADC_NbrOfConversion = NR_CANAIS;  /*!< Specifies the number of ADC conversions
@@ -94,7 +103,7 @@ void adc_init(){
 	                                               This parameter must range from 1 to 16. */
 	ADC_Init(ADC1, &ADC_InitStructure);
 
-/* ADC1 regular channels configuration */
+/* ADC2 regular channels configuration */
 	//changed from ADC_SampleTime_55Cycles5 to ADC_SampleTime_56Cycles
 	ADC_RegularChannelConfig(ADC1, ADC_Channel_14, 1, ADC_SampleTime_56Cycles);
 	ADC_RegularChannelConfig(ADC1, ADC_Channel_5, 2, ADC_SampleTime_56Cycles);
@@ -130,5 +139,7 @@ void adc_init(){
 }
 
 inline u16 adc_getConversion(u8 index){
-	return ADC_Conversao[index];
+	u16 c;
+	c=ADC_Conversao[index];
+	return c;
 }

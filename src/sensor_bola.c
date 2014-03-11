@@ -21,10 +21,10 @@ void sensor_bola_init(){
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
 	GPIO_InitStructure.GPIO_Speed=GPIO_Speed_50MHz;
-#ifndef CHUTE_BARRO
+
 	GPIO_InitStructure.GPIO_Pin=SENSOR_BOLA_0_PIN;
 	GPIO_Init(SENSOR_BOLA_0_PORT, &GPIO_InitStructure);
-#endif
+
 	GPIO_InitStructure.GPIO_Pin=SENSOR_BOLA_1_PIN;
 	GPIO_Init(SENSOR_BOLA_1_PORT, &GPIO_InitStructure);
 
