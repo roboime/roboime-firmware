@@ -14,13 +14,13 @@ __IO uint32_t ADC_Conversao[NR_CANAIS];
 
 
 /*
- * Canal 4  - Corrente M3
- * Canal 5  - Corrente M1
- * Canal 10 - V+_DIV
- * Canal 11 - VCHUTE_DIV
- * Canal 12 - SENSOR_BOLA
- * Canal 14 - Corrente M0
- * Canal 15 - Corrente M2
+ * 0 Canal 4  - Corrente M3
+ * 1 Canal 5  - Corrente M1
+ * 2 Canal 10 - V+_DIV
+ * 3 Canal 11 - VCHUTE_DIV
+ * 4 Canal 12 - SENSOR_BOLA
+ * 5 Canal 14 - Corrente M0
+ * 6 Canal 15 - Corrente M2
  */
 
 void adc_init(){
@@ -30,7 +30,7 @@ void adc_init(){
 	DMA_InitTypeDef DMA_InitStructure;
 
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1,ENABLE);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA | RCC_AHB1Periph_GPIOC | RCC_AHB1Periph_DMA1, ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA | RCC_AHB1Periph_GPIOC | RCC_AHB1Periph_DMA2, ENABLE);
 
 
 	GPIO_InitStructure.GPIO_Mode=GPIO_Mode_AN;
@@ -44,7 +44,7 @@ void adc_init(){
 
 	GPIO_Init(GPIOC,&GPIO_InitStructure);
 
-	//DMA_DeInit(DMA2_Stream0);
+	DMA_DeInit(DMA2_Stream0);
 
 	////Checking if the DMA is disable to use the function DMA_Init()
 	//if(DMA_GetCmdStatus(DMA2_Stream0) == ENABLE){
@@ -56,7 +56,7 @@ void adc_init(){
 
 
 
-	DMA_InitStructure.DMA_Channel = DMA_Channel_1 ;
+	DMA_InitStructure.DMA_Channel = DMA_Channel_0 ;
 	DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&(ADC1->DR);
 	DMA_InitStructure.DMA_Memory0BaseAddr = (uint32_t)&ADC_Conversao;
 	DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralToMemory; //DMA_DIR_PeripheralSRC;
@@ -77,9 +77,9 @@ void adc_init(){
 	DMA_Init(DMA2_Stream0, &DMA_InitStructure);
 
 	/* Enable DMA1 channel1 */
-	DMA_Cmd(DMA1_Stream1, ENABLE);
+	DMA_Cmd(DMA2_Stream0, ENABLE);
 	//Waiting until the DMA Stream is enable
-	while(DMA_GetCmdStatus(DMA1_Stream1) == DISABLE);
+	while(DMA_GetCmdStatus(DMA2_Stream0) == DISABLE);
 
 /* ADC Common Init **********************************************************/
 	  ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;

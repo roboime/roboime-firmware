@@ -12,14 +12,14 @@ EXTI_InitTypeDef   EXTI_InitStructure;
 void botao_init(){
 	GPIO_InitTypeDef GPIO_InitStructure;
 
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA,ENABLE);
+	//RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA,ENABLE);
 
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_0;
 	GPIO_InitStructure.GPIO_Speed=GPIO_Speed_2MHz;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
-	GPIO_Init(GPIOA,&GPIO_InitStructure);
+	//GPIO_Init(GPIOA,&GPIO_InitStructure);
 
 
 
@@ -40,16 +40,16 @@ void EXTILine0_Config(void)
   EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
   EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
   EXTI_InitStructure.EXTI_LineCmd = ENABLE;
-  EXTI_Init(&EXTI_InitStructure);
+  //EXTI_Init(&EXTI_InitStructure);
 
   /* Enable and set EXTI Line0 Interrupt to the lowest priority */
   NVIC_InitStructure.NVIC_IRQChannel = EXTI0_IRQn;
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x01;
   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x01;
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-  NVIC_Init(&NVIC_InitStructure);
+  //NVIC_Init(&NVIC_InitStructure);
 
-  SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOA, EXTI_PinSource0);
+  //SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOA, EXTI_PinSource0);
 
 
 }
@@ -143,11 +143,12 @@ void EXTI0_IRQHandler()
 			//TODO
 			break;
 		case 2:
-			drible(1);
+			//while(!botao_apertado())
+			while(botao_apertado())	drible(1);
 			break;
 		case 3:
-			WAIT(10);
-			//TODO
+			while(botao_apertado())	drible(1);
+						break;
 			break;
 		}
 		goto INICIO;
