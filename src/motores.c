@@ -3,14 +3,14 @@
 #include "stm32f4xx_gpio.h"
 #include "stm32f4xx_tim.h"
 #include <stdio.h>
+#include <math.h>
+#include "arm_math.h"
 
 #include "config.h"
 #include "motores.h"
 #include "pid.h"
 #include "timer.h"
 #include "leds.h"
-
-
 
 
 
@@ -163,6 +163,13 @@
 #define MOTOR_MINIMO 0
 #define MOTOR_MAXIMO 1000
 
+#define VEL_LINEAR_MAXIMA 1.0f
+#define VEL_ANGULAR_MAXIMA 8.0f
+#define TETA0  60*2*PI/360
+#define TETA1  135*2*PI/360
+#define TETA2 -135*2*PI/360
+#define TETA3 -60*2*PI/360
+
 //TODO Remover
 #define MOTOR_0_POSICAO TIM_GetCounter(TIM2)
 #define MOTOR_1_POSICAO TIM_GetCounter(TIM3)
@@ -174,6 +181,19 @@
 #define FALSE 0
 
 CONTROLADOR_S cont_m1, cont_m0, cont_m2, cont_m3;
+
+CONTROLADOR_S pid_x, pid_y, pid_teta;
+
+POSICAO_S P;
+
+int ponto_alcancado()
+{
+	float raio=sqrt((P.Xreal-P.Xesperado)*(P.Xreal-P.Xesperado) + (P.Yreal-P.Yesperado)*(P.Yreal-P.Yesperado));
+	if(raio<0.01 && abs(P.TETAesperado-P.TETAreal)<0.01) return 1;
+	else return 0;
+
+}
+
 
 float motor_get_velocidade(u8 motor){
 	switch(motor){
@@ -231,6 +251,40 @@ void motores_amostrar(){
 	velocidade[3]=-(posicao_new-posicao[3]);
 	posicao[3]=posicao_new;
 
+	/* Tentando melhorar as coisas...
+	 * Uma volta do motor possui 400 passos no encoder...
+	 * A relação entre a engrenagem do motor e a engrenagem da roda é 1:8
+	 * logo:
+	 * Velocidade Angular=delta omega / delta tempo = (2*PI/400*8)/(1/freq) = 2*PI*freq/3200
+	 *
+	 * Matriz Omni
+	 *
+	 * |    -sin(60)/r    cos(60)/r      d/r   |
+	 * |   -sin(135)/r    cos(135)/r      d/r   |
+	 * |   -sin(-135)/r  cos(-135)/r     d/r   |
+	 * |   -sin(-60)/r    cos(-60)/r     d/r   |
+	 *
+	 * Onde 'd' é a distância do centro do robô para a roda e 'r' é o raio da roda
+	 *
+	 * d=0.085 metros
+	 * r=0.0289 metros
+	 *
+	 * Entrada: Velocidade x,y lineares e teta
+	 * Saida: Velocidade Angular de cada roda
+	 *
+	 * Matriz Omni Inversa (levando em conta v0,v1 e v2)
+	 *
+	 * |Vx|   | 0         -0.020435   0.020435 | |v0|
+	 * |Vy| = | 0.023941  -0.026632   0.002691 |*|v1|
+	 * |Vo|   | 0.199167  -0.051550   0.192383 | |v2|
+	 *
+	 *
+	 */
+
+
+	//Comentando para tentar tornar os parâmetros mais exatos
+
+/*
 	float veloc0=(float)velocidade[0]*Get_Freq()/3920.0;
 	cont_m0.realimentacao=(s16)(veloc0*10);
 
@@ -241,7 +295,89 @@ void motores_amostrar(){
 	cont_m2.realimentacao=(s16)(veloc2*10);
 
 	float veloc3=(float)velocidade[3]*Get_Freq()/3920.0;
-	cont_m3.realimentacao=(s16)(veloc3*10);
+	cont_m3.realimentacao=(s16)(veloc3*10);*/
+
+
+	//calculo das velocidades lidas de cada roda em rad/s
+
+	float veloc0=(float)velocidade[0]*Get_Freq()*2*PI/3200.0;
+	cont_m0.realimentacao=(s16)(veloc0);
+
+	float veloc1=(float)velocidade[1]*Get_Freq()*2*PI/3200.0;
+	cont_m1.realimentacao=(s16)(veloc1);
+
+	float veloc2=(float)velocidade[2]*Get_Freq()*2*PI/3200.0;
+	cont_m2.realimentacao=(s16)(veloc2);
+
+	float veloc3=(float)velocidade[3]*Get_Freq()*2*PI/3200.0;
+	cont_m3.realimentacao=(s16)(veloc3);
+
+
+	//calculo de vx, vy e vteta em função das velocidades lidas
+
+
+
+
+	P.Vx=      -(-0.0100*cont_m0.realimentacao     -    0.0082*cont_m1.realimentacao    +         0.0082*cont_m2.realimentacao   +         0.0100*cont_m3.realimentacao);
+	P.Vy=      -(0.0120*cont_m0.realimentacao     -    0.0120*cont_m1.realimentacao    -         0.0120*cont_m2.realimentacao   +         0.0120*cont_m3.realimentacao);
+	P.Vteta =  -(0.0996*cont_m0.realimentacao     +    0.0704*cont_m1.realimentacao    +         0.0704*cont_m2.realimentacao   +         0.0996*cont_m3.realimentacao);
+
+
+
+
+	//Atualiza posição angular integrando velocidade angular
+
+	P.TETAreal = P.TETAreal +    P.Vteta*(1.0/(float)Get_Freq());
+
+	//while(P.TETAreal>3.14) P.TETAreal-=2*PI;
+	//while(P.TETAreal<-3.14) P.TETAreal+=2*PI;
+
+	//encontra sin e cos de teta uma vez para não ter a necessidade de recalcular em cada calculo
+
+	P.TETAreal_rad  = (float32_t)P.TETAreal;
+	P.cos_teta_real = arm_cos_f32(P.TETAreal_rad);
+	P.sin_teta_real = arm_sin_f32(P.TETAreal_rad);
+
+
+	//Rotaciona a velocidade do robo para o refencial do campo
+
+	P.Vx_Ref_Campo =  P.Vx*P.cos_teta_real  -   P.Vy*P.sin_teta_real;
+	P.Vy_Ref_Campo =  P.Vx*P.sin_teta_real  +   P.Vy*P.cos_teta_real;
+
+	//integra velocidade para atualizar posição do robo
+
+	P.Xreal    = P.Xreal    +    P.Vx_Ref_Campo*(1/(float)Get_Freq());
+	P.Yreal    = P.Yreal    +    P.Vy_Ref_Campo*(1/(float)Get_Freq());
+
+
+	//entradas dos PIDs
+
+	pid_x.entrada = P.Xesperado;
+	pid_x.realimentacao = P.Xreal;
+
+	pid_y.entrada = P.Yesperado;
+	pid_y.realimentacao = P.Yreal;
+
+	pid_teta.entrada = P.TETAesperado;
+	pid_teta.realimentacao = P.TETAreal;
+
+	//calculo de saídas dos PIDs de posição
+
+	pidService(&pid_x);
+	pidService(&pid_y);
+	pidServiceAngulo(&pid_teta);
+
+
+
+	P.Vx_Ref_Robo =     pid_x.saida * P.cos_teta_real + pid_y.saida * P.sin_teta_real;
+	P.Vy_Ref_Robo =   - pid_x.saida * P.sin_teta_real + pid_y.saida * P.cos_teta_real;
+
+	//saida dos PIDs de posicao como entrada dos PIDs de velocidade
+
+	cont_m0.entrada     =     - (-29.96628 * P.Vx_Ref_Robo   +   17.30104 * P.Vy_Ref_Robo  +  2.94118 * pid_teta.saida);
+	cont_m1.entrada     =     - (-24.46736 * P.Vx_Ref_Robo   -   24.46736 * P.Vy_Ref_Robo  +  2.94118 * pid_teta.saida);
+	cont_m2.entrada     =     - ( 24.46736 * P.Vx_Ref_Robo   -   24.46736 * P.Vy_Ref_Robo  +  2.94118 * pid_teta.saida);
+	cont_m3.entrada     =     - ( 29.96628 * P.Vx_Ref_Robo   +   17.30104 * P.Vy_Ref_Robo  +  2.94118 * pid_teta.saida);
 
 	pidService(&cont_m0);
 	pidService(&cont_m1);
@@ -252,6 +388,8 @@ void motores_amostrar(){
 	motor_tensao(1,(s16)cont_m1.saida);
 	motor_tensao(2,(s16)cont_m2.saida);
 	motor_tensao(3,(s16)cont_m3.saida);
+
+
 
 	//static int temp=0;
 	//if((temp++)%50==0){
@@ -820,9 +958,27 @@ void motor_inicializar(){
 	TIM_CtrlPWMOutputs(MOTOR_3_A_H_TIM,ENABLE);
 	TIM_CtrlPWMOutputs(MOTOR_3_B_H_TIM,ENABLE);
 
-	pidInit(&cont_m0,10,2,0,MOTOR_MAXIMO,MOTOR_MAXIMO);
-	pidInit(&cont_m1,10,2,0,MOTOR_MAXIMO,MOTOR_MAXIMO);
-	pidInit(&cont_m2,10,2,0,MOTOR_MAXIMO,MOTOR_MAXIMO);
-	pidInit(&cont_m3,10,2,0,MOTOR_MAXIMO,MOTOR_MAXIMO);
+	posInit(&P);
+
+	pidInit(&cont_m0,20,0.4,0,MOTOR_MAXIMO,MOTOR_MAXIMO);
+	pidInit(&cont_m1,20,0.4,0,MOTOR_MAXIMO,MOTOR_MAXIMO);
+	pidInit(&cont_m2,20,0.4,0,MOTOR_MAXIMO,MOTOR_MAXIMO);
+	pidInit(&cont_m3,20,0.4,0,MOTOR_MAXIMO,MOTOR_MAXIMO);
+
+	pidInit(&pid_x,30,0.0001,2,VEL_LINEAR_MAXIMA,VEL_LINEAR_MAXIMA);
+	pidInit(&pid_y,30,0.0001,2,VEL_LINEAR_MAXIMA,VEL_LINEAR_MAXIMA);
+	pidInit(&pid_teta,60,0,0,VEL_ANGULAR_MAXIMA,VEL_ANGULAR_MAXIMA);
+
+
+
+	//NewExpectedPosition(&P, 1, 1,10);
 
 }
+
+void NewExpectedPosition(float x, float y, float teta)
+{
+	P.Xesperado = x;
+	P.Yesperado = y;
+	P.TETAesperado = teta;
+}
+

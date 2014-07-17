@@ -14,13 +14,13 @@ __IO uint32_t ADC_Conversao[NR_CANAIS];
 
 
 /*
- * 0 Canal 4  - Corrente M3
+ * 3 Canal 4  - Corrente M3
  * 1 Canal 5  - Corrente M1
- * 2 Canal 10 - V+_DIV
- * 3 Canal 11 - VCHUTE_DIV
- * 4 Canal 12 - SENSOR_BOLA
- * 5 Canal 14 - Corrente M0
- * 6 Canal 15 - Corrente M2
+ * 4 Canal 10 - V+_DIV
+ * 5 Canal 11 - VCHUTE_DIV
+ * 6 Canal 12 - SENSOR_BOLA
+ * 0 Canal 14 - Corrente M0
+ * 2 Canal 15 - Corrente M2
  */
 
 void adc_init(){

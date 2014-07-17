@@ -13,11 +13,13 @@
 #include "protocolo.h"
 #include "dip_switch.h"
 
-
+#define PI	3.14159265358979f
 
 
 s32 time_ms=0;
 u8 led_bat_en = 0;
+int bateria=0;
+
 
 void SysTick_Handler(){
 	s32 tempo = time_ms % 200;
@@ -31,6 +33,32 @@ void SysTick_Handler(){
 void wait_ms(u32 ms){
 	u32 tempo_ini=time_ms;
 	while((tempo_ini+ms)>time_ms);
+}
+
+void quadrado()
+{
+	NewExpectedPosition(0,0.5,3.0*PI/4.0);
+				while(!ponto_alcancado());
+				NewExpectedPosition(0.5,0.5,PI/4.0);
+				while(!ponto_alcancado());
+				NewExpectedPosition(0.5,0,-PI/4.0);
+				while(!ponto_alcancado());
+				NewExpectedPosition(0,0,-3.0*PI/4);
+				while(!ponto_alcancado());
+}
+
+void zigzag()
+{
+					NewExpectedPosition(2,0,0);
+					while(!ponto_alcancado());
+					NewExpectedPosition(2,0,PI);
+					while(!ponto_alcancado());
+					wait_ms(1000);
+					NewExpectedPosition(0,0,PI);
+					while(!ponto_alcancado());
+					NewExpectedPosition(0,0,0);
+					while(!ponto_alcancado());
+					wait_ms(1000);
 }
 
 
@@ -53,7 +81,7 @@ int main(void)
 	drible_init();
 	sensor_bola_init();
 	dip_switch_init();
-	Timer_Init(1000);
+	Timer_Init(10000);
 	wait_ms(500);
 	rfm12_init();
 	protocolo_init();
@@ -84,6 +112,8 @@ int main(void)
 		//chutar_baixo(255);
 		//wait_ms(255);
 	}*/
+	int led_bat_toggle=0;
+
 	while(1){
 		//    	wait_ms(1000);
 		//    	protocolo_transmitir(0,6,0xfe,0,"LRBoot");
@@ -95,14 +125,14 @@ int main(void)
 		{
 			tempo_ultima_recepcao=time_ms;
 		}
-		else if((time_ms-tempo_ultima_recepcao)>500)
+		/*else if((time_ms-tempo_ultima_recepcao)>50)
 		{
 			motor_parar(0);
 			motor_parar(1);
 			motor_parar(2);
 			motor_parar(3);
 			drible(0);
-		}
+		}*/
 
 
 
@@ -124,6 +154,70 @@ int main(void)
 		a5=adc_getConversion(4);
 		a6=adc_getConversion(5);
 		a7=adc_getConversion(6);
+
+
+
+		while(1)
+		{
+			zigzag();
+		}
+
+		bateria=adc_getConversion(2);
+		if(bateria>3000)
+		{
+			Led_Acender(0);
+			Led_Acender(1);
+			Led_Acender(2);
+			Led_Acender(3);
+
+		}
+
+		if(bateria<3000 && bateria>2900)
+		{
+			Led_Apagar(0);
+			Led_Acender(1);
+			Led_Acender(2);
+			Led_Acender(3);
+
+		}
+
+		if(bateria<2900 && bateria>2800)
+		{
+			Led_Apagar(0);
+			Led_Apagar(1);
+			Led_Acender(2);
+			Led_Acender(3);
+
+		}
+
+		if(bateria<2800 && bateria>2700)
+		{
+			Led_Apagar(0);
+			Led_Apagar(1);
+			Led_Apagar(2);
+			Led_Acender(3);
+
+		}
+
+		if(bateria<2700)
+		{
+			if (led_bat_toggle==0 && !(time_ms%200)){
+			Led_Apagar(0);
+			Led_Apagar(1);
+			Led_Apagar(2);
+			Led_Apagar(3);
+			led_bat_toggle=1;}
+			else if(led_bat_toggle==1 && !(time_ms%200))
+			{
+				Led_Acender(0);
+				Led_Acender(1);
+				Led_Acender(2);
+				Led_Acender(3);
+				led_bat_toggle=0;}
+
+
+
+		}
 
 
 

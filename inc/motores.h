@@ -11,10 +11,12 @@ u8 motor_frear(u8 motor);
 u8 motor_tensao(u8 motor, s16 valor);
 u16 motor_get_posicao(u8 motor);
 s16 motor_get_tensao(u8 motor);
+int ponto_alcancado();
 
 void motor_inicializar();
 void motores_amostrar();
 u8 motor_velocidade(u8 motor, float vel);
 float motor_get_velocidade(u8 motor);
+void NewExpectedPosition(float x, float y, float teta);
 
 #endif

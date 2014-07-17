@@ -146,7 +146,7 @@ u16 rfm12_cmd(u16 cmd) {
 	resp |= SPI_I2S_ReceiveData(RFM12_SPI);
 //	while (SPI_I2S_GetFlagStatus(RFM12_SPI, SPI_I2S_FLAG_BSY) == SET);//necessário para dar um delay antes do release do SS sem isso não funciona
 	u8 i;
-	for(i = 0; i < 25; i++);
+	for(i = 0; i < 100; i++);
 	rfm12_ss_release();
 	return resp;
 }

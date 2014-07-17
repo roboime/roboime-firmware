@@ -86,20 +86,24 @@ void protocolo_transmitir(u8 type, u8 tam, u8 source, u8 dest, char *buf  ){
 }
 
 void protocolo_analisar(char data[], u8 len){
+
+	u8 found=0;
+
 	u8 i=0;
 	float val=0;
 	if(len==PAYLOAD_SIZE){
 		if(data[0]==PACOTE_TIPO){
 			for(i=1;i<PAYLOAD_SIZE;i+=7){
 				if(data[i]==ID_ROBO){
+					found=1;
 					val=(s8)data[i+1];
-					motor_velocidade(0,val);
+					//motor_velocidade(0,val);
 					val=(s8)data[i+2];
-					motor_velocidade(1,val);
+					//motor_velocidade(1,val);
 					val=(s8)data[i+3];
-					motor_velocidade(2,val);
+					//motor_velocidade(2,val);
 					val=(s8)data[i+4];
-					motor_velocidade(3,val);
+					//motor_velocidade(3,val);
 					drible(data[i+5]);
 					val=(s8)data[i+6];
 
@@ -114,12 +118,20 @@ void protocolo_analisar(char data[], u8 len){
 						chutar_alto((u32)(val*10));
 					}
 					return;
+					}
+				}
+
+			if(!found) {
+				motor_velocidade(0,20);
+				motor_velocidade(1,20);
+				motor_velocidade(2,20);
+				motor_velocidade(3,20);
 				}
 			}
 		}
-	}
-
 }
+
+
 
 unsigned char protocolo_get_robo_id(){
 	return get_robot_id();

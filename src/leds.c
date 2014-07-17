@@ -69,6 +69,14 @@ void Leds_init(){
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_Init(GPIOD,&GPIO_InitStructure);
 
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD,ENABLE);
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_8 | GPIO_Pin_10| GPIO_Pin_12 | GPIO_Pin_14;
+	GPIO_InitStructure.GPIO_Speed=GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	GPIO_Init(GPIOD,&GPIO_InitStructure);
+
 
 //	Led_Pwr_on();
 }
@@ -84,16 +92,16 @@ void Led_Acender(u8 led)
 	switch(led)
 	{
 	case 0:
-		GPIO_SetBits(GPIOD,GPIO_Pin_12);
+		GPIO_SetBits(GPIOD,GPIO_Pin_8); //12 13 14 15
 		break;
 	case 1:
-		GPIO_SetBits(GPIOD,GPIO_Pin_13);
+		GPIO_SetBits(GPIOD,GPIO_Pin_10);
 		break;
 	case 2:
-		GPIO_SetBits(GPIOD,GPIO_Pin_14);
+		GPIO_SetBits(GPIOD,GPIO_Pin_12);
 		break;
 	case 3:
-		GPIO_SetBits(GPIOD,GPIO_Pin_15);
+		GPIO_SetBits(GPIOD,GPIO_Pin_14);
 		break;
 	}
 }
@@ -107,13 +115,13 @@ void Led_Apagar(u8 led)
 	switch(led)
 	{
 	case 0:
-		GPIO_ResetBits(GPIOD,GPIO_Pin_12);
+		GPIO_ResetBits(GPIOD,GPIO_Pin_8);
 	case 1:
-		GPIO_ResetBits(GPIOD,GPIO_Pin_13);
+		GPIO_ResetBits(GPIOD,GPIO_Pin_10);
 	case 2:
-		GPIO_ResetBits(GPIOD,GPIO_Pin_14);
+		GPIO_ResetBits(GPIOD,GPIO_Pin_12);
 	case 3:
-		GPIO_ResetBits(GPIOD,GPIO_Pin_15);
+		GPIO_ResetBits(GPIOD,GPIO_Pin_14);
 	}
 }
 
