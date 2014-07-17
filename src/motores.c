@@ -318,7 +318,8 @@ void motores_amostrar(){
 
 
 
-	P.Vx=      -(-0.0100*cont_m0.realimentacao     -    0.0082*cont_m1.realimentacao    +         0.0082*cont_m2.realimentacao   +         0.0100*cont_m3.realimentacao);
+	// pseudo inversa da omni
+	P.Vx=      -(-0.0100*cont_m0.realimentacao    -    0.0082*cont_m1.realimentacao    +         0.0082*cont_m2.realimentacao   +         0.0100*cont_m3.realimentacao);
 	P.Vy=      -(0.0120*cont_m0.realimentacao     -    0.0120*cont_m1.realimentacao    -         0.0120*cont_m2.realimentacao   +         0.0120*cont_m3.realimentacao);
 	P.Vteta =  -(0.0996*cont_m0.realimentacao     +    0.0704*cont_m1.realimentacao    +         0.0704*cont_m2.realimentacao   +         0.0996*cont_m3.realimentacao);
 
@@ -329,8 +330,8 @@ void motores_amostrar(){
 
 	P.TETAreal = P.TETAreal +    P.Vteta*(1.0/(float)Get_Freq());
 
-	//while(P.TETAreal>3.14) P.TETAreal-=2*PI;
-	//while(P.TETAreal<-3.14) P.TETAreal+=2*PI;
+	while (P.TETAreal >  3.14) P.TETAreal -= 2 * PI;
+	while (P.TETAreal < -3.14) P.TETAreal += 2 * PI;
 
 	//encontra sin e cos de teta uma vez para não ter a necessidade de recalcular em cada calculo
 
@@ -341,8 +342,8 @@ void motores_amostrar(){
 
 	//Rotaciona a velocidade do robo para o refencial do campo
 
-	P.Vx_Ref_Campo =  P.Vx*P.cos_teta_real  -   P.Vy*P.sin_teta_real;
-	P.Vy_Ref_Campo =  P.Vx*P.sin_teta_real  +   P.Vy*P.cos_teta_real;
+	P.Vx_Ref_Campo =  P.Vx * P.cos_teta_real  -   P.Vy * P.sin_teta_real;
+	P.Vy_Ref_Campo =  P.Vx * P.sin_teta_real  +   P.Vy * P.cos_teta_real;
 
 	//integra velocidade para atualizar posição do robo
 
@@ -395,7 +396,6 @@ void motores_amostrar(){
 	//if((temp++)%50==0){
 	//	display_matlab(veloc0, veloc1, veloc2, veloc3);
 	//}
-
 }
 
 

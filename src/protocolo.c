@@ -22,8 +22,7 @@
 
 unsigned int ultima_recepcao=0;
 
-typedef struct{
-
+typedef struct {
 	//we transmit the bytes beginning here
 	u8 len;						//length byte - number of bytes in buffer
 	u8 type;					//type field for airlab
@@ -34,10 +33,9 @@ typedef struct{
 	volatile uint8_t status;	//is the buffer free or occupied?
 	uint8_t num_bytes; 			//number of bytes to transmit (size in buffer)
 	uint8_t bytecount;   		//counter for the byte we are transmitting at the moment
-}pacote_tx_s;
+} pacote_tx_s;
 
-typedef struct{
-
+typedef struct {
 	//we transmit the bytes beginning here
 	u8 len;						//length byte - number of bytes in buffer
 	u8 type;					//type field for airlab
@@ -48,7 +46,7 @@ typedef struct{
 	volatile uint8_t status;	//is the buffer free or occupied?
 	uint8_t num_bytes; 			//number of bytes to transmit (size in buffer)
 	uint8_t bytecount;   		//counter for the byte we are transmitting at the moment
-}pacote_rx_s;
+} pacote_rx_s;
 
 
 pacote_tx_s pacote_tx;
@@ -86,9 +84,7 @@ void protocolo_transmitir(u8 type, u8 tam, u8 source, u8 dest, char *buf  ){
 }
 
 void protocolo_analisar(char data[], u8 len){
-
 	u8 found=0;
-
 	u8 i=0;
 	float val=0;
 	if(len==PAYLOAD_SIZE){

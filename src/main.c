@@ -38,27 +38,27 @@ void wait_ms(u32 ms){
 void quadrado()
 {
 	NewExpectedPosition(0,0.5,3.0*PI/4.0);
-				while(!ponto_alcancado());
-				NewExpectedPosition(0.5,0.5,PI/4.0);
-				while(!ponto_alcancado());
-				NewExpectedPosition(0.5,0,-PI/4.0);
-				while(!ponto_alcancado());
-				NewExpectedPosition(0,0,-3.0*PI/4);
-				while(!ponto_alcancado());
+	while(!ponto_alcancado());
+	NewExpectedPosition(0.5,0.5,PI/4.0);
+	while(!ponto_alcancado());
+	NewExpectedPosition(0.5,0,-PI/4.0);
+	while(!ponto_alcancado());
+	NewExpectedPosition(0,0,-3.0*PI/4);
+	while(!ponto_alcancado());
 }
 
 void zigzag()
 {
-					NewExpectedPosition(2,0,0);
-					while(!ponto_alcancado());
-					NewExpectedPosition(2,0,PI);
-					while(!ponto_alcancado());
-					wait_ms(1000);
-					NewExpectedPosition(0,0,PI);
-					while(!ponto_alcancado());
-					NewExpectedPosition(0,0,0);
-					while(!ponto_alcancado());
-					wait_ms(1000);
+	NewExpectedPosition(2,0,0);
+	while(!ponto_alcancado());
+	NewExpectedPosition(2,0,PI);
+	while(!ponto_alcancado());
+	wait_ms(1000);
+	NewExpectedPosition(0,0,PI);
+	while(!ponto_alcancado());
+	NewExpectedPosition(0,0,0);
+	while(!ponto_alcancado());
+	wait_ms(1000);
 }
 
 
@@ -74,9 +74,8 @@ int main(void)
 
 	Led_Pwr_on();
 
-
-    motor_inicializar();
-    adc_init();
+	motor_inicializar();
+	adc_init();
 	chute_init();
 	drible_init();
 	sensor_bola_init();
@@ -92,7 +91,9 @@ int main(void)
 
 	unsigned char robo_id=protocolo_get_robo_id();
 	unsigned char temp;
-	for(temp=0;temp<robo_id;temp++){
+
+	// pisca id do robo
+	for(temp = 0; temp < robo_id; temp++){
 		Led_Pwr_on();
 		Led_Status_on();
 		wait_ms(200);
@@ -125,25 +126,25 @@ int main(void)
 		{
 			tempo_ultima_recepcao=time_ms;
 		}
-		/*else if((time_ms-tempo_ultima_recepcao)>50)
+		else if((time_ms-tempo_ultima_recepcao)>50)
 		{
 			motor_parar(0);
 			motor_parar(1);
 			motor_parar(2);
 			motor_parar(3);
 			drible(0);
-		}*/
+		}
 
 
 
 
 		if(sensor_bola(0)==0 || sensor_bola(1)==0){
-					Led_Pwr_on();
-					}
-					else
-					{
-						Led_Pwr_off();
-					}
+			Led_Pwr_on();
+		}
+		else
+		{
+			Led_Pwr_off();
+		}
 
 
 		int a1,a2,a3,a4,a5,a6,a7;
@@ -157,10 +158,10 @@ int main(void)
 
 
 
-		while(1)
-		{
-			zigzag();
-		}
+		//while(1)
+		//{
+		//	zigzag();
+		//}
 
 		bateria=adc_getConversion(2);
 		if(bateria>3000)
@@ -187,7 +188,6 @@ int main(void)
 			Led_Apagar(1);
 			Led_Acender(2);
 			Led_Acender(3);
-
 		}
 
 		if(bateria<2800 && bateria>2700)
@@ -196,7 +196,6 @@ int main(void)
 			Led_Apagar(1);
 			Led_Apagar(2);
 			Led_Acender(3);
-
 		}
 
 		if(bateria<2700)
@@ -214,9 +213,6 @@ int main(void)
 				Led_Acender(2);
 				Led_Acender(3);
 				led_bat_toggle=0;}
-
-
-
 		}
 
 
@@ -235,7 +231,6 @@ int main(void)
 			{
 				Led_Pwr_off();
 			}
-
 		}
 
 	}
