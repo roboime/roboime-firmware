@@ -13,12 +13,16 @@
 
 #define PACOTE_DATA_SIZE 47
 
-#define PACOTE_TIPO 44
+#define PACOTE_TIPO_MOVE 44
+#define PACOTE_TIPO_GOTO 45
+#define PACOTE_TIPO_FIELD 44
 
 #define PROTOCOLO_RECEBENDO 1
 #define PROTOCOLO_LIVRE 0
 
-#define PAYLOAD_SIZE 44
+#define PAYLOAD_SIZE_MOVE 44
+#define PAYLOAD_SIZE_GOTO 55
+#define PAYLOAD_SIZE_FIELD 66 
 
 unsigned int ultima_recepcao=0;
 
@@ -91,19 +95,25 @@ void protocolo_analisar(char data[], u8 len){
 
 	u8 i=0;
 	float val=0;
-	if(len==PAYLOAD_SIZE){
-		if(data[0]==PACOTE_TIPO){
-			for(i=1;i<PAYLOAD_SIZE;i+=7){
-				if(data[i]==ID_ROBO){
+	if(len==PAYLOAD_SIZE_MOVE)
+    {
+		if(data[0]==PACOTE_TIPO_MOVE)
+        {
+			for(i=1;i<PAYLOAD_SIZE_MOVE;i+=7)
+            {
+				if(data[i]==ID_ROBO)
+                {
 					found=1;
+
 					val=(s8)data[i+1];
-					//motor_velocidade(0,val);
+					motor_velocidade(0,val);
 					val=(s8)data[i+2];
-					//motor_velocidade(1,val);
+					motor_velocidade(1,val);
 					val=(s8)data[i+3];
-					//motor_velocidade(2,val);
+					motor_velocidade(2,val);
 					val=(s8)data[i+4];
-					//motor_velocidade(3,val);
+
+					motor_velocidade(3,val);
 					drible(data[i+5]);
 					val=(s8)data[i+6];
 
@@ -118,17 +128,17 @@ void protocolo_analisar(char data[], u8 len){
 						chutar_alto((u32)(val*10));
 					}
 					return;
-					}
-				}
+                }
+            }
 
 			if(!found) {
 				motor_velocidade(0,20);
 				motor_velocidade(1,20);
 				motor_velocidade(2,20);
 				motor_velocidade(3,20);
-				}
-			}
-		}
+            }
+        }
+    }
 }
 
 

@@ -125,14 +125,14 @@ int main(void)
 		{
 			tempo_ultima_recepcao=time_ms;
 		}
-		/*else if((time_ms-tempo_ultima_recepcao)>50)
+		else if((time_ms-tempo_ultima_recepcao)>50)
 		{
 			motor_parar(0);
 			motor_parar(1);
 			motor_parar(2);
 			motor_parar(3);
 			drible(0);
-		}*/
+		}
 
 
 
@@ -156,11 +156,12 @@ int main(void)
 		a7=adc_getConversion(6);
 
 
-
+		/*
 		while(1)
 		{
 			zigzag();
 		}
+		*/
 
 		bateria=adc_getConversion(2);
 		if(bateria>3000)
