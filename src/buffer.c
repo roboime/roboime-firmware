@@ -16,36 +16,46 @@ static int out = -1;
 /* Conta quantos dados estão disponíveis no buffer */
 static int contador = 0;
 
-void buffer_write(unsigned char dado) {
-	/* Verifica se o buffer está cheio*/
-	if (BUFFER_SIZE == contador) {
-		/* TODO: faz alguma coisa se tiver cheio */
-	} else {
-		/* Caso especial para quando o buffer estiver vazio*/
-		if (contador == 0) {
-			out++;
-		}
-		buffer[in] = dado;
-		in = (in + 1) % BUFFER_SIZE;
-		contador++;
-	}
+void buffer_write(unsigned char dado)
+{
+    /* Verifica se o buffer está cheio*/
+    if (BUFFER_SIZE == contador)
+    {
+        /* TODO: faz alguma coisa se tiver cheio */
+    }
+    else
+    {
+        /* Caso especial para quando o buffer estiver vazio*/
+        if (contador == 0)
+        {
+            out++;
+        }
+        buffer[in] = dado;
+        in = (in + 1) % BUFFER_SIZE;
+        contador++;
+    }
 }
 
-unsigned char buffer_read(void) {
-	if (buffer_dataIndication() == 1) {
-		unsigned char dado = buffer[out];
-		out = (out + 1) % BUFFER_SIZE;
-		contador--;
-		return dado;
-	} else {
-		/* TODO: faz alguma coisa se tiver fazio */
-		return 0;
-	}
+unsigned char buffer_read(void)
+{
+    if (buffer_dataIndication() == 1)
+    {
+        unsigned char dado = buffer[out];
+        out = (out + 1) % BUFFER_SIZE;
+        contador--;
+        return dado;
+    }
+    else
+    {
+        /* TODO: faz alguma coisa se tiver fazio */
+        return 0;
+    }
 }
 
 /*
  * Indica se há dado disponível no buffer
  */
-unsigned char buffer_dataIndication(void) {
-	return (contador>0) ?  1:0;
+unsigned char buffer_dataIndication(void)
+{
+    return (contador > 0) ?  1 : 0;
 }
