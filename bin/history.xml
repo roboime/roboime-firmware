@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -g -nostartfiles -Map=firmware_1.0.map -O0 --gc-sections -LC:\CooCox\CoIDE\configuration\ProgramData\firmware_1.0 -TC:\CooCox\CoIDE\configuration\ProgramData\firmware_1.0/arm-gcc-link.ld -g -L..\..\.. -lm">
+      <target file="firmware_1.0.elf" lastModified="1474e99eba3">
+         <source file="..\obj\stm32f4xx_syscfg.o" lastModified="1474e99dd30"/>
+         <source file="..\obj\timer.o" lastModified="1474e99de5b"/>
+         <source file="..\obj\sensor_bola.o" lastModified="1474e99de94"/>
+         <source file="..\obj\stm32f4xx_usart.o" lastModified="1474e99df10"/>
+         <source file="..\obj\startup_stm32f4xx.o" lastModified="1474e99df3f"/>
+         <source file="..\obj\botao.o" lastModified="1474e99e028"/>
+         <source file="..\obj\main.o" lastModified="1474e99e0ae"/>
+         <source file="..\obj\stm32f4xx_rcc.o" lastModified="1474e99e11e"/>
+         <source file="..\obj\protocolo.o" lastModified="1474e99e191"/>
+         <source file="..\obj\stm32f4xx_adc.o" lastModified="1474e99e20f"/>
+         <source file="..\obj\drible.o" lastModified="1474e99e24c"/>
+         <source file="..\obj\leds.o" lastModified="1474e99e292"/>
+         <source file="..\obj\stm32f4xx_gpio.o" lastModified="1474e99e2d9"/>
+         <source file="..\obj\motores.o" lastModified="1474e99e36e"/>
+         <source file="..\obj\system_stm32f4xx.o" lastModified="1474e99e3ad"/>
+         <source file="..\obj\syscalls.o" lastModified="1474e99e43e"/>
+         <source file="..\obj\stm32f4xx_dma.o" lastModified="1474e99e490"/>
+         <source file="..\obj\adc.o" lastModified="1474e99e4ce"/>
+         <source file="..\obj\arm_cos_f32.o" lastModified="1474e99e510"/>
+         <source file="..\obj\chute.o" lastModified="1474e99e54e"/>
+         <source file="..\obj\stm32f4xx_spi.o" lastModified="1474e99e5a2"/>
+         <source file="..\obj\stm32f4xx_exti.o" lastModified="1474e99e5df"/>
+         <source file="..\obj\misc.o" lastModified="1474e99e618"/>
+         <source file="..\obj\dip_switch.o" lastModified="1474e99e651"/>
+         <source file="..\obj\arm_sin_f32.o" lastModified="1474e99e695"/>
+         <source file="..\obj\rfm12.o" lastModified="1474e99e7ad"/>
+         <source file="..\obj\pid.o" lastModified="1474e99e806"/>
+         <source file="..\obj\stm32f4xx_tim.o" lastModified="1474e99e8b2"/>
+      </target>
+   </processor>
+</history>
