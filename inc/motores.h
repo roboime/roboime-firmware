@@ -6,6 +6,8 @@
 	#include "stm32f4xx.h"
 #endif
 
+extern int is_goto;
+
 u8 motor_parar(u8 motor);
 u8 motor_frear(u8 motor);
 u8 motor_tensao(u8 motor, s16 valor);

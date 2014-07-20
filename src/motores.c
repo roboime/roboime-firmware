@@ -186,12 +186,16 @@ CONTROLADOR_S pid_x, pid_y, pid_teta;
 
 POSICAO_S P;
 
+int is_goto = 0;
+
+/*
 int ponto_alcancado()
 {
     float raio = sqrt((P.Xreal - P.Xesperado) * (P.Xreal - P.Xesperado) + (P.Yreal - P.Yesperado) * (P.Yreal - P.Yesperado));
     if (raio < 0.01 && abs(P.TETAesperado - P.TETAreal) < 0.01) return 1;
     else return 0;
 }
+*/
 
 
 float motor_get_velocidade(u8 motor)
@@ -279,63 +283,65 @@ void motores_amostrar()
      *
      */
     //Comentando para tentar tornar os parâmetros mais exatos
-    /*
-        float veloc0=(float)velocidade[0]*Get_Freq()/3920.0;
-        cont_m0.realimentacao=(s16)(veloc0*10);
-
-        float veloc1=(float)velocidade[1]*Get_Freq()/3920.0;
-        cont_m1.realimentacao=(s16)(veloc1*10);
-
-        float veloc2=(float)velocidade[2]*Get_Freq()/3920.0;
-        cont_m2.realimentacao=(s16)(veloc2*10);
-
-        float veloc3=(float)velocidade[3]*Get_Freq()/3920.0;
-        cont_m3.realimentacao=(s16)(veloc3*10);*/
-    //calculo das velocidades lidas de cada roda em rad/s
-    float veloc0 = (float)velocidade[0] * Get_Freq() * 2 * PI / 3200.0;
-    cont_m0.realimentacao = (s16)(veloc0);
-    float veloc1 = (float)velocidade[1] * Get_Freq() * 2 * PI / 3200.0;
-    cont_m1.realimentacao = (s16)(veloc1);
-    float veloc2 = (float)velocidade[2] * Get_Freq() * 2 * PI / 3200.0;
-    cont_m2.realimentacao = (s16)(veloc2);
-    float veloc3 = (float)velocidade[3] * Get_Freq() * 2 * PI / 3200.0;
-    cont_m3.realimentacao = (s16)(veloc3);
-    //calculo de vx, vy e vteta em função das velocidades lidas
-    P.Vx =      -(-0.0100 * cont_m0.realimentacao     -    0.0082 * cont_m1.realimentacao    +         0.0082 * cont_m2.realimentacao   +         0.0100 * cont_m3.realimentacao);
-    P.Vy =      -(0.0120 * cont_m0.realimentacao     -    0.0120 * cont_m1.realimentacao    -         0.0120 * cont_m2.realimentacao   +         0.0120 * cont_m3.realimentacao);
-    P.Vteta =  -(0.0996 * cont_m0.realimentacao     +    0.0704 * cont_m1.realimentacao    +         0.0704 * cont_m2.realimentacao   +         0.0996 * cont_m3.realimentacao);
-    //Atualiza posição angular integrando velocidade angular
-    P.TETAreal = P.TETAreal +    P.Vteta * (1.0 / (float)Get_Freq());
-    //while(P.TETAreal>3.14) P.TETAreal-=2*PI;
-    //while(P.TETAreal<-3.14) P.TETAreal+=2*PI;
-    //encontra sin e cos de teta uma vez para não ter a necessidade de recalcular em cada calculo
-    P.TETAreal_rad  = (float32_t)P.TETAreal;
-    P.cos_teta_real = arm_cos_f32(P.TETAreal_rad);
-    P.sin_teta_real = arm_sin_f32(P.TETAreal_rad);
-    //Rotaciona a velocidade do robo para o refencial do campo
-    P.Vx_Ref_Campo =  P.Vx * P.cos_teta_real  -   P.Vy * P.sin_teta_real;
-    P.Vy_Ref_Campo =  P.Vx * P.sin_teta_real  +   P.Vy * P.cos_teta_real;
-    //integra velocidade para atualizar posição do robo
-    P.Xreal    = P.Xreal    +    P.Vx_Ref_Campo * (1 / (float)Get_Freq());
-    P.Yreal    = P.Yreal    +    P.Vy_Ref_Campo * (1 / (float)Get_Freq());
-    //entradas dos PIDs
-    pid_x.entrada = P.Xesperado;
-    pid_x.realimentacao = P.Xreal;
-    pid_y.entrada = P.Yesperado;
-    pid_y.realimentacao = P.Yreal;
-    pid_teta.entrada = P.TETAesperado;
-    pid_teta.realimentacao = P.TETAreal;
-    //calculo de saídas dos PIDs de posição
-    pidService(&pid_x);
-    pidService(&pid_y);
-    pidServiceAngulo(&pid_teta);
-    P.Vx_Ref_Robo =     pid_x.saida * P.cos_teta_real + pid_y.saida * P.sin_teta_real;
-    P.Vy_Ref_Robo =   - pid_x.saida * P.sin_teta_real + pid_y.saida * P.cos_teta_real;
-    //saida dos PIDs de posicao como entrada dos PIDs de velocidade
-    cont_m0.entrada     =     - (-29.96628 * P.Vx_Ref_Robo   +   17.30104 * P.Vy_Ref_Robo  +  2.94118 * pid_teta.saida);
-    cont_m1.entrada     =     - (-24.46736 * P.Vx_Ref_Robo   -   24.46736 * P.Vy_Ref_Robo  +  2.94118 * pid_teta.saida);
-    cont_m2.entrada     =     - (24.46736 * P.Vx_Ref_Robo   -   24.46736 * P.Vy_Ref_Robo  +  2.94118 * pid_teta.saida);
-    cont_m3.entrada     =     - (29.96628 * P.Vx_Ref_Robo   +   17.30104 * P.Vy_Ref_Robo  +  2.94118 * pid_teta.saida);
+    if (!is_goto)
+    {
+        float veloc0 = (float)velocidade[0] * Get_Freq() / 3920.0;
+        cont_m0.realimentacao = (s16)(veloc0 * 10);
+        float veloc1 = (float)velocidade[1] * Get_Freq() / 3920.0;
+        cont_m1.realimentacao = (s16)(veloc1 * 10);
+        float veloc2 = (float)velocidade[2] * Get_Freq() / 3920.0;
+        cont_m2.realimentacao = (s16)(veloc2 * 10);
+        float veloc3 = (float)velocidade[3] * Get_Freq() / 3920.0;
+        cont_m3.realimentacao = (s16)(veloc3 * 10);
+    }
+    else
+    {
+        //calculo das velocidades lidas de cada roda em rad/s
+        float veloc0 = (float)velocidade[0] * Get_Freq() * 2 * PI / 3200.0;
+        cont_m0.realimentacao = (s16)(veloc0);
+        float veloc1 = (float)velocidade[1] * Get_Freq() * 2 * PI / 3200.0;
+        cont_m1.realimentacao = (s16)(veloc1);
+        float veloc2 = (float)velocidade[2] * Get_Freq() * 2 * PI / 3200.0;
+        cont_m2.realimentacao = (s16)(veloc2);
+        float veloc3 = (float)velocidade[3] * Get_Freq() * 2 * PI / 3200.0;
+        cont_m3.realimentacao = (s16)(veloc3);
+        //calculo de vx, vy e vteta em função das velocidades lidas
+        P.Vx =      -(-0.0100 * cont_m0.realimentacao     -    0.0082 * cont_m1.realimentacao    +         0.0082 * cont_m2.realimentacao   +         0.0100 * cont_m3.realimentacao);
+        P.Vy =      -(0.0120 * cont_m0.realimentacao     -    0.0120 * cont_m1.realimentacao    -         0.0120 * cont_m2.realimentacao   +         0.0120 * cont_m3.realimentacao);
+        P.Vteta =  -(0.0996 * cont_m0.realimentacao     +    0.0704 * cont_m1.realimentacao    +         0.0704 * cont_m2.realimentacao   +         0.0996 * cont_m3.realimentacao);
+        //Atualiza posição angular integrando velocidade angular
+        P.TETAreal = P.TETAreal +    P.Vteta * (1.0 / (float)Get_Freq());
+        //while(P.TETAreal>3.14) P.TETAreal-=2*PI;
+        //while(P.TETAreal<-3.14) P.TETAreal+=2*PI;
+        //encontra sin e cos de teta uma vez para não ter a necessidade de recalcular em cada calculo
+        P.TETAreal_rad  = (float32_t)P.TETAreal;
+        P.cos_teta_real = arm_cos_f32(P.TETAreal_rad);
+        P.sin_teta_real = arm_sin_f32(P.TETAreal_rad);
+        //Rotaciona a velocidade do robo para o refencial do campo
+        P.Vx_Ref_Campo =  P.Vx * P.cos_teta_real  -   P.Vy * P.sin_teta_real;
+        P.Vy_Ref_Campo =  P.Vx * P.sin_teta_real  +   P.Vy * P.cos_teta_real;
+        //integra velocidade para atualizar posição do robo
+        P.Xreal    = P.Xreal    +    P.Vx_Ref_Campo * (1 / (float)Get_Freq());
+        P.Yreal    = P.Yreal    +    P.Vy_Ref_Campo * (1 / (float)Get_Freq());
+        //entradas dos PIDs
+        pid_x.entrada = P.Xesperado;
+        pid_x.realimentacao = P.Xreal;
+        pid_y.entrada = P.Yesperado;
+        pid_y.realimentacao = P.Yreal;
+        pid_teta.entrada = P.TETAesperado;
+        pid_teta.realimentacao = P.TETAreal;
+        //calculo de saídas dos PIDs de posição
+        pidService(&pid_x);
+        pidService(&pid_y);
+        pidServiceAngulo(&pid_teta);
+        P.Vx_Ref_Robo =     pid_x.saida * P.cos_teta_real + pid_y.saida * P.sin_teta_real;
+        P.Vy_Ref_Robo =   - pid_x.saida * P.sin_teta_real + pid_y.saida * P.cos_teta_real;
+        //saida dos PIDs de posicao como entrada dos PIDs de velocidade
+        cont_m0.entrada     =     - (-29.96628 * P.Vx_Ref_Robo   +   17.30104 * P.Vy_Ref_Robo  +  2.94118 * pid_teta.saida);
+        cont_m1.entrada     =     - (-24.46736 * P.Vx_Ref_Robo   -   24.46736 * P.Vy_Ref_Robo  +  2.94118 * pid_teta.saida);
+        cont_m2.entrada     =     - (24.46736 * P.Vx_Ref_Robo   -   24.46736 * P.Vy_Ref_Robo  +  2.94118 * pid_teta.saida);
+        cont_m3.entrada     =     - (29.96628 * P.Vx_Ref_Robo   +   17.30104 * P.Vy_Ref_Robo  +  2.94118 * pid_teta.saida);
+    }
     pidService(&cont_m0);
     pidService(&cont_m1);
     pidService(&cont_m2);
@@ -344,10 +350,6 @@ void motores_amostrar()
     motor_tensao(1, (s16)cont_m1.saida);
     motor_tensao(2, (s16)cont_m2.saida);
     motor_tensao(3, (s16)cont_m3.saida);
-    //static int temp=0;
-    //if((temp++)%50==0){
-    //  display_matlab(veloc0, veloc1, veloc2, veloc3);
-    //}
 }
 
 
@@ -859,3 +861,9 @@ void NewExpectedPosition(float x, float y, float teta)
     P.TETAesperado = teta;
 }
 
+void NewObservedPosition(float x, float y, float theta)
+{
+    P.Xreal = x;
+    P.Yreal = y;
+    P.TETAreal = theta;
+}
