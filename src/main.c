@@ -50,8 +50,11 @@ void quadrado()
     while (!ponto_alcancado());
 }
 
+extern int is_goto;
+
 void zigzag()
 {
+	is_goto = 1;
     NewExpectedPosition(2, 0, 0);
     while (!ponto_alcancado());
     NewExpectedPosition(2, 0, PI);
@@ -80,7 +83,7 @@ int main(void)
     drible_init();
     sensor_bola_init();
     dip_switch_init();
-    Timer_Init(10000);
+    Timer_Init(1000);
     wait_ms(500);
     rfm12_init();
     protocolo_init();
@@ -113,6 +116,12 @@ int main(void)
     int led_bat_toggle = 0;
     while (1)
     {
+    	/*
+        while(1)
+        {
+            zigzag();
+        }
+        */
         //      wait_ms(1000);
         //      protocolo_transmitir(0,6,0xfe,0,"LRBoot");
         protocolo_poll();
@@ -120,7 +129,8 @@ int main(void)
         {
             tempo_ultima_recepcao = time_ms;
         }
-        else if ((time_ms - tempo_ultima_recepcao) > 50)
+        // Needed only for robots doing move instead of goto
+        else if ((time_ms - tempo_ultima_recepcao) > 500)
         {
             motor_parar(0);
             motor_parar(1);
@@ -128,6 +138,7 @@ int main(void)
             motor_parar(3);
             drible(0);
         }
+        /*
         if (sensor_bola(0) == 0 || sensor_bola(1) == 0)
         {
             Led_Pwr_on();
@@ -136,6 +147,7 @@ int main(void)
         {
             Led_Pwr_off();
         }
+        */
         int a1, a2, a3, a4, a5, a6, a7;
         a1 = adc_getConversion(0);
         a2 = adc_getConversion(1);
@@ -144,12 +156,7 @@ int main(void)
         a5 = adc_getConversion(4);
         a6 = adc_getConversion(5);
         a7 = adc_getConversion(6);
-        /*
-        while(1)
-        {
-            zigzag();
-        }
-        */
+
         bateria = adc_getConversion(2);
         if (bateria > 3000)
         {
