@@ -24,6 +24,9 @@
 #define PAYLOAD_SIZE_GOTO 44
 #define PAYLOAD_SIZE_FIELD 44
 
+#define PI 3.1415926535897932384626433832795
+#define TAU 6.283185307179586476925286766559
+
 unsigned int ultima_recepcao = 0;
 
 float x_ball, y_ball;
@@ -182,8 +185,10 @@ void protocolo_analisar(char data[], u8 len)
 				x = *((s16*) (data + i + 1)) / 1000.;
 				y = *((s16*) (data + i + 3)) / 1000.;
 				o = *((s16*) (data + i + 5)) * 1.7453292519943295769236907684886e-4;
+				while (o <= PI) o += TAU;
+				while (o > PI) o -= TAU;
 				NewExpectedPosition(x, y, o);
-
+				//NewExpectedPosition(0,0,PI);
 				return;
 			}
 		}
@@ -205,6 +210,8 @@ void protocolo_analisar(char data[], u8 len)
 				x = *((s16*) data + i + 1) / 1000.;
 				y = *((s16*) data + i + 3) / 1000.;
 				o = *((s16*) data + i + 5) * 1.7453292519943295769236907684886e-4;
+				while (o <= PI) o += TAU;
+				while (o > PI) o -= TAU;
 				NewObservedPosition(x, y, o);
 				//NewObservedPosition(0., 1., o);
 
@@ -302,72 +309,3 @@ void protocolo_poll()
         }
     }
 }
-
-/*
-void rfm12_receive_callback(u8 c)
-{
-    static u8 status = PROTOCOLO_LIVRE;
-    static u8 pos = 0;
-    static u8 checksum = 0;
-    ultima_recepcao = 1;
-    if (status == PROTOCOLO_LIVRE)
-    {
-        Led_Status_on();
-        status = PROTOCOLO_RECEBENDO;
-        pos = 1;
-        pacote_rx.len = c;
-        checksum = c;
-    }
-    else    //if(status==PROTOCOLO_RECEBENDO){
-    {
-        switch (pos)
-        {
-        case 1:
-            pacote_rx.type = c;
-            checksum ^= c;
-            pos++;
-            break;
-        case 2:
-            pacote_rx.source = c;
-            checksum ^= c;
-            pos++;
-            break;
-        case 3:
-            pacote_rx.dest = c;
-            checksum ^= c;
-            pos++;
-            break;
-        case 4:
-            checksum ^= 0xff;
-            pacote_rx.checksum = c;
-            if (checksum != pacote_rx.checksum)
-            {
-                status = PROTOCOLO_LIVRE;
-                rfm12_accept_data();
-                Led_Status_off();
-                break;
-            }
-            pos++;
-            checksum = 0;
-            break;
-        default:
-            pacote_rx.data[pos - 5] = c;
-            checksum ^= c;
-            if (pos >= (pacote_rx.len + 5) || pos >= (PACOTE_MAX_DATA_SIZE + 5))
-            {
-                status = PROTOCOLO_LIVRE;
-                Led_Status_off();
-                if (pacote_rx.type == 0 ||  checksum == 0)
-                {
-                    protocolo_analisar((char*)pacote_rx.data, pacote_rx.len);
-                }
-                rfm12_accept_data();
-                break;
-            }
-            pos++;
-            break;
-        }
-    }
-}
-*/
-
