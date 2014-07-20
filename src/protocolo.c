@@ -103,115 +103,115 @@ void protocolo_analisar(char data[], u8 len)
     float val = 0;
     int id_do_robo_caralho = ID_ROBO;
 
-        if (data[0] == PACOTE_TIPO_MOVE)
-        {
-            for (i = 1; i < PAYLOAD_SIZE_MOVE; i += 7)
-            {
-                if (data[i] == ID_ROBO)
-                {
-                    is_goto = 0;
-                    found = 1;
-                    val = (s8)data[i + 1];
-                    motor_velocidade(0, val);
-                    val = (s8)data[i + 2];
-                    motor_velocidade(1, val);
-                    val = (s8)data[i + 3];
-                    motor_velocidade(2, val);
-                    val = (s8)data[i + 4];
-                    motor_velocidade(3, val);
-                    drible(data[i + 5]);
-                    val = (s8)data[i + 6];
-                    //chutar((u32)(val*10/17));//val*150/255
-                    if (val > 0)
-                    {
-                        chutar_baixo((u32)(val * 10));
-                    }
-                    else if (val < 0)
-                    {
-                        val = -val;
-                        chutar_alto((u32)(val * 10));
-                    }
-                    return;
-                }
-            }
-            if (!found)
-            {
-                motor_velocidade(0, 20);
-                motor_velocidade(1, 20);
-                motor_velocidade(2, 20);
-                motor_velocidade(3, 20);
-            }
-        }
-        else if (data[0] == PACOTE_TIPO_GOTO)
-        {
-            for (i = 1; i < PAYLOAD_SIZE_MOVE; i += 7)
-            {
-                if (data[i] == (ID_ROBO | 0x80))
-                {
-                	//Led_Acender(1);
-                	//Led_Apagar(2);
-                    is_goto = 0;
-                    found = 1;
-                    val = (s8)data[i + 1];
-                    motor_velocidade(0, val);
-                    val = (s8)data[i + 2];
-                    motor_velocidade(1, val);
-                    val = (s8)data[i + 3];
-                    motor_velocidade(2, val);
-                    val = (s8)data[i + 4];
-                    motor_velocidade(3, val);
-                    drible(data[i + 5]);
-                    val = (s8)data[i + 6];
-                    if (val > 0)
-                    {
-                        chutar_baixo((u32)(val * 10));
-                    }
-                    else if (val < 0)
-                    {
-                        val = -val;
-                        chutar_alto((u32)(val * 10));
-                    }
-                    return;
-                }
-                else if (data[i] == ID_ROBO)
-                {
-                    float x, y, o;
-                    is_goto = 1;
-                    found = 1;
+	if (data[0] == PACOTE_TIPO_MOVE && len == PAYLOAD_SIZE_MOVE)
+	{
+		for (i = 1; i < PAYLOAD_SIZE_MOVE; i += 7)
+		{
+			if (data[i] == ID_ROBO)
+			{
+				is_goto = 0;
+				found = 1;
+				val = (s8)data[i + 1];
+				motor_velocidade(0, val);
+				val = (s8)data[i + 2];
+				motor_velocidade(1, val);
+				val = (s8)data[i + 3];
+				motor_velocidade(2, val);
+				val = (s8)data[i + 4];
+				motor_velocidade(3, val);
+				drible(data[i + 5]);
+				val = (s8)data[i + 6];
+				//chutar((u32)(val*10/17));//val*150/255
+				if (val > 0)
+				{
+					chutar_baixo((u32)(val * 10));
+				}
+				else if (val < 0)
+				{
+					val = -val;
+					chutar_alto((u32)(val * 10));
+				}
+				return;
+			}
+		}
+		if (!found)
+		{
+			motor_velocidade(0, 20);
+			motor_velocidade(1, 20);
+			motor_velocidade(2, 20);
+			motor_velocidade(3, 20);
+		}
+	}
+	else if (data[0] == PACOTE_TIPO_GOTO && len == PAYLOAD_SIZE_GOTO)
+	{
+		for (i = 1; i < PAYLOAD_SIZE_MOVE; i += 7)
+		{
+			if (data[i] == (ID_ROBO | 0x80))
+			{
+				//Led_Acender(1);
+				//Led_Apagar(2);
+				is_goto = 0;
+				found = 1;
+				val = (s8)data[i + 1];
+				motor_velocidade(0, val);
+				val = (s8)data[i + 2];
+				motor_velocidade(1, val);
+				val = (s8)data[i + 3];
+				motor_velocidade(2, val);
+				val = (s8)data[i + 4];
+				motor_velocidade(3, val);
+				drible(data[i + 5]);
+				val = (s8)data[i + 6];
+				if (val > 0)
+				{
+					chutar_baixo((u32)(val * 10));
+				}
+				else if (val < 0)
+				{
+					val = -val;
+					chutar_alto((u32)(val * 10));
+				}
+				return;
+			}
+			else if (data[i] == ID_ROBO)
+			{
+				float x, y, o;
+				is_goto = 1;
+				found = 1;
 
-                    x = *((s16*) (data + i + 1)) / 1000.;
-                    y = *((s16*) (data + i + 3)) / 1000.;
-                    o = *((s16*) (data + i + 5)) * 1.7453292519943295769236907684886e-4;
-                    NewExpectedPosition(x, y, o);
+				x = *((s16*) (data + i + 1)) / 1000.;
+				y = *((s16*) (data + i + 3)) / 1000.;
+				o = *((s16*) (data + i + 5)) * 1.7453292519943295769236907684886e-4;
+				NewExpectedPosition(x, y, o);
 
-                    return;
-                }
-            }
-            if (!found)
-            {
-                motor_velocidade(0, 20);
-                motor_velocidade(1, 20);
-                motor_velocidade(2, 20);
-                motor_velocidade(3, 20);
-            }
-        }
-        else if (data[0] == PACOTE_TIPO_FIELD)
-        {
-            for (i = 1; i < PAYLOAD_SIZE_FIELD; i += 7)
-            {
-                if (data[i] == ID_ROBO)
-                {
-                    int x, y, o;
-                    x = *((s16*) data + i + 1) / 1000.;
-                    y = *((s16*) data + i + 3) / 1000.;
-                    o = *((s16*) data + i + 5) * 1.7453292519943295769236907684886e-4;
-                    NewObservedPosition(x, y, o);
-                    //NewObservedPosition(0., 1., o);
+				return;
+			}
+		}
+		if (!found)
+		{
+			motor_velocidade(0, 20);
+			motor_velocidade(1, 20);
+			motor_velocidade(2, 20);
+			motor_velocidade(3, 20);
+		}
+	}
+	else if (data[0] == PACOTE_TIPO_FIELD && len == PAYLOAD_SIZE_FIELD)
+	{
+		for (i = 1; i < PAYLOAD_SIZE_FIELD; i += 7)
+		{
+			if (data[i] == ID_ROBO)
+			{
+				int x, y, o;
+				x = *((s16*) data + i + 1) / 1000.;
+				y = *((s16*) data + i + 3) / 1000.;
+				o = *((s16*) data + i + 5) * 1.7453292519943295769236907684886e-4;
+				NewObservedPosition(x, y, o);
+				//NewObservedPosition(0., 1., o);
 
-                    return;
-                }
-            }
-        }
+				return;
+			}
+		}
+	}
 }
 
 unsigned char protocolo_get_robo_id()
