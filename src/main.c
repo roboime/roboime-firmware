@@ -9,7 +9,10 @@
 #include "drible.h"
 #include "chute.h"
 #include "sensor_bola.h"
-#include "rfm12.h"
+//#include "rfm12.h"
+#include "TM/defines.h"
+#include "TM/tm_stm32f4_nrf24l01.h"
+#include "TM/tm_stm32f4_spi.h"
 #include "protocolo.h"
 #include "dip_switch.h"
 
@@ -20,6 +23,23 @@ s32 time_ms=0;
 u8 led_bat_en = 0;
 int bateria=0;
 
+/* Receiver address */
+uint8_t nrf_address_transmissor[] = {	0xE7,	0xE7,	0xE7,	0xE7,	0xE7};
+
+/* My address */
+uint8_t nrf_address_robo[] = {	0x7E,	0x7E,	0x7E,	0x7E,	0x7E};
+
+int nrf_canal = 15;
+int nrf_payload = 32;
+
+//TODO: metodo para contar o canal!!!
+void preparar_NRF24L01() {
+	TM_NRF24L01_Init(nrf_canal, nrf_payload);
+	TM_NRF24L01_SetRF(TM_NRF24L01_DataRate_2M, TM_NRF24L01_OutputPower_M18dBm);
+
+	TM_NRF24L01_SetMyAddress(nrf_address_robo);
+	TM_NRF24L01_SetTxAddress(nrf_address_transmissor);
+}
 
 void SysTick_Handler(){
 	s32 tempo = time_ms % 200;
@@ -82,7 +102,8 @@ int main(void)
 	dip_switch_init();
 	Timer_Init(10000);
 	wait_ms(500);
-	rfm12_init();
+	//rfm12_init();
+	preparar_NRF24L01();
 	protocolo_init();
 	botao_init();
 	EXTILine0_Config();

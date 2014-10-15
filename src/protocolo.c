@@ -1,7 +1,7 @@
 #include "config.h"
 #include "stm32f4xx_conf.h"
 #include "protocolo.h"
-#include "rfm12.h"
+//#include "rfm12.h"
 #include "motores.h"
 #include "chute.h"
 #include "drible.h"
@@ -53,7 +53,7 @@ pacote_tx_s pacote_tx;
 pacote_rx_s pacote_rx;
 
 void protocolo_init(){
-	rfm12_receiver_mode();
+	//rfm12_receiver_mode();
 }
 
 void protocolo_transmitir(u8 type, u8 tam, u8 source, u8 dest, char *buf  ){
@@ -79,7 +79,8 @@ void protocolo_transmitir(u8 type, u8 tam, u8 source, u8 dest, char *buf  ){
 	pacote_tx.status=1;
 	pacote_tx.num_bytes=tam+6;
 	pacote_tx.bytecount=0;
-	rfm12_sendbuffer((char*)(&pacote_tx),pacote_tx.num_bytes);
+	//rfm12_sendbuffer((char*)(&pacote_tx),pacote_tx.num_bytes);
+	TM_NRF24L01_Transmit((char*)(&pacote_tx));
 	pacote_tx.status=0;
 }
 
@@ -139,15 +140,92 @@ unsigned int protocolo_ultima_recepcao(){
 	return up;
 }
 
-void protocolo_poll(){
+
+void protocolo_poll() {
+	static u8 status=PROTOCOLO_LIVRE;
+	static u8 pos=0;
+	uint8_t datain[32];
+	static u8 checksum=0;
+	u8 iterar;
+
+	//while(rfm12_data_available()){
+	while(TM_NRF24L01_DataReady()){
+		ultima_recepcao=1;
+		//c=rfm12_receive();
+		TM_NRF24L01_GetData(datain);
+		if(status==PROTOCOLO_LIVRE){
+			Led_Status_on();
+			status=PROTOCOLO_RECEBENDO;
+
+
+			//pos0: local.checksum
+			checksum = datain[0];
+
+			//pos0: len
+			pacote_rx.len = datain[0];
+
+			//pos1: type
+			pacote_rx.type = datain[1];
+			checksum ^= datain[1];
+
+			//pos2: source
+			pacote_rx.source = datain[2];
+			checksum ^= datain[2];
+
+			//pos3: dest
+			pacote_rx.dest = datain[3];
+			checksum ^= datain[3];
+
+			//pos4: rx.checksum
+			pacote_rx.checksum = datain[4];
+			checksum ^= 0xff;
+
+			if(checksum!=pacote_rx.checksum){
+					status=PROTOCOLO_LIVRE;
+					//rfm12_accept_data();
+					Led_Status_off();
+					continue;
+			}
+
+			//>>zerar local.checksum
+			checksum = 0;
+
+			//pos5: data[5-5=0]
+			for(pos = 5; pos < 32; pos++){
+				pacote_rx.data[pos - 5] = datain[pos];
+			}
+
+			//continue;
+		} else { //esse ja eh o segundo pacote! indice de rx.data agora eh 32
+			for(pos = 32; pos < 64; pos++ ){
+				pacote_rx.data[pos - 5] = datain[pos - 32];
+				checksum ^= datain[pos - 32];
+				if(pos >= (pacote_rx.len+5) || pos >= (PACOTE_DATA_SIZE+5)){
+					status=PROTOCOLO_LIVRE;
+					Led_Status_off();
+
+					if(checksum == 0){
+						protocolo_analisar((char*)pacote_rx.data, pacote_rx.len);
+					}
+					//rfm12_accept_data();
+					break; // pra sair do for
+				}
+			}
+		}
+	}
+}
+
+void protocolo_poll_old(){
 	static u8 status=PROTOCOLO_LIVRE;
 	static u8 pos=0;
 	char c;
 	static u8 checksum=0;
 
-	while(rfm12_data_available()){
+	//while(rfm12_data_available()){
+	while(TM_NRF24L01_DataReady()){
 		ultima_recepcao=1;
-		c=rfm12_receive();
+		//c=rfm12_receive();
+
 		if(status==PROTOCOLO_LIVRE){
 			Led_Status_on();
 			status=PROTOCOLO_RECEBENDO;
@@ -239,7 +317,7 @@ void rfm12_receive_callback(u8 c){
 			pacote_rx.checksum=c;
 			if(checksum!=pacote_rx.checksum){
 				status=PROTOCOLO_LIVRE;
-				rfm12_accept_data();
+				//rfm12_accept_data();
 				Led_Status_off();
 				break;
 			}
@@ -255,7 +333,7 @@ void rfm12_receive_callback(u8 c){
 				if(pacote_rx.type==0 ||  checksum==0){
 					protocolo_analisar((char*)pacote_rx.data, pacote_rx.len);
 				}
-				rfm12_accept_data();
+				//rfm12_accept_data();
 				break;
 			}
 			pos++;

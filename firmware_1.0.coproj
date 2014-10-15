@@ -32,7 +32,7 @@
           <Memory name="IROM2" type="ReadOnly" size="" startValue=""/>
           <Memory name="IRAM2" type="ReadWrite" size="0x00010000" startValue="0x10000000"/>
         </MemoryAreas>
-        <LocateLinkFile path="../../configuration/programdata/firmware_1.0/arm-gcc-link.ld" type="0"/>
+        <LocateLinkFile path="../../../../../coocox/coide/configuration/programdata/firmware_1.0/arm-gcc-link.ld" type="0"/>
       </Link>
       <Output>
         <Option name="OutputFileType" value="0"/>
@@ -67,49 +67,38 @@
     </DebugOption>
     <ExcludeFile/>
   </Target>
-  <Components path="./">
-    <Component id="30" name="C Library" path="" type="2"/>
-    <Component id="54" name="M4 CMSIS Core" path="" type="2"/>
-    <Component id="500" name="CMSIS BOOT" path="" type="2"/>
-    <Component id="501" name="RCC" path="" type="2"/>
-    <Component id="504" name="GPIO" path="" type="2"/>
-    <Component id="505" name="EXTI" path="" type="2"/>
-    <Component id="509" name="SPI" path="" type="2"/>
-    <Component id="511" name="DMA" path="" type="2"/>
-    <Component id="513" name="TIM" path="" type="2"/>
-    <Component id="514" name="ADC" path="" type="2"/>
-    <Component id="517" name="USART" path="" type="2"/>
-    <Component id="524" name="MISC" path="" type="2"/>
-    <Component id="526" name="SYSCFG" path="" type="2"/>
-  </Components>
+  <Components path="./"/>
   <Files>
     <File name="cmsis_lib/source/stm32f4xx_gpio.c" path="cmsis_lib/source/stm32f4xx_gpio.c" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_dma.c" path="cmsis_lib/source/stm32f4xx_dma.c" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_usart.c" path="cmsis_lib/source/stm32f4xx_usart.c" type="1"/>
+    <File name="TM/tm_stm32f4_nrf24l01.c" path="TM/tm_stm32f4_nrf24l01.c" type="1"/>
     <File name="src/dip_switch.c" path="src/dip_switch.c" type="1"/>
     <File name="src/timer.c" path="src/timer.c" type="1"/>
     <File name="cmsis_boot" path="" type="2"/>
     <File name="cmsis_lib/include/stm32f4xx_syscfg.h" path="cmsis_lib/include/stm32f4xx_syscfg.h" type="1"/>
     <File name="inc/rfm12.h" path="inc/rfm12.h" type="1"/>
-    <File name="cmsis_lib/include/stm32f4xx_usart.h" path="cmsis_lib/include/stm32f4xx_usart.h" type="1"/>
+    <File name="TM/defines.h" path="TM/defines.h" type="1"/>
     <File name="src" path="" type="2"/>
+    <File name="cmsis_lib/include/stm32f4xx_usart.h" path="cmsis_lib/include/stm32f4xx_usart.h" type="1"/>
     <File name="inc/pid.h" path="inc/pid.h" type="1"/>
     <File name="src/leds.c" path="src/leds.c" type="1"/>
-    <File name="cmsis_boot/stm32f4xx.h" path="cmsis_boot/stm32f4xx.h" type="1"/>
-    <File name="cmsis/core_cm4_simd.h" path="cmsis/core_cm4_simd.h" type="1"/>
     <File name="cmsis_boot/startup" path="" type="2"/>
+    <File name="cmsis/core_cm4_simd.h" path="cmsis/core_cm4_simd.h" type="1"/>
+    <File name="cmsis_boot/stm32f4xx.h" path="cmsis_boot/stm32f4xx.h" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_spi.c" path="cmsis_lib/source/stm32f4xx_spi.c" type="1"/>
     <File name="cmsis/core_cmFunc.h" path="cmsis/core_cmFunc.h" type="1"/>
     <File name="cmsis/core_cm4.h" path="cmsis/core_cm4.h" type="1"/>
     <File name="inc/protocolo.h" path="inc/protocolo.h" type="1"/>
     <File name="cmsis_lib/source/misc.c" path="cmsis_lib/source/misc.c" type="1"/>
-    <File name="cmsis_lib/include/stm32f4xx_tim.h" path="cmsis_lib/include/stm32f4xx_tim.h" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_adc.c" path="cmsis_lib/source/stm32f4xx_adc.c" type="1"/>
+    <File name="cmsis_lib/include/stm32f4xx_tim.h" path="cmsis_lib/include/stm32f4xx_tim.h" type="1"/>
     <File name="syscalls/syscalls.c" path="syscalls/syscalls.c" type="1"/>
     <File name="inc/chute.h" path="inc/chute.h" type="1"/>
     <File name="cmsis_lib/source" path="" type="2"/>
     <File name="inc/arm_math.h" path="inc/arm_math.h" type="1"/>
     <File name="inc/rfm12_config.h" path="inc/rfm12_config.h" type="1"/>
+    <File name="TM/tm_stm32f4_nrf24l01.h" path="TM/tm_stm32f4_nrf24l01.h" type="1"/>
     <File name="src/arm_sin_f32.c" path="src/arm_sin_f32.c" type="1"/>
     <File name="cmsis_boot/stm32f4xx_conf.h" path="cmsis_boot/stm32f4xx_conf.h" type="1"/>
     <File name="cmsis_boot/system_stm32f4xx.h" path="cmsis_boot/system_stm32f4xx.h" type="1"/>
@@ -117,6 +106,7 @@
     <File name="src/rfm12.c" path="src/rfm12.c" type="1"/>
     <File name="cmsis_lib/include/stm32f4xx_rcc.h" path="cmsis_lib/include/stm32f4xx_rcc.h" type="1"/>
     <File name="src/main.c" path="src/main.c" type="1"/>
+    <File name="TM/tm_stm32f4_spi.h" path="TM/tm_stm32f4_spi.h" type="1"/>
     <File name="src/protocolo.c" path="src/protocolo.c" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_syscfg.c" path="cmsis_lib/source/stm32f4xx_syscfg.c" type="1"/>
     <File name="cmsis_boot/startup/startup_stm32f4xx.c" path="cmsis_boot/startup/startup_stm32f4xx.c" type="1"/>
@@ -125,19 +115,20 @@
     <File name="inc/leds.h" path="inc/leds.h" type="1"/>
     <File name="inc/timer.h" path="inc/timer.h" type="1"/>
     <File name="src/arm_cos_f32.c" path="src/arm_cos_f32.c" type="1"/>
+    <File name="TM" path="" type="2"/>
     <File name="src/sensor_bola.c" path="src/sensor_bola.c" type="1"/>
     <File name="inc/motores.h" path="inc/motores.h" type="1"/>
-    <File name="inc/dip_switch.h" path="inc/dip_switch.h" type="1"/>
-    <File name="inc" path="" type="2"/>
     <File name="cmsis_lib/include/stm32f4xx_adc.h" path="cmsis_lib/include/stm32f4xx_adc.h" type="1"/>
+    <File name="inc" path="" type="2"/>
+    <File name="inc/dip_switch.h" path="inc/dip_switch.h" type="1"/>
     <File name="inc/config.h" path="inc/config.h" type="1"/>
-    <File name="cmsis_lib/include/stm32f4xx_exti.h" path="cmsis_lib/include/stm32f4xx_exti.h" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_exti.c" path="cmsis_lib/source/stm32f4xx_exti.c" type="1"/>
+    <File name="cmsis_lib/include/stm32f4xx_exti.h" path="cmsis_lib/include/stm32f4xx_exti.h" type="1"/>
     <File name="cmsis_boot/system_stm32f4xx.c" path="cmsis_boot/system_stm32f4xx.c" type="1"/>
     <File name="src/drible.c" path="src/drible.c" type="1"/>
     <File name="src/botao.c" path="src/botao.c" type="1"/>
-    <File name="cmsis_lib/include/stm32f4xx_spi.h" path="cmsis_lib/include/stm32f4xx_spi.h" type="1"/>
     <File name="src/motores.c" path="src/motores.c" type="1"/>
+    <File name="cmsis_lib/include/stm32f4xx_spi.h" path="cmsis_lib/include/stm32f4xx_spi.h" type="1"/>
     <File name="src/pid.c" path="src/pid.c" type="1"/>
     <File name="inc/adc.h" path="inc/adc.h" type="1"/>
     <File name="inc/botao.h" path="inc/botao.h" type="1"/>
@@ -150,8 +141,9 @@
     <File name="syscalls" path="" type="2"/>
     <File name="cmsis_lib/include/misc.h" path="cmsis_lib/include/misc.h" type="1"/>
     <File name="src/adc.c" path="src/adc.c" type="1"/>
-    <File name="inc/sensor_bola.h" path="inc/sensor_bola.h" type="1"/>
     <File name="cmsis_lib/include" path="" type="2"/>
+    <File name="inc/sensor_bola.h" path="inc/sensor_bola.h" type="1"/>
+    <File name="TM/tm_stm32f4_spi.c" path="TM/tm_stm32f4_spi.c" type="1"/>
     <File name="src/chute.c" path="src/chute.c" type="1"/>
   </Files>
 </Project>
