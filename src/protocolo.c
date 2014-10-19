@@ -1,7 +1,7 @@
 #include "config.h"
 #include "stm32f4xx_conf.h"
 #include "protocolo.h"
-//#include "rfm12.h"
+#include "rfm12.h"
 #include "motores.h"
 #include "chute.h"
 #include "drible.h"
@@ -22,20 +22,8 @@
 
 unsigned int ultima_recepcao=0;
 
-typedef struct {
-	//we transmit the bytes beginning here
-	u8 len;						//length byte - number of bytes in buffer
-	u8 type;					//type field for airlab
-	u8 source;					//origem do pacote
-	u8 dest;					//destino do pacote
-	u8 checksum;				//rx checksum
-	u8 data[PACOTE_DATA_SIZE+10];	//armazena os dados que serão trasmitidos + checksum
-	volatile uint8_t status;	//is the buffer free or occupied?
-	uint8_t num_bytes; 			//number of bytes to transmit (size in buffer)
-	uint8_t bytecount;   		//counter for the byte we are transmitting at the moment
-} pacote_tx_s;
+typedef struct{
 
-typedef struct {
 	//we transmit the bytes beginning here
 	u8 len;						//length byte - number of bytes in buffer
 	u8 type;					//type field for airlab
@@ -46,14 +34,28 @@ typedef struct {
 	volatile uint8_t status;	//is the buffer free or occupied?
 	uint8_t num_bytes; 			//number of bytes to transmit (size in buffer)
 	uint8_t bytecount;   		//counter for the byte we are transmitting at the moment
-} pacote_rx_s;
+}pacote_tx_s;
+
+typedef struct{
+
+	//we transmit the bytes beginning here
+	u8 len;						//length byte - number of bytes in buffer
+	u8 type;					//type field for airlab
+	u8 source;					//origem do pacote
+	u8 dest;					//destino do pacote
+	u8 checksum;				//rx checksum
+	u8 data[PACOTE_DATA_SIZE+10];	//armazena os dados que serão trasmitidos + checksum
+	volatile uint8_t status;	//is the buffer free or occupied?
+	uint8_t num_bytes; 			//number of bytes to transmit (size in buffer)
+	uint8_t bytecount;   		//counter for the byte we are transmitting at the moment
+}pacote_rx_s;
 
 
 pacote_tx_s pacote_tx;
 pacote_rx_s pacote_rx;
 
 void protocolo_init(){
-	//rfm12_receiver_mode();
+	rfm12_receiver_mode();
 }
 
 void protocolo_transmitir(u8 type, u8 tam, u8 source, u8 dest, char *buf  ){
@@ -79,28 +81,25 @@ void protocolo_transmitir(u8 type, u8 tam, u8 source, u8 dest, char *buf  ){
 	pacote_tx.status=1;
 	pacote_tx.num_bytes=tam+6;
 	pacote_tx.bytecount=0;
-	//rfm12_sendbuffer((char*)(&pacote_tx),pacote_tx.num_bytes);
-	TM_NRF24L01_Transmit((char*)(&pacote_tx));
+	rfm12_sendbuffer((char*)(&pacote_tx),pacote_tx.num_bytes);
 	pacote_tx.status=0;
 }
 
 void protocolo_analisar(char data[], u8 len){
-	u8 found=0;
 	u8 i=0;
 	float val=0;
 	if(len==PAYLOAD_SIZE){
 		if(data[0]==PACOTE_TIPO){
 			for(i=1;i<PAYLOAD_SIZE;i+=7){
 				if(data[i]==ID_ROBO){
-					found=1;
 					val=(s8)data[i+1];
-					//motor_velocidade(0,val);
+					motor_velocidade(0,val);
 					val=(s8)data[i+2];
-					//motor_velocidade(1,val);
+					motor_velocidade(1,val);
 					val=(s8)data[i+3];
-					//motor_velocidade(2,val);
+					motor_velocidade(2,val);
 					val=(s8)data[i+4];
-					//motor_velocidade(3,val);
+					motor_velocidade(3,val);
 					drible(data[i+5]);
 					val=(s8)data[i+6];
 
@@ -115,20 +114,12 @@ void protocolo_analisar(char data[], u8 len){
 						chutar_alto((u32)(val*10));
 					}
 					return;
-					}
-				}
-
-			if(!found) {
-				motor_velocidade(0,20);
-				motor_velocidade(1,20);
-				motor_velocidade(2,20);
-				motor_velocidade(3,20);
 				}
 			}
 		}
+	}
+
 }
-
-
 
 unsigned char protocolo_get_robo_id(){
 	return get_robot_id();
@@ -140,92 +131,47 @@ unsigned int protocolo_ultima_recepcao(){
 	return up;
 }
 
-
-void protocolo_poll() {
+void protocolo_poll_new_NRF24L01() {
 	static u8 status=PROTOCOLO_LIVRE;
-	static u8 pos=0;
 	uint8_t datain[32];
-	static u8 checksum=0;
 	u8 iterar;
-
-	//while(rfm12_data_available()){
-	while(TM_NRF24L01_DataReady()){
+	if(TM_NRF24L01_DataReady()){
 		ultima_recepcao=1;
-		//c=rfm12_receive();
 		TM_NRF24L01_GetData(datain);
-		if(status==PROTOCOLO_LIVRE){
+		//254, 0, 44, [7..], [7..],  [7..],  [7..],  [7..],  [7..], 55, 0....
+		//  1, 2,  3,  4-10, 11-17,  18-24,  25-31, 32|1-6,  7-13,  14.
+		//  1, 2,  3,  4-10, 11-17,  18-24,  25-31, 32|33-38,39-45, 46.
+		if(datain[0]==0xFE) {
+			//TODO: acender led na PE6
 			Led_Status_on();
-			status=PROTOCOLO_RECEBENDO;
+			status = PROTOCOLO_RECEBENDO;
 
-
-			//pos0: local.checksum
-			checksum = datain[0];
-
-			//pos0: len
-			pacote_rx.len = datain[0];
-
-			//pos1: type
-			pacote_rx.type = datain[1];
-			checksum ^= datain[1];
-
-			//pos2: source
-			pacote_rx.source = datain[2];
-			checksum ^= datain[2];
-
-			//pos3: dest
-			pacote_rx.dest = datain[3];
-			checksum ^= datain[3];
-
-			//pos4: rx.checksum
-			pacote_rx.checksum = datain[4];
-			checksum ^= 0xff;
-
-			if(checksum!=pacote_rx.checksum){
-					status=PROTOCOLO_LIVRE;
-					//rfm12_accept_data();
-					Led_Status_off();
-					continue;
+			pacote_rx.len = datain[2];
+			for(iterar = 2; iterar < 32; iterar++) {
+				pacote_rx.data[iterar-2] = datain[iterar];
 			}
 
-			//>>zerar local.checksum
-			checksum = 0;
-
-			//pos5: data[5-5=0]
-			for(pos = 5; pos < 32; pos++){
-				pacote_rx.data[pos - 5] = datain[pos];
+		} else {
+			status = PROTOCOLO_LIVRE;
+			//TODO: apagar led na PE6
+			Led_Status_off();
+			for(iterar = 0; iterar < 14; iterar++) {
+				pacote_rx.data[iterar+32] = datain[iterar];
 			}
-
-			//continue;
-		} else { //esse ja eh o segundo pacote! indice de rx.data agora eh 32
-			for(pos = 32; pos < 64; pos++ ){
-				pacote_rx.data[pos - 5] = datain[pos - 32];
-				checksum ^= datain[pos - 32];
-				if(pos >= (pacote_rx.len+5) || pos >= (PACOTE_DATA_SIZE+5)){
-					status=PROTOCOLO_LIVRE;
-					Led_Status_off();
-
-					if(checksum == 0){
-						protocolo_analisar((char*)pacote_rx.data, pacote_rx.len);
-					}
-					//rfm12_accept_data();
-					break; // pra sair do for
-				}
-			}
+			protocolo_analisar((char*)pacote_rx.data, pacote_rx.len);
 		}
 	}
 }
 
-void protocolo_poll_old(){
+void protocolo_poll_rfm12(){
 	static u8 status=PROTOCOLO_LIVRE;
 	static u8 pos=0;
 	char c;
 	static u8 checksum=0;
 
-	//while(rfm12_data_available()){
-	while(TM_NRF24L01_DataReady()){
+	while(rfm12_data_available()){
 		ultima_recepcao=1;
-		//c=rfm12_receive();
-
+		c=rfm12_receive();
 		if(status==PROTOCOLO_LIVRE){
 			Led_Status_on();
 			status=PROTOCOLO_RECEBENDO;
@@ -317,7 +263,7 @@ void rfm12_receive_callback(u8 c){
 			pacote_rx.checksum=c;
 			if(checksum!=pacote_rx.checksum){
 				status=PROTOCOLO_LIVRE;
-				//rfm12_accept_data();
+				rfm12_accept_data();
 				Led_Status_off();
 				break;
 			}
@@ -333,7 +279,7 @@ void rfm12_receive_callback(u8 c){
 				if(pacote_rx.type==0 ||  checksum==0){
 					protocolo_analisar((char*)pacote_rx.data, pacote_rx.len);
 				}
-				//rfm12_accept_data();
+				rfm12_accept_data();
 				break;
 			}
 			pos++;

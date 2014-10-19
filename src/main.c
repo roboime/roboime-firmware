@@ -9,7 +9,7 @@
 #include "drible.h"
 #include "chute.h"
 #include "sensor_bola.h"
-//#include "rfm12.h"
+#include "rfm12.h"
 #include "TM/defines.h"
 #include "TM/tm_stm32f4_nrf24l01.h"
 #include "TM/tm_stm32f4_spi.h"
@@ -19,9 +19,6 @@
 #define PI	3.14159265358979f
 
 
-s32 time_ms=0;
-u8 led_bat_en = 0;
-int bateria=0;
 
 /* Receiver address */
 uint8_t nrf_address_transmissor[] = {	0xE7,	0xE7,	0xE7,	0xE7,	0xE7};
@@ -29,11 +26,15 @@ uint8_t nrf_address_transmissor[] = {	0xE7,	0xE7,	0xE7,	0xE7,	0xE7};
 /* My address */
 uint8_t nrf_address_robo[] = {	0x7E,	0x7E,	0x7E,	0x7E,	0x7E};
 
-int nrf_canal = 15;
+int nrf_canal = 109;
 int nrf_payload = 32;
 
-//TODO: metodo para contar o canal!!!
-void preparar_NRF24L01() {
+s32 time_ms=0;
+u8 led_bat_en = 0;
+int bateria=0;
+
+
+void NRF24L01_init() {
 	TM_NRF24L01_Init(nrf_canal, nrf_payload);
 	TM_NRF24L01_SetRF(TM_NRF24L01_DataRate_2M, TM_NRF24L01_OutputPower_M18dBm);
 
@@ -55,32 +56,6 @@ void wait_ms(u32 ms){
 	while((tempo_ini+ms)>time_ms);
 }
 
-void quadrado()
-{
-	NewExpectedPosition(0,0.5,3.0*PI/4.0);
-	while(!ponto_alcancado());
-	NewExpectedPosition(0.5,0.5,PI/4.0);
-	while(!ponto_alcancado());
-	NewExpectedPosition(0.5,0,-PI/4.0);
-	while(!ponto_alcancado());
-	NewExpectedPosition(0,0,-3.0*PI/4);
-	while(!ponto_alcancado());
-}
-
-void zigzag()
-{
-	NewExpectedPosition(2,0,0);
-	while(!ponto_alcancado());
-	NewExpectedPosition(2,0,PI);
-	while(!ponto_alcancado());
-	wait_ms(1000);
-	NewExpectedPosition(0,0,PI);
-	while(!ponto_alcancado());
-	NewExpectedPosition(0,0,0);
-	while(!ponto_alcancado());
-	wait_ms(1000);
-}
-
 
 
 
@@ -94,16 +69,18 @@ int main(void)
 
 	Led_Pwr_on();
 
-	motor_inicializar();
-	adc_init();
+
+    motor_inicializar();
+    adc_init();
 	chute_init();
 	drible_init();
 	sensor_bola_init();
 	dip_switch_init();
 	Timer_Init(10000);
 	wait_ms(500);
+
+	NRF24L01_init();
 	//rfm12_init();
-	preparar_NRF24L01();
 	protocolo_init();
 	botao_init();
 	EXTILine0_Config();
@@ -112,9 +89,7 @@ int main(void)
 
 	unsigned char robo_id=protocolo_get_robo_id();
 	unsigned char temp;
-
-	// pisca id do robo
-	for(temp = 0; temp < robo_id; temp++){
+	for(temp=0;temp<robo_id;temp++){
 		Led_Pwr_on();
 		Led_Status_on();
 		wait_ms(200);
@@ -122,6 +97,20 @@ int main(void)
 		Led_Status_off();
 		wait_ms(200);
 	}
+
+//	while(1) {
+//		motor_velocidade(0, 40);
+//		motor_velocidade(1, 40);
+//		motor_velocidade(2, 40);
+//		motor_velocidade(3, 40);
+//		wait_ms(2500);
+//
+//		motor_velocidade(0, -40);
+//		motor_velocidade(1, -40);
+//		motor_velocidade(2, -40);
+//		motor_velocidade(3, -40);
+//		wait_ms(2500);
+//	}
 
  /*    drible(1);
 	motor_velocidade(0,80);
@@ -138,34 +127,34 @@ int main(void)
 
 	while(1){
 		//    	wait_ms(1000);
-		//    	protocolo_transmitir(0,6,0xfe,0,"LRBoot");
 
-		protocolo_poll();
 
+		protocolo_poll_new_NRF24L01();
+		protocolo_poll_new_NRF24L01();
 
 		if(protocolo_ultima_recepcao())
 		{
 			tempo_ultima_recepcao=time_ms;
 		}
-		else if((time_ms-tempo_ultima_recepcao)>50)
-		{
-			motor_parar(0);
-			motor_parar(1);
-			motor_parar(2);
-			motor_parar(3);
-			drible(0);
-		}
+//		else if((time_ms-tempo_ultima_recepcao)>50)
+//		{
+//			motor_parar(0);
+//			motor_parar(1);
+//			motor_parar(2);
+//			motor_parar(3);
+//			drible(0);
+//		}
 
 
 
 
 		if(sensor_bola(0)==0 || sensor_bola(1)==0){
-			Led_Pwr_on();
-		}
-		else
-		{
-			Led_Pwr_off();
-		}
+					Led_Pwr_on();
+					}
+					else
+					{
+						Led_Pwr_off();
+					}
 
 
 		int a1,a2,a3,a4,a5,a6,a7;
@@ -178,11 +167,6 @@ int main(void)
 		a7=adc_getConversion(6);
 
 
-
-		//while(1)
-		//{
-		//	zigzag();
-		//}
 
 		bateria=adc_getConversion(2);
 		if(bateria>3000)
@@ -209,6 +193,7 @@ int main(void)
 			Led_Apagar(1);
 			Led_Acender(2);
 			Led_Acender(3);
+
 		}
 
 		if(bateria<2800 && bateria>2700)
@@ -217,6 +202,7 @@ int main(void)
 			Led_Apagar(1);
 			Led_Apagar(2);
 			Led_Acender(3);
+
 		}
 
 		if(bateria<2700)
@@ -233,7 +219,8 @@ int main(void)
 				Led_Acender(1);
 				Led_Acender(2);
 				Led_Acender(3);
-				led_bat_toggle=0;}
+				led_bat_toggle=0;
+			}
 		}
 
 
@@ -252,6 +239,7 @@ int main(void)
 			{
 				Led_Pwr_off();
 			}
+
 		}
 
 	}

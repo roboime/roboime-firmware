@@ -21,18 +21,6 @@ void pidInit(CONTROLADOR_S *Controlador, float Kp, float Ki, float Kd, float sai
 	Controlador->integMax=integMax;
 }
 
-void posInit(POSICAO_S *P){
-	P->TETAesperado=0;
-	P->TETAreal=0;
-	P->Vteta=0;
-	P->Vx=0;
-	P->Vy=0;
-	P->Xreal=0;
-	P->Xesperado=0;
-	P->Yesperado=0;
-	P->Yreal=0;
-}
-
 void pidService(CONTROLADOR_S *Controlador){
     // calcula o erro
     Controlador->erro = Controlador->entrada-Controlador->realimentacao;
@@ -52,38 +40,3 @@ void pidService(CONTROLADOR_S *Controlador){
     Controlador->saida = MAX(Controlador->saida, -Controlador->saidaMax);
     Controlador->saida = MIN(Controlador->saida, Controlador->saidaMax);
 }
-
-void pidServiceAngulo(CONTROLADOR_S *Controlador){
-
-    // calcula o erro
-    Controlador->erro = Controlador->entrada-Controlador->realimentacao;
-    //Erro sempre menor que 180 graus
-   	while(Controlador->erro < -3.14) Controlador->erro += 2*PI;
-   	while(Controlador->erro >  3.14) Controlador->erro -= 2*PI;
-
-    // calcula a integral do erro
-    Controlador->erro_integ += Controlador->erro;
-    // limita a integral do erro
-    Controlador->erro_integ = MAX(Controlador->erro_integ, (-ABS(Controlador->integMax/Controlador->Ki)));
-    Controlador->erro_integ = MIN(Controlador->erro_integ,  ABS(Controlador->integMax/Controlador->Ki));
-    // calcula a derivada do erro
-    Controlador->erro_dif = Controlador->erro - Controlador->erro_anterior;
-    Controlador->erro_anterior = Controlador->erro;
-    // calcula o PID
-    Controlador->saida=	(Controlador->Kp*Controlador->erro)
-                		+(Controlador->Ki*Controlador->erro_integ)
-                		+(Controlador->Kd*Controlador->erro_dif);
-    // limita a saída
-    Controlador->saida = MAX(Controlador->saida, -Controlador->saidaMax);
-    Controlador->saida = MIN(Controlador->saida, Controlador->saidaMax);
-}
-
-
-
-void NewPosition(POSICAO_S *P, float x, float y, float teta)
-{
-	P->Xreal = x;
-	P->Yreal = y;
-	P->TETAreal = teta;
-}
-

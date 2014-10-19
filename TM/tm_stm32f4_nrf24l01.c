@@ -17,6 +17,7 @@
  * |----------------------------------------------------------------------
  */
 #include "tm_stm32f4_nrf24l01.h"
+//#define HORTA_SEM_ACK
 
 TM_NRF24L01_t TM_NRF24L01_Struct;
 
@@ -79,14 +80,33 @@ uint8_t TM_NRF24L01_Init(uint8_t channel, uint8_t payload_size) {
 	//Config register
 	TM_NRF24L01_WriteRegister(NRF24L01_REG_CONFIG, NRF24L01_CONFIG);
 	
-	//Enable auto-acknowledgment for all pipes
-	TM_NRF24L01_WriteRegister(NRF24L01_REG_EN_AA, 0x3F);
-	
-	//Enable RX addresses
-	TM_NRF24L01_WriteRegister(NRF24L01_REG_EN_RXADDR, 0x3F);
+#ifdef HORTA_SEM_ACK
+    //Enable auto-acknowledgment for all pipes
+		//TM_NRF24L01_WriteRegister(NRF24L01_REG_EN_AA, 0x3F);
+		// HORTA:
+		// Disabling the Enhanced ShockBurst features is done by setting register EN_AA=0x00 and the ARC = 0.
+		// HORTA: DESATIVANDO auto-acknowledgment for all pipes
+		TM_NRF24L01_WriteRegister(NRF24L01_REG_EN_AA, 0x00);
 
-	//Auto retransmit delay: 1000 (4x250) us and Up to 15 retransmit trials
-	TM_NRF24L01_WriteRegister(NRF24L01_REG_SETUP_RETR, 0x4F);
+		//Enable RX addresses
+		TM_NRF24L01_WriteRegister(NRF24L01_REG_EN_RXADDR, 0x3F);
+
+		//Auto retransmit delay: 1000 (4x250) us and Up to 15 retransmit trials
+		//TM_NRF24L01_WriteRegister(NRF24L01_REG_SETUP_RETR, 0x4F);
+		// HORTA
+		// Disabling the Enhanced ShockBurst features is done by setting register EN_AA=0x00 and the ARC = 0.
+		TM_NRF24L01_WriteRegister(NRF24L01_REG_SETUP_RETR, 0x00);
+#else
+		//Enable auto-acknowledgment for all pipes
+		TM_NRF24L01_WriteRegister(NRF24L01_REG_EN_AA, 0x3F);
+
+		//Enable RX addresses
+		TM_NRF24L01_WriteRegister(NRF24L01_REG_EN_RXADDR, 0x3F);
+
+		//Auto retransmit delay: 1000 (4x250) us and Up to 15 retransmit trials
+		TM_NRF24L01_WriteRegister(NRF24L01_REG_SETUP_RETR, 0x4F);
+#endif
+
 	
 	//Dynamic length configurations: No dynamic length
 	TM_NRF24L01_WriteRegister(NRF24L01_REG_DYNPD, (0 << NRF24L01_DPL_P0) | (0 << NRF24L01_DPL_P1) | (0 << NRF24L01_DPL_P2) | (0 << NRF24L01_DPL_P3) | (0 << NRF24L01_DPL_P4) | (0 << NRF24L01_DPL_P5));
