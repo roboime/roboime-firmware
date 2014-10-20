@@ -17,7 +17,7 @@
  * |----------------------------------------------------------------------
  */
 #include "tm_stm32f4_nrf24l01.h"
-//#define HORTA_SEM_ACK
+#define HORTA_SEM_ACK
 
 TM_NRF24L01_t TM_NRF24L01_Struct;
 

@@ -105,11 +105,23 @@ int main(void)
 //		motor_velocidade(3, 40);
 //		wait_ms(2500);
 //
+//		motor_velocidade(0, 0);
+//		motor_velocidade(1, 0);
+//		motor_velocidade(2, 0);
+//		motor_velocidade(3, 0);
+//		wait_ms(1000);
+//
 //		motor_velocidade(0, -40);
 //		motor_velocidade(1, -40);
 //		motor_velocidade(2, -40);
 //		motor_velocidade(3, -40);
 //		wait_ms(2500);
+//
+//		motor_velocidade(0, 0);
+//		motor_velocidade(1, 0);
+//		motor_velocidade(2, 0);
+//		motor_velocidade(3, 0);
+//		wait_ms(1000);
 //	}
 
  /*    drible(1);
