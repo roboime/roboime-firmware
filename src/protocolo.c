@@ -22,6 +22,8 @@
 
 unsigned int ultima_recepcao=0;
 
+extern u32 contador_evita_chute_longo;
+
 typedef struct{
 
 	//we transmit the bytes beginning here
@@ -85,6 +87,7 @@ void protocolo_transmitir(u8 type, u8 tam, u8 source, u8 dest, char *buf  ){
 	pacote_tx.status=0;
 }
 
+
 void protocolo_analisar(char data[], u8 len){
 	u8 i=0;
 	float val=0;
@@ -106,12 +109,12 @@ void protocolo_analisar(char data[], u8 len){
 					//chutar((u32)(val*10/17));//val*150/255
 					if(val>0)
 					{
-						chutar_baixo((u32)(val*10));
+						chutar_baixo((u32)(val));
 					}
 					else if(val<0)
 					{
 						val=-val;
-						chutar_alto((u32)(val*10));
+						chutar_alto((u32)(val));
 					}
 					return;
 				}
@@ -142,7 +145,6 @@ void protocolo_poll_new_NRF24L01() {
 		//  1, 2,  3,  4-10, 11-17,  18-24,  25-31, 32|1-6,  7-13,  14.
 		//  1, 2,  3,  4-10, 11-17,  18-24,  25-31, 32|33-38,39-45, 46.
 		if(datain[0]==0xFE) {
-			//TODO: acender led na PE6
 			Led_Status_on();
 			status = PROTOCOLO_RECEBENDO;
 
@@ -153,11 +155,12 @@ void protocolo_poll_new_NRF24L01() {
 
 		} else {
 			status = PROTOCOLO_LIVRE;
-			//TODO: apagar led na PE6
 			Led_Status_off();
 			for(iterar = 0; iterar < 14; iterar++) {
-				pacote_rx.data[iterar+32] = datain[iterar];
+				pacote_rx.data[iterar+30] = datain[iterar];
 			}
+
+			contador_evita_chute_longo--;
 			protocolo_analisar((char*)pacote_rx.data, pacote_rx.len);
 		}
 	}

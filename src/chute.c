@@ -17,68 +17,78 @@
 #define CHUTE_ALTO_PORT GPIOE
 
 #define TENTATIVAS_CHUTE_LONGO 20
+#define FATOR_DURACAO_CHUTE 2
 
+u32 contador_evita_chute_longo = 0;
 
 u32 chutar_baixo(u32 tempo) {
-	static u32 contador_evita_chute_longo_baixo = 0;
-	if (contador_evita_chute_longo_baixo <= 0) {
+	tempo *= FATOR_DURACAO_CHUTE;
+	if (contador_evita_chute_longo <= 0 && (sensor_bola(0) == 0 || sensor_bola(1) == 0)) {
+		u32 i = 0;
+		u32 j = 0;
+		u32 k = 0;
 
-		if (sensor_bola(0) == 0 || sensor_bola(1) == 0) {
-			u32 i = 0;
-			u32 j = 0;
-			u32 k = 0;
-
-			GPIO_SetBits(CHUTE_BAIXO_PORT, CHUTE_BAIXO_PIN);
-			for (i = tempo; i; i--) {
-				for (j = tempo; j; j--) {
-					k = j + i;
-				}
+		GPIO_SetBits(CHUTE_BAIXO_PORT, CHUTE_BAIXO_PIN);
+		for(i = tempo; i; i--) {
+			for(j = tempo; j; j--) {
+				k = j + i;
 			}
-			GPIO_ResetBits(CHUTE_BAIXO_PORT, CHUTE_BAIXO_PIN);
+		}
+		GPIO_ResetBits(CHUTE_BAIXO_PORT, CHUTE_BAIXO_PIN);
 
-			// resetar contador de chutes
-			contador_evita_chute_longo_baixo = TENTATIVAS_CHUTE_LONGO;
+		// resetar contador de chutes
+		contador_evita_chute_longo = TENTATIVAS_CHUTE_LONGO;
 
-			return k;
-		} else
-			return 0;
-
-	} else {
-		contador_evita_chute_longo_baixo--;
-	}
-	return 0;
+		return k;
+	} else
+		return 0;
 }
-
-
 
 u32 chutar_alto(u32 tempo) {
-	static u32 contador_evita_chute_longo_alto = 0;
-	if (contador_evita_chute_longo_alto <= 0) {
+	tempo *= FATOR_DURACAO_CHUTE;
 
-		if (sensor_bola(0) == 0 || sensor_bola(1) == 0) {
-			u32 i = 0;
-			u32 j = 0;
-			u32 k = 0;
-			GPIO_SetBits(CHUTE_ALTO_PORT, CHUTE_ALTO_PIN);
-			for (i = tempo; i; i--) {
-				for (j = tempo; j; j--) {
-					k = j + i;
-				}
+	if (contador_evita_chute_longo <= 0 && (sensor_bola(0) == 0 || sensor_bola(1) == 0)) {
+		u32 i = 0;
+		u32 j = 0;
+		u32 k = 0;
+
+		GPIO_SetBits(CHUTE_ALTO_PORT, CHUTE_ALTO_PIN);
+		for (i = tempo; i; i--) {
+			for (j = tempo; j; j--) {
+				k = j + i;
 			}
-			GPIO_ResetBits(CHUTE_ALTO_PORT, CHUTE_ALTO_PIN);
+		}
+		GPIO_ResetBits(CHUTE_ALTO_PORT, CHUTE_ALTO_PIN);
 
-			// zera contador de chutes
-			contador_evita_chute_longo_alto = TENTATIVAS_CHUTE_LONGO;
+		// resetar contador de chutes
+		contador_evita_chute_longo = TENTATIVAS_CHUTE_LONGO;
 
-			return k;
-		} else
-			return 0;
-
-	} else {
-		contador_evita_chute_longo_alto--;
-	}
-	return 0;
+		return k;
+	} else
+		return 0;
 }
+
+//u32 chutar_alto(u32 tempo)
+//{
+//	if(sensor_bola(0)==0 || sensor_bola(1)==0)
+//	{
+//		u32 i=0;
+//		u32 j=0;
+//		u32 k=0;
+//		GPIO_SetBits(CHUTE_ALTO_PORT, CHUTE_ALTO_PIN);
+//		for(i=tempo;i;i--)
+//		{
+//			for(j=tempo;j;j--){
+//				k=j+i;
+//			}
+//		}
+//		GPIO_ResetBits(CHUTE_ALTO_PORT, CHUTE_ALTO_PIN);
+//
+//		return k;
+//	}
+//	else
+//		return 0;
+//}
 
 void chute_init()
 {

@@ -144,29 +144,24 @@ int main(void)
 		protocolo_poll_new_NRF24L01();
 		protocolo_poll_new_NRF24L01();
 
-		if(protocolo_ultima_recepcao())
-		{
+		if(protocolo_ultima_recepcao())	{
 			tempo_ultima_recepcao=time_ms;
 		}
-//		else if((time_ms-tempo_ultima_recepcao)>50)
-//		{
-//			motor_parar(0);
-//			motor_parar(1);
-//			motor_parar(2);
-//			motor_parar(3);
-//			drible(0);
-//		}
 
-
+		else if((time_ms-tempo_ultima_recepcao)>200) {
+			motor_velocidade(0,0);
+			motor_velocidade(1,0);
+			motor_velocidade(2,0);
+			motor_velocidade(3,0);
+			drible(0);
+		}
 
 
 		if(sensor_bola(0)==0 || sensor_bola(1)==0){
-					Led_Pwr_on();
-					}
-					else
-					{
-						Led_Pwr_off();
-					}
+			Led_Pwr_on();
+		} else {
+			Led_Pwr_off();
+		}
 
 
 		int a1,a2,a3,a4,a5,a6,a7;
