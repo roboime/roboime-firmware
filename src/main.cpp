@@ -1,75 +1,90 @@
+/**
+*****************************************************************************
+**
+**  File        : main.c
+**
+**  Abstract    : main function.
+**
+**  Functions   : main
+**
+**  Environment : Atollic TrueSTUDIO(R)
+**                STMicroelectronics STM32F4xx Standard Peripherals Library
+**
+**  Distribution: The file is distributed "as is", without any warranty
+**                of any kind.
+**
+**  (c)Copyright Atollic AB.
+**  You may use this file as-is or modify it according to the needs of your
+**  project. This file may only be built (assembled or compiled and linked)
+**  using the Atollic TrueSTUDIO(R) product. The use of this file together
+**  with other tools than Atollic TrueSTUDIO(R) is not permitted.
+**
+*****************************************************************************
+*/
+
+/* Includes */
 #include "stm32f4xx.h"
 #include "stm32f4_discovery.h"
-#include "usbd_usr.h"
-#include "usbd_desc.h"
-#include "usbd_cdc_vcp.h"
-#include "usb_dcd_int.h"
-#include "usbd_cdc_core.h"
-#include "usbd_core.h"
-#include "usbd_usr.h"
-#include "usbd_desc.h"
-#include "usbd_cdc_vcp.h"
-#include "usb_dcd_int.h"
+#include "GPIO.h"
+#include "Pwm.h"
+#include "Encoder.h"
+#include "TimerTime.h"
+#include "TimerTime2.h"
+#include "Motor.h"
+#include "Robo.h"
+#include "my_spi.h"
 #include "NRF24.h"
+#include "adc.h"
 
 static __IO uint32_t TimingDelay;
 
+extern "C"{
+	void SysTick_Handler(void);
+}
 void TimingDelay_Decrement(void);
 void Delay_ms(uint32_t time_ms);
 
-extern "C" {
- void SysTick_Handler(void);
- void OTG_FS_IRQHandler(void);
- void OTG_FS_WKUP_IRQHandler(void);
-}
+Robo robo;
+Timer_Time robo_irq_timer;
 
-__ALIGN_BEGIN USB_OTG_CORE_HANDLE  USB_OTG_dev __ALIGN_END;
-
-int main(void){
+int main(void)
+{
   SysTick_Config(SystemCoreClock/1000);
-  USBD_Init(&USB_OTG_dev, USB_OTG_FS_CORE_ID, &USR_desc, &USBD_CDC_cb, &USR_cb);
-  STM_EVAL_LEDInit(LED5);
-  STM_EVAL_LEDInit(LED6);
+  float v3Bat;
   NRF24 radio;
-  radio.is_rx=false;
+  radio.is_rx=true;
   radio.Config();
   radio.NRF_CE->Set();
-  while (1)
-  {
-	int i=0;
-	uint8_t buf[] = {0,0,0,0,0};
-	uint8_t symbol;
-	while(i<6){
-	  if(VCP_get_char(&symbol)){
-		if((symbol=='a')&&(i==0)){
-	      i=1;
-		}
-		else if(i>0){
-		  buf[i-1]=symbol;
-		  i=i+1;
-		}
-	  }
-	}
-	VCP_send_buffer(buf, 5);
-	radio.NRF_CE->Set();
-    radio.WritePayload(buf, 5);
-    int counter;
-    while(radio.TxEmpty()!=0){
-      counter++;
-      if(counter==0xeeee2)
-    	radio.FlushTx();
+
+  while (1){
+    if(radio.DataReady()||(radio.RxEmpty()==0)){
+      radio.NRF_CE->Reset();
+      radio.CleanDataReady();
+      uint8_t data_in[5];
+      radio.ReadPayload(data_in, 5);
+      int v[3];
+      for(int i2=0; i2<3; i2++){
+        if(data_in[i2]<100){
+          v[i2]=10*data_in[i2];
+        }
+        else{
+          v[i2]=-10*(data_in[i2]-100);
+        }
+      }
+	  robo.set_speed(v[0], v[1], v[2]);
+	  radio.FlushRx();
+      radio.NRF_CE->Set();
     }
-    if(radio.DataSent()){
-	  radio.CleanDataSent();
-	  STM_EVAL_LEDToggle(LED6);
-	}
-	if(radio.MaxRt()){
-	  radio.CleanMaxRt();
-	  radio.FlushTx();
-	  STM_EVAL_LEDToggle(LED5);
-	}
-	radio.NRF_CE->Reset();
   }
+}
+
+extern "C" {
+void TIM6_DAC_IRQHandler(){
+  if(TIM_GetITStatus(TIM6,TIM_IT_Update)){
+    TIM_ClearITPendingBit(TIM6,TIM_IT_Update);
+	robo.control_speed();
+  }
+}
 }
 
 extern "C"{
@@ -83,22 +98,10 @@ void TimingDelay_Decrement(void){
     TimingDelay--;
   }
 }
-void Delay_ms(uint32_t time_ms){
+void Delay_ms(uint32_t time_ms)
+{
   TimingDelay = time_ms;
   while(TimingDelay != 0);
-}
-void OTG_FS_IRQHandler(void){
-  USBD_OTG_ISR_Handler (&USB_OTG_dev);
-}
-
-void OTG_FS_WKUP_IRQHandler(void){
-  if(USB_OTG_dev.cfg.low_power)
-  {
-    *(uint32_t *)(0xE000ED10) &= 0xFFFFFFF9 ;
-    SystemInit();
-    USB_OTG_UngateClock(&USB_OTG_dev);
-  }
-  EXTI_ClearITPendingBit(EXTI_Line18);
 }
 
 /*
