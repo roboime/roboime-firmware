@@ -1,187 +1,105 @@
-/*
- * NOVO:
- * Usará o pino IRQ do nRF24 e interruptions para lidar com a recepção de mensagens
- * RECENTE:
- * Em vez de se basear em 3 funções diferentes, usar apenas um comando de SPI genérico
- * Mantém-se a configuração de SPI divida em duas partes:
- * 		uma parte fica no construtor da classe SPI e faz a inicialização do SCK,MOSI e MISO
- * 		a outra parte fica no construtor da classe NRF, e inicializa o CSN
- * o pino VDD do NRF fica ligado direto no VDD da discovery
- * a função NRF::begin() é chamada dentro do construtor do nRF
- *
- * Author: Renan Pícoli
- */
+#include "stm32f4xx.h"
+#include "stm32f4_discovery.h"
+#include "usbd_usr.h"
+#include "usbd_desc.h"
+#include "usbd_cdc_vcp.h"
+#include "usb_dcd_int.h"
+#include "usbd_cdc_core.h"
+#include "usbd_core.h"
+#include "usbd_usr.h"
+#include "usbd_desc.h"
+#include "usbd_cdc_vcp.h"
+#include "usb_dcd_int.h"
+#include "NRF24.h"
 
-/* Includes */
-#include "main.h"
-
-#include "own_libraries/NRF24.h"
-#include "own_libraries/CONFIG.h"
-#include "own_libraries/SPI_interface.h"
-
-uint32_t TimingDelay;
-
-//void Delay (uint32_t nTime);
+static __IO uint32_t TimingDelay;
 
 void TimingDelay_Decrement(void);
+void Delay_ms(uint32_t time_ms);
 
 extern "C" {
  void SysTick_Handler(void);
-
- //handlers que podem ser chamados
- void EXTI0_IRQHandler();
- void EXTI1_IRQHandler();
- void EXTI2_IRQHandler();
- void EXTI3_IRQHandler();
- void EXTI4_IRQHandler();
- void EXTI9_5_IRQHandler();
- void EXTI15_10_IRQHandler();
+ void OTG_FS_IRQHandler(void);
+ void OTG_FS_WKUP_IRQHandler(void);
 }
 
-uint8_t USB_receive_and_put(NRF* radio_ptr);
+__ALIGN_BEGIN USB_OTG_CORE_HANDLE  USB_OTG_dev __ALIGN_END;
 
-NRF* radio_ptr;
-
-Robo robo;
-
-int main(void)
-{
+int main(void){
   SysTick_Config(SystemCoreClock/1000);
-
-  STM_EVAL_LEDInit(LED3);
-  STM_EVAL_LEDInit(LED4);
+  USBD_Init(&USB_OTG_dev, USB_OTG_FS_CORE_ID, &USR_desc, &USBD_CDC_cb, &USR_cb);
   STM_EVAL_LEDInit(LED5);
   STM_EVAL_LEDInit(LED6);
-
-  NRF radio;//inicializa o NRF com os pinos default, deixa em POWER_UP
-  radio_ptr=&radio;
-  radio.RX_configure();
-  radio.start_listen();
-
+  NRF24 radio;
+  radio.is_rx=false;
+  radio.Config();
+  radio.NRF_CE->Set();
   while (1)
   {
-		if(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_5)){
-		  STM_EVAL_LEDOn(LED3);
-		  STM_EVAL_LEDOff(LED4);
-		  if(EXTI_GetITStatus(EXTI_Line5)!=RESET)
-			  STM_EVAL_LEDOn(LED5);
-		  else
-			  STM_EVAL_LEDOff(LED5);
-	  }
-	  else{
-		  STM_EVAL_LEDOff(LED3);
-		  STM_EVAL_LEDOn(LED4);
-	  }
-  }
-}
-extern "C" {
-void TIM6_DAC_IRQHandler(){
-  if(TIM_GetITStatus(TIM6,TIM_IT_Update)){
-    TIM_ClearITPendingBit(TIM6,TIM_IT_Update);
-  }
-}
-}
-
-uint8_t USB_receive_and_put(NRF* radio_ptr){
-	static uint8_t data[]={0,0,0,0,0};
-	//passa por aqui
-	if(radio_ptr->RECEIVE(data)){
-		//TODO: testar se ainda há pacotes para ler, COMO O MANUAL MANDA
-/*		if(radio_ptr->DATA_READY()){
-			STM_EVAL_LEDOn(LED5);
-		}*/
-	    int dutys[4];
-		for(int i2=0; i2<4; i2++){
-			if(data[i2+1]<100){
-			    dutys[i2]=10*data[i2+1];
-			}
-			else{
-				dutys[i2]=-10*(data[i2+1]-100);
-			}
+	int i=0;
+	uint8_t buf[] = {0,0,0,0,0};
+	uint8_t symbol;
+	while(i<6){
+	  if(VCP_get_char(&symbol)){
+		if((symbol=='a')&&(i==0)){
+	      i=1;
 		}
-		robo.set_pwms(dutys);
-		return 1;
+		else if(i>0){
+		  buf[i-1]=symbol;
+		  i=i+1;
+		}
+	  }
 	}
-	else{
-		return 0;
+	VCP_send_buffer(buf, 5);
+	radio.NRF_CE->Set();
+    radio.WritePayload(buf, 5);
+    int counter;
+    while(radio.TxEmpty()!=0){
+      counter++;
+      if(counter==0xeeee2)
+    	radio.FlushTx();
+    }
+    if(radio.DataSent()){
+	  radio.CleanDataSent();
+	  STM_EVAL_LEDToggle(LED6);
 	}
+	if(radio.MaxRt()){
+	  radio.CleanMaxRt();
+	  radio.FlushTx();
+	  STM_EVAL_LEDToggle(LED5);
+	}
+	radio.NRF_CE->Reset();
+  }
 }
 
-void EXTI0_IRQHandler(){
-	USB_receive_and_put(radio_ptr);
-	EXTI_ClearITPendingBit(EXTI_Line0);
-	STM_EVAL_LEDToggle(LED6);//indicador de sucesso
-	return;
+extern "C"{
+  void SysTick_Handler(void){
+    TimingDelay_Decrement();
+  }
 }
 
-void EXTI1_IRQHandler(){
-	USB_receive_and_put(radio_ptr);
-	EXTI_ClearITPendingBit(EXTI_Line1);
-	STM_EVAL_LEDToggle(LED6);//indicador de sucesso
-	return;
-}
-
-void EXTI2_IRQHandler(){
-	USB_receive_and_put(radio_ptr);
-	EXTI_ClearITPendingBit(EXTI_Line2);
-	STM_EVAL_LEDToggle(LED6);//indicador de sucesso
-	return;
-}
-
-void EXTI3_IRQHandler(){
-	USB_receive_and_put(radio_ptr);
-	EXTI_ClearITPendingBit(EXTI_Line3);
-	STM_EVAL_LEDToggle(LED6);//indicador de sucesso
-	return;
-}
-
-void EXTI4_IRQHandler(){
-	USB_receive_and_put(radio_ptr);
-	EXTI_ClearITPendingBit(EXTI_Line4);
-	STM_EVAL_LEDToggle(LED6);//indicador de sucesso
-	return;
-}
-
-void EXTI9_5_IRQHandler(){
-	//passa por aqui
-	USB_receive_and_put(radio_ptr);
-	//NÃO passa por aqui
-	//contém 1 na posição correspondente às linhas que têm IT para tratar
-	EXTI_ClearITPendingBit(EXTI_Line(radio_ptr->IRQ_Pin()));
-	STM_EVAL_LEDToggle(LED6);//indicador de sucesso
-	return;
-}
-
-void EXTI15_10_IRQHandler(){
-	USB_receive_and_put(radio_ptr);
-	//contém 1 na posição correspondente às linhas que têm IT para tratar
-	EXTI_ClearITPendingBit(EXTI_Line(radio_ptr->IRQ_Pin()));
-	STM_EVAL_LEDToggle(LED6);//indicador de sucesso
-	return;
-}
-
-/*void Delay( uint32_t nTime)
-{
-  TimingDelay = nTime;
-
-  while(TimingDelay != 0); //gustavo
-}*/
-
-/*
-void TimingDelay_Decrement(void)
-{
-  if (TimingDelay != 0x00)
-  {
+void TimingDelay_Decrement(void){
+  if(TimingDelay != 0x00){
     TimingDelay--;
   }
 }
-extern "C" {
-void SysTick_Handler(void)
-{
-  TimingDelay_Decrement();
+void Delay_ms(uint32_t time_ms){
+  TimingDelay = time_ms;
+  while(TimingDelay != 0);
 }
+void OTG_FS_IRQHandler(void){
+  USBD_OTG_ISR_Handler (&USB_OTG_dev);
 }
-*/
+
+void OTG_FS_WKUP_IRQHandler(void){
+  if(USB_OTG_dev.cfg.low_power)
+  {
+    *(uint32_t *)(0xE000ED10) &= 0xFFFFFFF9 ;
+    SystemInit();
+    USB_OTG_UngateClock(&USB_OTG_dev);
+  }
+  EXTI_ClearITPendingBit(EXTI_Line18);
+}
 
 /*
  * Callback used by stm32f4_discovery_audio_codec.c.
