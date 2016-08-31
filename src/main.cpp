@@ -35,6 +35,7 @@
 #include "my_spi.h"
 #include "NRF24.h"
 #include "adc.h"
+#include "dibre.h"
 
 static __IO uint32_t TimingDelay;
 
@@ -49,31 +50,41 @@ Timer_Time robo_irq_timer;
 
 int main(void)
 {
+
+  dibre ronaldo;
+  ronaldo.Set_Vel(0);
+
+  adc volt;
+  volt.ADC_Config(10, GPIOC, GPIO_Pin_0);
+
   SysTick_Config(SystemCoreClock/1000);
+
   float v3Bat;
   NRF24 radio;
   radio.is_rx=true;
   radio.Config();
   radio.NRF_CE->Set();
 
+
   while (1){
+
     if(radio.DataReady()||(radio.RxEmpty()==0)){
-      radio.NRF_CE->Reset();
-      radio.CleanDataReady();
-      uint8_t data_in[5];
-      radio.ReadPayload(data_in, 5);
-      int v[3];
-      for(int i2=0; i2<3; i2++){
-        if(data_in[i2]<100){
-          v[i2]=10*data_in[i2];
-        }
-        else{
-          v[i2]=-10*(data_in[i2]-100);
-        }
-      }
-	  robo.set_speed(v[0], v[1], v[2]);
-	  radio.FlushRx();
-      radio.NRF_CE->Set();
+	  radio.NRF_CE->Reset();
+	  radio.CleanDataReady();
+	  uint8_t data_in[5];
+	  radio.ReadPayload(data_in, 5);
+	  int v[3];
+	  for(int i2=0; i2<3; i2++){
+	  if(data_in[i2]<100){
+	    v[i2]=10*data_in[i2];
+	  }
+	  else{
+	    v[i2]=-10*(data_in[i2]-100);
+	  }
+	}
+    robo.set_speed(v[0], v[1], v[2]);
+	radio.FlushRx();
+	radio.NRF_CE->Set();
     }
   }
 }
