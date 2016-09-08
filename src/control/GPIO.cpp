@@ -29,6 +29,12 @@ GPIO::GPIO(GPIO_TypeDef* Port, uint16_t Pin) {
 	GPIO_Port = Port;
 	GPIO_Pin = Pin;
 }
+bool GPIO::Status(){
+  uint8_t status_bit = GPIO_ReadOutputDataBit(GPIO_Port, GPIO_Pin);
+  if(status_bit==Bit_SET)
+    return true;
+  return false;
+}
 void GPIO::Set(){
 	GPIO_SetBits(GPIO_Port, GPIO_Pin);
 	return;

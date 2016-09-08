@@ -22,6 +22,8 @@ Pwm::Pwm(GPIO_TypeDef* Port, uint32_t Pin, TIM_TypeDef * Tim, uint8_t Af_Pin, ui
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
 	if(Tim == TIM8)
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM8, ENABLE);
+	if(Tim == TIM12)
+		RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM12, ENABLE);
 
 	GPIO_InitTypeDef GPIO_InitStructure;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;

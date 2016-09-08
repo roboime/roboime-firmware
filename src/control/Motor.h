@@ -39,7 +39,7 @@ private:
 	float Speed_Last_Error[10];
 	uint32_t last_position;
 	uint32_t last_time;
-	double last_vel_answer = 0;
+	double last_vel_answer;
 	int16_t last_speed_pos;
 };
 #endif /* MOTOR_H_ */

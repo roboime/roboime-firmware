@@ -15,12 +15,18 @@
 #include "TimerTime2.h"
 #include "Motor.h"
 #include "adc.h"
+#include "dibre.h"
 
 class Robo {
 public:
 	Robo();
+	GPIO *high_kick;
+	GPIO *chute_baixo;
+	void HighKick();
+	void ChuteBaixo();
 	void control_speed();
 	void control_pos();
+	dibre *drible;
 	int pos[4];
 	int speed[4];
 	Timer_Time2 *robo_timer;
@@ -33,6 +39,7 @@ public:
     adc *batAdc;
     float vBat;
     void set_speed(int v_r, int v_t, int w);
+
 private:
 };
 #endif /* ROBO_H_ */

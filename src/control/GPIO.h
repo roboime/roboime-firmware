@@ -15,6 +15,7 @@ public:
 	GPIO(GPIO_TypeDef* Port, uint16_t Pin);
 	void Set();
 	void Reset();
+	bool Status();
 private:
 	GPIO_TypeDef* GPIO_Port;
 	uint16_t GPIO_Pin;

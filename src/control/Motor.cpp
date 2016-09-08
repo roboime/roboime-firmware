@@ -19,6 +19,7 @@ Motor::Motor(Pwm *A_High,
 	Motor_B_Low = B_Low;
 	Motor_Enc = Enc;
 	Motor_Time = MTimer;
+	last_vel_answer = 0;
 }
 void Motor::Control_Pos(uint32_t hold_position){
 	uint32_t position;
@@ -56,24 +57,26 @@ void Motor::Answer(int16_t answer)
 {
 	if (answer > 0)
 	{
-		if (answer>600)
+		if (answer>1000)
 		{
-			answer=600;
+			answer=1000;
 		}
 		Motor_A_Low->Reset();
 		Motor_B_High->set_DutyCycle(0);
+		while(Motor_A_Low->Status());
 		Motor_A_High->set_DutyCycle(answer);
 		Motor_B_Low->Set();
 	}
 	else
 	{
 		answer=-answer;
-		if(answer>600)
+		if(answer>1000)
 		{
-			answer=600;
+			answer=1000;
 		}
 		Motor_B_Low->Reset();
 		Motor_A_High->set_DutyCycle(0);
+		while(Motor_B_Low->Status());
 		Motor_B_High->set_DutyCycle(answer);
 		Motor_A_Low->Set();
 	}

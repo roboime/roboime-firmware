@@ -50,28 +50,33 @@ Timer_Time robo_irq_timer;
 int main(void)
 {
   SysTick_Config(SystemCoreClock/1000);
-  float v3Bat;
   NRF24 radio;
   radio.is_rx=true;
   radio.Config();
   radio.NRF_CE->Set();
-
   while (1){
     if(radio.DataReady()||(radio.RxEmpty()==0)){
       radio.NRF_CE->Reset();
       radio.CleanDataReady();
-      uint8_t data_in[5];
-      radio.ReadPayload(data_in, 5);
-      int v[3];
-      for(int i2=0; i2<3; i2++){
-        if(data_in[i2]<100){
-          v[i2]=10*data_in[i2];
+      uint8_t data_in[6];
+      radio.ReadPayload(data_in, 6);
+      if(data_in[0]=='a'){
+        int v[3];
+        for(int i2=1; i2<4; i2++){
+          if(data_in[i2]<100){
+            v[i2-1]=10*data_in[i2];
+          }
+          else{
+            v[i2-1]=-10*(data_in[i2]-100);
+          }
         }
-        else{
-          v[i2]=-10*(data_in[i2]-100);
-        }
+	    robo.set_speed(v[0], v[1], v[2]);
+	    if((data_in[4]&0b00000001)) robo.ChuteBaixo();
+  	    if((data_in[4]&0b00000010)) robo.HighKick();
+	    int drible_vel;
+	    drible_vel = 10*data_in[5];
+	    robo.drible->Set_Vel(drible_vel);
       }
-	  robo.set_speed(v[0], v[1], v[2]);
 	  radio.FlushRx();
       radio.NRF_CE->Set();
     }
