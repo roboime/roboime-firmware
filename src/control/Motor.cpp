@@ -36,7 +36,7 @@ void Motor::Control_Speed(int16_t hold_speed){
 	int16_t vel_answer;
 	uint32_t position = Motor_Enc->get_position();
 	Motor_Enc->set_position((uint32_t) 20000);
-	speed = 1000*((int16_t)position-20000);
+	speed = 300*((int16_t)position-20000);
     vel_answer = -Spe_Calc_Answer(speed, hold_speed);
 	this->Answer((int16_t)vel_answer);
 	return;

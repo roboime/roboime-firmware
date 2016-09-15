@@ -7,6 +7,9 @@
 
 #include <NRF24.h>
 
+uint8_t addressRoboList[] = {0XC3, 0XC4, 0XC5, 0XC6, 0XC7, 0XC8, 0XC9,
+		0XCA, 0XCB, 0XB3, 0XB4, 0XB5, 0XB6, 0XB7, 0XB8, 0XB9};
+
 NRF24::NRF24() {
   NRF_Spi = new MySpi();
   NRF_CE = new GPIO(GPIOA, GPIO_Pin_3);
@@ -117,6 +120,16 @@ int NRF24::CheckPayloadWidth(){
 	return 0;
   return buf_in[1];
 }
+int NRF24::SetId(uint8_t roboId){
+  uint8_t roboAddress[5];
+  for(int i=0; i<5; i++){
+    roboAddress[i]=addressRoboList[roboId];
+  }
+  WriteRegister(0x0A, roboAddress, 5);
+  WriteRegister(0x10, roboAddress, 5);
+  return 0;
+}
+
 int NRF24::Test(){
   uint8_t new_value=0x57;
   uint8_t value;

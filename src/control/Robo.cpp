@@ -31,8 +31,81 @@ Robo::Robo()
 
 	high_kick = new GPIO(GPIOD, GPIO_Pin_8);
 	chute_baixo = new GPIO(GPIOD, GPIO_Pin_10);
+    radio = new NRF24();
+    radio->is_rx=true;
+    radio->Config();
+    radio->SetId(0);
+    radio->NRF_CE->Set();
 }
+/*
+Pacote do tx
 
+00 uint8_t[1] tipo de pacote e versão do protocolo
+01-07 int16_t[3] posição medida pela câmera
+08 uint8_t pos_delay
+09 uint8_t kick_duration
+10 uint8_t kick_flags
+11 uint8_t dribler_speed
+12 uint8_t skill_id
+13-26 skill_data
+
+Pacote do rx
+
+00 uint8_t tipo de pacote e versão do protocolo
+01-06 int16_t[3] posição atual calibrada com os sensores do robo
+07-12 int16_t[3] velocidade medida pelo robô
+13 uint8_t battery level
+14 uint8_t kick capacitors level
+15 uint8_t flags como os sensor de posse da bola
+16 uint8_t hardware id
+ */
+void Robo::Receive(){
+  if(radio->DataReady()||(radio->RxEmpty()==0)){
+    radio->NRF_CE->Reset();
+    radio->CleanDataReady();
+    uint8_t data_in[27];
+    radio->ReadPayload(data_in, 27);
+    procPacket(data_in);
+    radio->FlushRx();
+    nPacketReceived++;
+    if(nPacketReceived>10){
+      radio->FlushTx();
+      radio->CleanDataSent();
+  	  uint8_t data_out[17];
+  	  uint8_t batLevel = 10*vBat;
+  	  data_out[13] = batLevel;
+  	  radio->WriteAckPayload(data_out, 17);
+  	  nPacketReceived = 0;
+    }
+	if(radio->MaxRt()){
+	  radio->CleanMaxRt();
+	  radio->FlushTx();
+	}
+    radio->NRF_CE->Set();
+    nVerifyPacket=0;
+  }
+  else{
+    nVerifyPacket++;
+  }
+  if(nVerifyPacket>0x3ee2){
+    set_speed(0, 0, 0);
+    nVerifyPacket=0;
+  }
+}
+void Robo::procPacket(uint8_t *dataPacket){
+  if(dataPacket[0]=='a'){
+	if((dataPacket[10]&0b00000001)) ChuteBaixo();
+	if((dataPacket[10]&0b00000010)) HighKick();
+	int drible_vel;
+	drible_vel = 10*dataPacket[11];
+	drible->Set_Vel(drible_vel);
+	if(dataPacket[12]==0){
+      int16_t v[3];
+      memcpy(v, (dataPacket+13), 6);
+      set_speed(v[0], v[1], v[2]);
+	}
+  }
+}
 void Robo::HighKick(){
 	high_kick->Set();
 	for(int i=0;i<0xeee2;i++);
@@ -64,7 +137,7 @@ void Robo::control_speed(){
   }
 }
 void Robo::set_speed(int v_r, int v_t, int w){
-	uint8_t R = 1; //TODO valor temporario
+	float R = 0.06; //TODO valor temporario
 
 	speed[0] = -v_r*cos_phi + v_t*sin_phi + w*R;
 	speed[2] = -v_r*cos_phi - v_t*sin_phi + w*R;

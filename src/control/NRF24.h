@@ -26,6 +26,7 @@ public:
 	int WriteAckPayload(uint8_t *data, int size);
 	int CheckPayloadWidth();
 	int Test();
+	int SetId(uint8_t roboId);
 	int DataSent();
 	int DataReady();
 	int MaxRt();

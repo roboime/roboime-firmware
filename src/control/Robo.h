@@ -7,6 +7,7 @@
 #ifndef ROBO_H_
 #define ROBO_H_
 
+#include <cstring>
 #include "stm32f4xx.h"
 #include "stm32f4_discovery.h"
 #include "GPIO.h"
@@ -16,6 +17,7 @@
 #include "Motor.h"
 #include "adc.h"
 #include "dibre.h"
+#include "NRF24.h"
 
 class Robo {
 public:
@@ -38,6 +40,11 @@ public:
     Motor *motors[4];
     adc *batAdc;
     float vBat;
+    int nVerifyPacket;
+    int nPacketReceived;
+    void Receive();
+    void procPacket(uint8_t *dataPacket);
+    NRF24 *radio;
     void set_speed(int v_r, int v_t, int w);
 
 private:
