@@ -65,7 +65,6 @@ defined in linker script */
  * @param  None
  * @retval : None
 */
-
     .section  .text.Reset_Handler
   .weak  Reset_Handler
   .type  Reset_Handler, %function
@@ -101,12 +100,13 @@ LoopFillZerobss:
   bcc  FillZerobss
 
 /* Call the clock system intitialization function.*/
-  bl  SystemInit   
+  bl  SystemInit
 /* Call static constructors */
     bl __libc_init_array
 /* Call the application's entry point.*/
   bl  main
   bx  lr    
+
 .size  Reset_Handler, .-Reset_Handler
 
 /**
@@ -128,6 +128,30 @@ Infinite_Loop:
 * 0x0000.0000.
 * 
 *******************************************************************************/
+
+  .section  .isr_vector_bl,"a",%progbits
+  .type  g_pfnVectors_bl, %object
+  .size  g_pfnVectors_bl, .-g_pfnVectors_bl
+
+
+g_pfnVectors_bl:
+  .word  _estack
+  .word  Reset_Handler
+  .word  NMI_Handler
+  .word  HardFault_Handler
+  .word  MemManage_Handler
+  .word  BusFault_Handler
+  .word  UsageFault_Handler
+  .word  0
+  .word  0
+  .word  0
+  .word  0
+  .word  SVC_Handler
+  .word  DebugMon_Handler
+  .word  0
+  .word  PendSV_Handler
+  .word  SysTick_Handler
+
    .section  .isr_vector,"a",%progbits
   .type  g_pfnVectors, %object
   .size  g_pfnVectors, .-g_pfnVectors
@@ -234,6 +258,10 @@ g_pfnVectors:
   .word     CRYP_IRQHandler                   /* CRYP crypto                  */                   
   .word     HASH_RNG_IRQHandler               /* Hash and Rng                 */
   .word     FPU_IRQHandler                    /* FPU                          */
+
+
+
+
                         
 /*******************************************************************************
 *
@@ -514,5 +542,6 @@ g_pfnVectors:
 
    .weak      FPU_IRQHandler                  
    .thumb_set FPU_IRQHandler,Default_Handler  
-   
+
+
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

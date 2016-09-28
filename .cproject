@@ -16,7 +16,7 @@
 					<folderInfo id="com.atollic.truestudio.exe.debug.1389025984." name="/" resourcePath="">
 						<toolChain id="com.atollic.truestudio.exe.debug.toolchain.1473662648" name="Atollic ARM Tools" superClass="com.atollic.truestudio.exe.debug.toolchain">
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.atollic.truestudio.exe.debug.toolchain.platform.175359740" isAbstract="false" name="Debug platform" superClass="com.atollic.truestudio.exe.debug.toolchain.platform"/>
-							<builder buildPath="${workspace_loc:/NRF24_02}/Debug" customBuilderProperties="toolChainpathType=1|toolChainpathString=C:/Program Files (x86)/Atollic/TrueSTUDIO for ARM 5.4.1/ARMTools/bin|" id="com.atollic.truestudio.mbs.builder1.990995479" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="com.atollic.truestudio.mbs.builder1"/>
+							<builder buildPath="${workspace_loc:/NRF24_02}/Debug" customBuilderProperties="toolChainpathType=1|toolChainpathString=C:/Program Files (x86)/Atollic/TrueSTUDIO for ARM 5.5.2/ARMTools/bin|" id="com.atollic.truestudio.mbs.builder1.990995479" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="com.atollic.truestudio.mbs.builder1"/>
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.as.1867530198" name="Assembler" superClass="com.atollic.truestudio.exe.debug.toolchain.as">
 								<option id="com.atollic.truestudio.common_options.target.endianess.1696556317" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.1094097266" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32F407VG" valueType="enumerated"/>
@@ -34,6 +34,8 @@
 									<listOptionValue builtIn="false" value="STM32F4XX"/>
 									<listOptionValue builtIn="false" value="STM32F40XX"/>
 									<listOptionValue builtIn="false" value="USE_STDPERIPH_DRIVER"/>
+									<listOptionValue builtIn="false" value="ARM_MATH_CM4"/>
+									<listOptionValue builtIn="false" value="__FPU_PRESENT"/>
 								</option>
 								<option id="com.atollic.truestudio.gcc.directories.select.1356911864" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" valueType="includePath">
 									<listOptionValue builtIn="false" value="../src"/>
@@ -41,7 +43,12 @@
 									<listOptionValue builtIn="false" value="..\Libraries\Device\STM32F4xx\Include"/>
 									<listOptionValue builtIn="false" value="..\Libraries\STM32F4xx_StdPeriph_Driver\inc"/>
 									<listOptionValue builtIn="false" value="..\Utilities\STM32F4-Discovery"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/control}&quot;"/>
+									<listOptionValue builtIn="false" value="../inc"/>
+									<listOptionValue builtIn="false" value="../Libraries/STM32_USB_HOST_Library/Core/inc"/>
+									<listOptionValue builtIn="false" value="../Libraries/STM32_USB_OTG_Driver/inc"/>
+									<listOptionValue builtIn="false" value="../Libraries/STM32_USB_Device_Library/Core/inc"/>
+									<listOptionValue builtIn="false" value="../inc/usb"/>
+									<listOptionValue builtIn="false" value="../src/control"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.720211789" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.1415138213" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32F407VG" valueType="enumerated"/>
@@ -69,6 +76,8 @@
 									<listOptionValue builtIn="false" value="STM32F4XX"/>
 									<listOptionValue builtIn="false" value="STM32F40XX"/>
 									<listOptionValue builtIn="false" value="USE_STDPERIPH_DRIVER"/>
+									<listOptionValue builtIn="false" value="ARM_MATH_CM4"/>
+									<listOptionValue builtIn="false" value="__FPU_PRESENT"/>
 								</option>
 								<option id="com.atollic.truestudio.gpp.directories.select.575927243" name="Include path" superClass="com.atollic.truestudio.gpp.directories.select" valueType="includePath">
 									<listOptionValue builtIn="false" value="../src"/>
@@ -76,7 +85,12 @@
 									<listOptionValue builtIn="false" value="..\Libraries\Device\STM32F4xx\Include"/>
 									<listOptionValue builtIn="false" value="..\Libraries\STM32F4xx_StdPeriph_Driver\inc"/>
 									<listOptionValue builtIn="false" value="..\Utilities\STM32F4-Discovery"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/control}&quot;"/>
+									<listOptionValue builtIn="false" value="../inc"/>
+									<listOptionValue builtIn="false" value="../Libraries/STM32_USB_HOST_Library/Core/inc"/>
+									<listOptionValue builtIn="false" value="../Libraries/STM32_USB_OTG_Driver/inc"/>
+									<listOptionValue builtIn="false" value="../Libraries/STM32_USB_Device_Library/Core/inc"/>
+									<listOptionValue builtIn="false" value="../inc/usb"/>
+									<listOptionValue builtIn="false" value="../src/control"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.1745485556" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.935885641" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32F407VG" valueType="enumerated"/>
@@ -88,6 +102,7 @@
 								<option id="com.atollic.truestudio.gpp.optimization.fno_rtti.531704193" name="Disable RTTI" superClass="com.atollic.truestudio.gpp.optimization.fno_rtti" value="true" valueType="boolean"/>
 								<option id="com.atollic.truestudio.gpp.optimization.fno_exceptions.1977529032" name="Disable exception handling" superClass="com.atollic.truestudio.gpp.optimization.fno_exceptions" value="true" valueType="boolean"/>
 								<option id="com.atollic.truestudio.common_options.target.interwork.2127569542" name="Mix ARM/Thumb" superClass="com.atollic.truestudio.common_options.target.interwork"/>
+								<option id="com.atollic.truestudio.gpp.cppstandard.136777888" name="C++ standard" superClass="com.atollic.truestudio.gpp.cppstandard" value="com.atollic.truestudio.gpp.cppstandard.gnupp0x" valueType="enumerated"/>
 								<inputType id="com.atollic.truestudio.gpp.input.1647380839" superClass="com.atollic.truestudio.gpp.input"/>
 							</tool>
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.ldcc.971264171" name="C++ Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ldcc">
@@ -108,10 +123,13 @@
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.secoutput.63324536" name="Other" superClass="com.atollic.truestudio.exe.debug.toolchain.secoutput"/>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="com.atollic.truestudio.exe.debug.1389025984.1710342631" name="usb_otg.c" rcbsApplicability="disable" resourcePath="Libraries/STM32_USB_OTG_Driver/src/usb_otg.c" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gcc.1674841680.1685254048">
+						<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.1674841680.1685254048" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.1674841680">
+							<inputType id="com.atollic.truestudio.gcc.input.2031270010" superClass="com.atollic.truestudio.gcc.input"/>
+						</tool>
+					</fileInfo>
 					<sourceEntries>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Libraries"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Utilities"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="Libraries/STM32_USB_OTG_Driver/src/usb_otg.c|src/radio/commands.cpp|Libraries/STM32_USB_HOST_Library/Class|Libraries/STM32_USB_OTG_Driver/src/usb_bsp_template.c|src/network|Libraries/STM32_USB_Device_Library/Class" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -235,9 +253,22 @@
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
 		<project id="NRF24_02.com.atollic.truestudio.exe.1514835706" name="Executable" projectType="com.atollic.truestudio.exe"/>
 	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Debug">
+			<resource resourceType="PROJECT" workspacePath="/roboime-firmware"/>
+		</configuration>
+		<configuration configurationName="Release">
+			<resource resourceType="PROJECT" workspacePath="/NRF24_02"/>
+		</configuration>
+	</storageModule>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="com.atollic.truestudio.exe.debug.1389025984;com.atollic.truestudio.exe.debug.1389025984.;com.atollic.truestudio.exe.debug.toolchain.gpp.663923603;com.atollic.truestudio.gpp.input.1647380839">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.atollic.truestudio.mbs.ARMToolsPerProjectProfileCPP"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.atollic.truestudio.exe.debug.1389025984;com.atollic.truestudio.exe.debug.1389025984.;com.atollic.truestudio.exe.debug.toolchain.gcc.1674841680;com.atollic.truestudio.gcc.input.855760713">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.atollic.truestudio.mbs.ARMToolsPerProjectProfileC"/>
+		</scannerConfigBuildInfo>
 	</storageModule>
-	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
-	<storageModule moduleId="refreshScope"/>
 </cproject>

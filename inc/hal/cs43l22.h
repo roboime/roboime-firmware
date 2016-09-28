@@ -1,0 +1,127 @@
+#pragma once
+#include <hal/i2c.h>
+#include <hal/i2s.h>
+#include <hal/io_pin.h>
+
+class CS43L22{
+public:
+	CS43L22(I2C &i2c, uint8_t address, I2S &i2s, IO_Pin &resetpin=*(IO_Pin*)0, IO_Pin &vddpin=*(IO_Pin*)0);
+	uint8_t SelfTest();
+	void Reset(uint8_t state);
+	void VDD(uint8_t state);
+	uint8_t SetVolume(uint8_t Volume);
+	uint8_t Cmd(uint8_t NewState);
+	uint8_t SpeakerCmd(uint8_t NewState);
+	void Init();
+protected:
+	I2C *_i2c;
+	uint8_t _address;
+	I2S *_i2s;
+	IO_Pin *_resetpin;
+	IO_Pin *_vddpin;
+};
+
+#define CS43L22_REG_CHIP_ID                     	0x01
+
+#define CS43L22_REG_PWR_CTRL1           			0x02
+#define CS43L22_REG_PWR_CTRL1_PWR_DOWN				0x01
+#define CS43L22_REG_PWR_CTRL1_PWR_UP				0x9E
+
+#define CS43L22_REG_PWR_CTRL2               	 	0x04
+#define CS43L22_REG_PWR_CTRL2_SPKA_ON_SPKHPLO		(0b00<<0)
+#define CS43L22_REG_PWR_CTRL2_SPKA_ON_SPKHPHI		(0b01<<0)
+#define CS43L22_REG_PWR_CTRL2_SPKA_ON				(0b10<<0)
+#define CS43L22_REG_PWR_CTRL2_SPKA_OFF				(0b11<<0)
+#define CS43L22_REG_PWR_CTRL2_SPKB_ON_SPKHPLO		(0b00<<2)
+#define CS43L22_REG_PWR_CTRL2_SPKB_ON_SPKHPHI		(0b01<<2)
+#define CS43L22_REG_PWR_CTRL2_SPKB_ON				(0b10<<2)
+#define CS43L22_REG_PWR_CTRL2_SPKB_OFF				(0b11<<2)
+#define CS43L22_REG_PWR_CTRL2_HPA_ON_SPKHPLO		(0b00<<4)
+#define CS43L22_REG_PWR_CTRL2_HPA_ON_SPKHPHI		(0b01<<4)
+#define CS43L22_REG_PWR_CTRL2_HPA_ON				(0b10<<4)
+#define CS43L22_REG_PWR_CTRL2_HPA_OFF				(0b11<<4)
+#define CS43L22_REG_PWR_CTRL2_HPB_ON_SPKHPLO		(0b00<<6)
+#define CS43L22_REG_PWR_CTRL2_HPB_ON_SPKHPHI		(0b01<<6)
+#define CS43L22_REG_PWR_CTRL2_HPB_ON				(0b10<<6)
+#define CS43L22_REG_PWR_CTRL2_HPB_OFF				(0b11<<6)
+
+#define CS43L22_REG_CLK_CTRL                 		 0x05
+#define CS43L22_REG_CLK_CTRL_AUTO					(0b1<<7)
+#define CS43L22_REG_CLK_CTRL_SPEED_MODE_DSM			(0b00<<5)
+#define CS43L22_REG_CLK_CTRL_SPEED_MODE_SSM			(0b01<<5)
+#define CS43L22_REG_CLK_CTRL_SPEED_MODE_HSM			(0b10<<5)
+#define CS43L22_REG_CLK_CTRL_SPEED_MODE_QSM			(0b11<<5)
+#define CS43L22_REG_CLK_CTRL_32K_GROUP				(0b1<<4)
+#define CS43L22_REG_CLK_CTRL_VIDEO_CLOCK			(0b1<<3)
+#define CS43L22_REG_CLK_CTRL_MCLK_LRCK_RATIO_128	(0b00<<1)
+#define CS43L22_REG_CLK_CTRL_MCLK_LRCK_RATIO_125	(0b01<<1)
+#define CS43L22_REG_CLK_CTRL_MCLK_LRCK_RATIO_132	(0b10<<1)
+#define CS43L22_REG_CLK_CTRL_MCLK_LRCK_RATIO_1136	(0b11<<1)
+#define CS43L22_REG_CLK_CTRL_MCLKDIV2				(0b1<<0)
+
+#define CS43L22_REG_IF_CTRL1                 		 0x06
+#define CS43L22_REG_IF_CTRL1_MODE_MASTER			(0b1<<7)
+#define CS43L22_REG_IF_CTRL1_MODE_SLAVE				(0b0<<7)
+#define CS43L22_REG_IF_CTRL1_SCLK_POL_NORMAL		(0b0<<6)
+#define CS43L22_REG_IF_CTRL1_SCLK_POL_INVERTED		(0b1<<6)
+#define CS43L22_REG_IF_CTRL1_DSP_MODE_ON			(0b1<<4)
+#define CS43L22_REG_IF_CTRL1_DSP_MODE_OFF			(0b0<<4)
+#define CS43L22_REG_IF_CTRL1_DAC_ITF_FORMAT_LEFT	(0b00<<2)
+#define CS43L22_REG_IF_CTRL1_DAC_ITF_FORMAT_I2S		(0b01<<2)
+#define CS43L22_REG_IF_CTRL1_DAC_ITF_FORMAT_RIGHT	(0b10<<2)
+#define CS43L22_REG_IF_CTRL1_AUDIO_WORD_LEN_32_24	(0b00<<0)
+#define CS43L22_REG_IF_CTRL1_AUDIO_WORD_LEN_24_20	(0b01<<0)
+#define CS43L22_REG_IF_CTRL1_AUDIO_WORD_LEN_20_18	(0b10<<0)
+#define CS43L22_REG_IF_CTRL1_AUDIO_WORD_LEN_16_16	(0b11<<0)
+
+#define CS43L22_REG_IF_CTRL2                  		0x07
+#define CS43L22_REG_IF_CTRL2_SCLK_EQ_MCLK			(0b1<<6)
+#define CS43L22_REG_IF_CTRL2_SPK_HP_INVERT			(0b1<<3)
+
+#define CS43L22_REG_PASSTHROUGH_A_SELECT         	0x08
+#define CS43L22_REG_PASSTHROUGH_A_SELECT_NOPASS    	0x00
+#define CS43L22_REG_PASSTHROUGH_A_SELECT_AIN1X    	0x01
+#define CS43L22_REG_PASSTHROUGH_A_SELECT_AIN2X    	0x02
+#define CS43L22_REG_PASSTHROUGH_A_SELECT_AIN3X    	0x04
+#define CS43L22_REG_PASSTHROUGH_A_SELECT_AIN4X    	0x08
+
+#define CS43L22_REG_PASSTHROUGH_B_SELECT         	0x09
+#define CS43L22_REG_PASSTHROUGH_B_SELECT_NOPASS    	0x00
+#define CS43L22_REG_PASSTHROUGH_B_SELECT_AIN1X    	0x01
+#define CS43L22_REG_PASSTHROUGH_B_SELECT_AIN2X    	0x02
+#define CS43L22_REG_PASSTHROUGH_B_SELECT_AIN3X    	0x04
+#define CS43L22_REG_PASSTHROUGH_B_SELECT_AIN4X    	0x08
+
+#define CS43L22_REG_ANALOG_SET                 		0x0A
+#define CS43L22_REG_PASSTHROUGH_GANG_CTRL     		0x0C
+#define CS43L22_REG_PLAYBACK_CTRL1             		0x0D
+#define CS43L22_REG_MISC_CTRL                 		0x0E
+
+#define CS43L22_REG_PLAYBACK_CTRL2             		0x0F
+#define CS43L22_REG_PLAYBACK_CTRL2_SPEAKER_MUTE		0x30
+#define CS43L22_REG_PLAYBACK_CTRL2_SPEAKER_MONO		0x02
+
+#define CS43L22_REG_PASSTHROUGH_A_VOL         		0x14
+#define CS43L22_REG_PASSTHROUGH_B_VOL         		0x15
+#define CS43L22_REG_PCMA_VOL                    	0x1A
+#define CS43L22_REG_PCMB_VOL                     	0x1B
+#define CS43L22_REG_BEEP_FREQ_ONTIME             	0x1C
+#define CS43L22_REG_BEEP_VOL_OFFTIME             	0x1D
+#define CS43L22_REG_BEEP_TONE_CFG             		0x1E
+#define CS43L22_REG_TONE_CTRL                 		0x1F
+#define CS43L22_REG_MASTER_A_VOL                 	0x20
+#define CS43L22_REG_MASTER_B_VOL                 	0x21
+#define CS43L22_REG_HP_A_VOL                     	0x22
+#define CS43L22_REG_HP_B_VOL                     	0x23
+#define CS43L22_REG_SPEAK_A_VOL                 	0x24
+#define CS43L22_REG_SPEAK_B_VOL                 	0x25
+#define CS43L22_REG_CH_MIX_SWAP                 	0x26
+#define CS43L22_REG_LIMIT_CTRL1                 	0x27
+#define CS43L22_REG_LIMIT_CTRL2                 	0x28
+#define CS43L22_REG_LIMIT_ATTACK                	0x29
+#define CS43L22_REG_OVFL_CLK_STATUS             	0x2E
+#define CS43L22_REG_BATT_COMP                 		0x2F
+#define CS43L22_REG_VP_BATT_LEVEL             		0x30
+#define CS43L22_REG_SPEAK_STATUS                 	0x31
+#define CS43L22_REG_CHARGE_PUMP_FREQ             	0x34
+
