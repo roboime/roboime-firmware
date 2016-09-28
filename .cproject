@@ -42,6 +42,7 @@
 									<listOptionValue builtIn="false" value="..\Libraries\STM32F4xx_StdPeriph_Driver\inc"/>
 									<listOptionValue builtIn="false" value="..\Utilities\STM32F4-Discovery"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/control}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware-RX/src/proto}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.720211789" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.1415138213" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32F407VG" valueType="enumerated"/>
@@ -77,6 +78,7 @@
 									<listOptionValue builtIn="false" value="..\Libraries\STM32F4xx_StdPeriph_Driver\inc"/>
 									<listOptionValue builtIn="false" value="..\Utilities\STM32F4-Discovery"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/control}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware-RX/src/proto}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.1745485556" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.935885641" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32F407VG" valueType="enumerated"/>
@@ -235,9 +237,15 @@
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
 		<project id="NRF24_02.com.atollic.truestudio.exe.1514835706" name="Executable" projectType="com.atollic.truestudio.exe"/>
 	</storageModule>
-	<storageModule moduleId="scannerConfiguration">
-		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="com.atollic.truestudio.exe.debug.1389025984;com.atollic.truestudio.exe.debug.1389025984.;com.atollic.truestudio.exe.debug.toolchain.gpp.663923603;com.atollic.truestudio.gpp.input.1647380839">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.atollic.truestudio.mbs.ARMToolsPerProjectProfileCPP"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.atollic.truestudio.exe.debug.1389025984;com.atollic.truestudio.exe.debug.1389025984.;com.atollic.truestudio.exe.debug.toolchain.gcc.1674841680;com.atollic.truestudio.gcc.input.855760713">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.atollic.truestudio.mbs.ARMToolsPerProjectProfileC"/>
+		</scannerConfigBuildInfo>
+	</storageModule>
 </cproject>

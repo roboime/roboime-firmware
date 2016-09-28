@@ -6,6 +6,9 @@
  */
 #include "Robo.h"
 #include "pins.h"
+#include "grSim_Commands.pb.h"
+#include "pb_encode.h"
+#include "pb_decode.h"
 
 #define sin_phi 0.8480
 #define cos_phi 0.52
@@ -35,6 +38,7 @@ Robo::Robo()
     radio->is_rx=true;
     radio->Config();
     radio->SetId(0);
+    id=radio->id;
     radio->NRF_CE->Set();
 }
 /*
@@ -93,18 +97,33 @@ void Robo::Receive(){
   }
 }
 void Robo::procPacket(uint8_t *dataPacket){
-  if(dataPacket[0]=='a'){
-	if((dataPacket[10]&0b00000001)) ChuteBaixo();
-	if((dataPacket[10]&0b00000010)) HighKick();
-	int drible_vel;
-	drible_vel = 10*dataPacket[11];
-	drible->Set_Vel(drible_vel);
-	if(dataPacket[12]==0){
-      int16_t v[3];
-      memcpy(v, (dataPacket+13), 6);
-      set_speed(v[0], v[1], v[2]);
+	grSim_Robot_Command robotcommand;
+	uint8_t buffer[128]={8, 0, 21, 0, 0, 0, 0, 29, 0, 0, 0, 0, 37, 0, 0, 128, 63, 45, 0, 0, 0, 64, 53, 0, 0, 64, 64, 56, 0, 64, 0 , 0};
+
+	grSim_Robot_Command gr=grSim_Robot_Command_init_zero;
+
+	pb_istream_t istream = pb_istream_from_buffer(buffer, 31);
+	bool status=pb_decode(&istream, grSim_Robot_Command_fields, &gr);//preenche gr
+
+	if(status && gr.id==id){//agora que a informação foi decodificada, vamos usá-la
+
+
+/*		  if(dataPacket[0]=='a'){NÃO PRECISA MAIS VERIFICAR ISSO
+			if((dataPacket[10]&0b00000001)) ChuteBaixo();
+			if((dataPacket[10]&0b00000010)) HighKick();
+			int drible_vel;
+			drible_vel = 10*dataPacket[11];
+			drible->Set_Vel(drible_vel);
+			if(dataPacket[12]==0){
+		      int16_t v[3];
+		      memcpy(v, (dataPacket+13), 6);
+		      set_speed(v[0], v[1], v[2]);FEITO!!!CONFERIR!!
+			}
+		  }*/
+		set_speed(gr.velnormal,gr.veltangent,gr.velangular);
+
 	}
-  }
+
 }
 void Robo::HighKick(){
 	high_kick->Set();

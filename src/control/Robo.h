@@ -22,6 +22,7 @@
 class Robo {
 public:
 	Robo();
+	uint32_t id;
 	GPIO *high_kick;
 	GPIO *chute_baixo;
 	void HighKick();
