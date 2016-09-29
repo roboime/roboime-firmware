@@ -52,7 +52,7 @@ int main(void)
 {
 	SysTick_Config(SystemCoreClock/1000);
 	usb.Init();
-//	NRF24 radio;
+	NRF24 radio;
 //	radio.is_rx=true;
 //	radio.Config();
 //	radio.SetId(0);

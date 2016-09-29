@@ -36,6 +36,7 @@
 #include <hal/io_pin_ds2413.h>
 #include <hal_stm32/flash_memory_stm32.h>
 #include <radio/scpi.h>
+#include <hal/nrf24l01p.h>
 
 extern I2C_STM32 i2c_a;
 extern I2C_STM32 i2c_b;
