@@ -12,160 +12,66 @@
 class NRF24L01P: public MODEM{
 public:
 	NRF24L01P(SPI &spi, IO_Pin &SS_PIN, IO_Pin &NIRQ_PIN);
+
+	uint8_t TxReady(){return 0;}
+	void TxPackage(uint8_t *data, uint16_t size, uint32_t frequency, MODEM_POWER power){}
+	uint16_t RxSize(){return 0;}
+	uint16_t RxData(uint8_t *data, uint16_t maxsize){return 0;}
+	void StartRX(uint16_t size, uint32_t freqHz){}
+	void ContinueRX(uint16_t size){}
+	void GeneratePoll(){}
+	void SetRXFrequency(uint32_t freqHz){}
+	uint8_t Busy(){return 0;}
+	void CW(uint8_t state){}
+	uint8_t GetRSSI(){return 0;}
+	void Calibrate(uint32_t freq){}
+	void Recovery(){}
+
+
 	void InterruptCallback();
 	void Init();
 	void Config();
 	uint8_t SelfTest();
-	uint8_t TxReady();
-	void TxPackage(uint8_t *data, uint16_t size, uint32_t freqHz, MODEM_POWER power);
-	uint16_t RxSize();
-	uint16_t RxData(uint8_t *data, uint16_t maxsize);
-	void GeneratePoll();
-	void SetRXFrequency(uint32_t freq);
-	void VCC(uint8_t state);
-	void Shutdown(uint8_t state);
-	void StartRX(uint16_t size, uint32_t freqHz);
-	uint8_t Busy();
-	void ContinueRX(uint16_t size);
-	void CW(uint8_t state);
-	uint8_t GetRSSI();
-	void Calibrate(uint32_t freq);
-	void SetFrequency(uint32_t freq);
-	uint32_t GetFrequency();
-	void Recovery();
+
+
 protected:
-	typedef enum{
-		ModeInit,
-		ModeRX,
-		ModeTX,
-		ModeReady,
-	} NRF24L01P_Mode;
-	typedef union {
-		uint32_t flag;
-		struct {
-			uint8_t INIT_STATUS :1;
-			uint8_t TRANSMITTING:1;
-			uint8_t RECEIVING:1;
+	uint8_t write_register(uint8_t address, uint8_t *buffer, uint8_t size);
+	uint8_t read_register(uint8_t address, uint8_t *buffer, uint8_t size);
+	uint8_t read_rx_payload(uint8_t *buffer, uint8_t size);
+	uint8_t write_tx_payload(uint8_t *buffer, uint8_t size);
+	uint8_t write_tx_payload_no_ack(uint8_t *buffer, uint8_t size);
+	uint8_t write_ack_payload(uint8_t *buffer, uint8_t size);
+	uint8_t flush_tx();
+	uint8_t flush_rx();
+	uint8_t reuse_tx_pl();
+	uint8_t read_rx_payload_width();
+	uint8_t nop();
 
-		};
-	} FLAGS;
-	typedef union {
-		uint8_t buffer[8];
-		struct {
-			uint8_t MODEM_PEND;
-			uint8_t MODEM_STATUS;
-			uint8_t CURR_RSSI;
-			uint8_t LATCH_RSSI;
-			uint8_t ANT1_RSSI;
-			uint8_t ANT2_RSSI;
-			uint8_t AFC_FREQ_OFFSET;
-			uint8_t AFC_FREQ_OFFSET1;
-		};
-	} MODEM_STATUS;
-
-	typedef union {
-		uint8_t buffer[8];
-		struct {
-			uint8_t PH_INT_STATUS_PEND :1;
-			uint8_t MODEM_INT_STATUS_PEND :1;
-			uint8_t CHIP_INT_STATUS_PEND :1;
-			uint8_t INT_PEND_XXXXX :5;
-
-			uint8_t PH_INT_STATUS :1;
-			uint8_t MODEM_INT_STATUS :1;
-			uint8_t CHIP_INT_STATUS :1;
-			uint8_t INT_STATUS_XXXXX :5;
-
-			uint8_t RX_FIFO_ALMOST_FULL_PEND :1;
-			uint8_t TX_FIFO_ALMOST_EMPTY_PEND :1;
-			uint8_t PH_PEND_X :1;
-			uint8_t CRC_ERROR_PEND :1;
-			uint8_t PACKET_RX_PEND :1;
-			uint8_t PACKET_SENT_PEND :1;
-			uint8_t FILTER_MISS_PEND :1;
-			uint8_t FILTER_MATCH_PEND :1;
-
-			uint8_t RX_FIFO_ALMOST_FULL :1;
-			uint8_t TX_FIFO_ALMOST_EMPTY :1;
-			uint8_t PH_STATUS_X :1;
-			uint8_t CRC_ERROR :1;
-			uint8_t PACKET_RX :1;
-			uint8_t PACKET_SENT :1;
-			uint8_t FILTER_MISS :1;
-			uint8_t FILTER_MATCH :1;
-
-			uint8_t SYNC_DETECT_PEND :1;
-			uint8_t PREAMBLE_DETECT_PEND :1;
-			uint8_t INVALID_PREAMBLE_PEND :1;
-			uint8_t RSSI_PEND :1;
-			uint8_t RSSI_JUMP_PEND :1;
-			uint8_t INVALID_SYNC_PEND :1;
-			uint8_t MODEM_PEND_XX :2;
-
-			uint8_t SYNC_DETECT  :1;
-			uint8_t PREAMBLE_DETECT :1;
-			uint8_t INVALID_PREAMBLE :1;
-			uint8_t RSSI :1;
-			uint8_t RSSI_JUMP :1;
-			uint8_t INVALID_SYNC :1;
-			uint8_t MODEM_STATUS_XX :2;
-
-			uint8_t WUT_PEND :1;
-			uint8_t LOW_BATT_PEND :1;
-			uint8_t CHIP_READY_PEND :1;
-			uint8_t CMD_ERROR_PEND :1;
-			uint8_t STATE_CHANGE_PEND :1;
-			uint8_t FIFO_UNDERFLOW_OVERFLOW_ERROR_PEND :1;
-			uint8_t CAL_PEND :2;
-
-			uint8_t WUT :1;
-			uint8_t LOW_BATT :1;
-			uint8_t CHIP_READY :1;
-			uint8_t CMD_ERROR :1;
-			uint8_t STATE_CHANGE :1;
-			uint8_t FIFO_UNDERFLOW_OVERFLOW_ERROR :1;
-			uint8_t CAL :2;
-		};
-	} INTERRUPT_STATUS;
-
-	void SetMode(NRF24L01P_Mode mode, uint16_t size, uint32_t freqHz, MODEM_POWER power=MODEM_POWER_NORMAL);
-	uint32_t read_rx_fifo(uint8_t *data, uint16_t size);
-	int8_t read_response(uint8_t *buffu, uint16_t size, uint8_t retries);
-	uint32_t write(uint8_t *data, uint16_t size);
-	uint8_t cmd(uint8_t cmd);
-	uint16_t timeout();
-	void setfrequency(uint32_t freq);
-	uint32_t getfrequency();
-	void settxpower(MODEM_POWER power);
-	uint8_t get_RX_FIFO_COUNT();
-	uint8_t get_TX_FIFO_SPACE();
-	void clear_TX_FIFO();
-	void clear_RX_FIFO();
-	void clear_RX_TX_FIFO();
-	void cmd_START_TX(uint8_t channel=0, uint8_t condition=0, uint16_t tx_len=0);
-	void cmd_START_RX(uint8_t channel=0, uint8_t condition=0, uint16_t rx_len=2048, uint8_t rx_timeout_state=0, uint8_t rx_valid_state=0, uint8_t rx_invalid_state=0);
-	void cmd_GET_INT_STATUS(INTERRUPT_STATUS &intstatus);
-	void cmd_SET_PKT_RX_THRESHOLD(uint8_t size);
-	uint8_t cmd(std::initializer_list<uint8_t> c);
-	void ircal(uint32_t freq);
-
+	uint8_t write(uint8_t cmd);
+	uint8_t write(uint8_t command, uint8_t *buffer, uint8_t size);
+	uint8_t read(uint8_t command, uint8_t *buffer, uint8_t size);
 
 	SPI *_spi;
 	IO_Pin *_SS_PIN;
 	IO_Pin *_NIRQ_PIN;
 	CircularBuffer<uint8_t,false> _rxbuffer;
 	CircularBuffer<uint8_t,false> _txbuffer;
-	uint8_t _rxfifobuffer[64];
-	uint8_t _txfifobuffer[65];
-	uint8_t _channel;
-	FLAGS _flags;
-	static const uint8_t SI4464_CFG_256KBPS[];
-	NRF24L01P_Mode _mode;
-	uint16_t _receivesize;
-	uint16_t _receivecount;
-	uint16_t _receivesizegoing;
-	uint8_t _rssi;
 
+	uint8_t _channel;
+
+	typedef enum {
+		R_REGISTER				=0x00,
+		W_REGISTER				=0x20,
+		R_RX_PAYLOAD			=0x61,
+		W_TX_PAYLOAD			=0xA0,
+		FLUSH_TX				=0xE1,
+		FLUSH_RX				=0xE2,
+		REUSE_TX_PL				=0xE3,
+		R_RX_PL_WID				=0x60,
+		W_ACK_PAYLOAD			=0xA8,
+		W_TX_PAYLOAD_NOACK		=0xB0,
+		NOP						=0xFF,
+	} CMD;
 };
 
 typedef union{
@@ -194,33 +100,6 @@ typedef union{
 	uint8_t value;
 } NRF24L01_CONFIG;
 
-
-typedef union{
-	struct {											//Configuration Register
-		uint8_t Reserved:1;								//Only '0' allowed
-		uint8_t MASK_RX_DR:1;							//Mask interrupt caused by RX_DR
-														//1: Interrupt not reflected on the IRQ pin
-														//0: Reflect RX_DR as active low interrupt on the
-														//IRQ pin
-		uint8_t MASK_TX_DS:1;							//Mask interrupt caused by TX_DS
-														//1: Interrupt not reflected on the IRQ pin
-														//0: Reflect TX_DS as active low interrupt on the IRQ
-														//pin
-		uint8_t MASK_MAX_RT:1;							//Mask interrupt caused by MAX_RT
-														//1: Interrupt not reflected on the IRQ pin
-														//0: Reflect MAX_RT as active low interrupt on the
-														//IRQ pin
-		uint8_t EN_CRC:1;								//Enable CRC. Forced high if one of the bits in the
-														//EN_AA is high
-		uint8_t CRCO:1;									//CRC encoding scheme
-														//'0' - 1 byte
-														//'1' – 2 bytes
-		uint8_t PWR_UP:1;								//1: POWER UP, 0:POWER DOWN
-		uint8_t PRIM_RX:1;								//RX/TX control
-														//1: PRX, 0: PTX
-	};
-	uint8_t value;
-} NRF24L01_CONFIG1;
 
 typedef union{
 	struct {											//Enable ‘Auto Acknowledgment’ Function Disable

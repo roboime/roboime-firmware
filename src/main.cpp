@@ -51,8 +51,11 @@ CircularBuffer<uint8_t> _usbserialbuffer(0,2048);
 int main(void)
 {
 	SysTick_Config(SystemCoreClock/1000);
-	usb.Init();
-	NRF24 radio;
+//	usb.Init();
+	nrf24.Init();
+
+	while(1);
+//	NRF24 radio;
 //	radio.is_rx=true;
 //	radio.Config();
 //	radio.SetId(0);

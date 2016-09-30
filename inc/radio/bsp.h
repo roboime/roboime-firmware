@@ -74,3 +74,6 @@ extern IO_Pin_STM32 ONEWIRE_PULL_UP;
 extern RF_POWER_CTRL rf_power_ctrl;
 //extern NULLMODEM modem;
 extern SCPI SCPI_USB;
+
+extern NRF24L01P nrf24;
+extern IO_Pin_STM32 Botao;
