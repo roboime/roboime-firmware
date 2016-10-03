@@ -321,10 +321,10 @@ uint8_t* USB_STM32::usbd_stm32_GetConfigDescriptor(uint8_t speed, uint16_t* leng
 	{
 			0x09,                       /*bLength */
 			0x02, 						/*bDescriptorType*/
-			0x00,
-			0x00,
+			0x00,						/*bConfigurationValue*/
+			0x00,						/*bConfigurationValue*/
 			0x00,						/*NumInterfaces*/
-			0x01,
+			0x01,						/*bConfigurationValue*/
 			USBD_IDX_CONFIG_STR,
 			0x80,
 			0xFA,
@@ -355,6 +355,7 @@ uint8_t* USB_STM32::usbd_stm32_GetConfigDescriptor(uint8_t speed, uint16_t* leng
 
 	std::list<USB_DEVICE_CLASS*> *_usb_device_classes_list(&USB_DEVICE_CLASS::GetDeviceClassesList());
 	if(_usb_device_classes_list){
+		uint32_t size=_usb_device_classes_list->size();
 		for(auto device =_usb_device_classes_list->begin(); device!=_usb_device_classes_list->end(); device++){
 			_descriptorbuffer.In((*device)->GetDescriptor(), (*device)->GetDescriptorSize());
 		}

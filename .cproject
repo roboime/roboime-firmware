@@ -123,13 +123,19 @@
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.secoutput.63324536" name="Other" superClass="com.atollic.truestudio.exe.debug.toolchain.secoutput"/>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="com.atollic.truestudio.exe.debug.1389025984.1710342631" name="usb_otg.c" rcbsApplicability="disable" resourcePath="Libraries/STM32_USB_OTG_Driver/src/usb_otg.c" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gcc.1674841680.1685254048">
-						<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.1674841680.1685254048" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.1674841680">
-							<inputType id="com.atollic.truestudio.gcc.input.2031270010" superClass="com.atollic.truestudio.gcc.input"/>
-						</tool>
-					</fileInfo>
+					<folderInfo id="com.atollic.truestudio.exe.debug.1389025984.1333502057" name="/" resourcePath="src/control">
+						<toolChain id="com.atollic.truestudio.exe.debug.toolchain.398622839" name="Atollic ARM Tools" superClass="com.atollic.truestudio.exe.debug.toolchain" unusedChildren="">
+							<tool id="com.atollic.truestudio.exe.debug.toolchain.as.1721701991" name="Assembler" superClass="com.atollic.truestudio.exe.debug.toolchain.as.1867530198"/>
+							<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.1065897509" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.1674841680"/>
+							<tool id="com.atollic.truestudio.exe.debug.toolchain.ld.119339245" name="C Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ld.219130374"/>
+							<tool id="com.atollic.truestudio.exe.debug.toolchain.gpp.753192155" name="C++ Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gpp.663923603"/>
+							<tool id="com.atollic.truestudio.exe.debug.toolchain.ldcc.1440936887" name="C++ Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ldcc.971264171"/>
+							<tool id="com.atollic.truestudio.ar.base.1156037635" name="Archiver" superClass="com.atollic.truestudio.ar.base.1138488465"/>
+							<tool id="com.atollic.truestudio.exe.debug.toolchain.secoutput.425274098" name="Other" superClass="com.atollic.truestudio.exe.debug.toolchain.secoutput.63324536"/>
+						</toolChain>
+					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Libraries/STM32_USB_OTG_Driver/src/usb_otg.c|src/radio/commands.cpp|Libraries/STM32_USB_HOST_Library/Class|Libraries/STM32_USB_OTG_Driver/src/usb_bsp_template.c|src/network|Libraries/STM32_USB_Device_Library/Class" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="src/control|Libraries/STM32_USB_OTG_Driver/src/usb_otg.c|src/radio/commands.cpp|Libraries/STM32_USB_HOST_Library/Class|Libraries/STM32_USB_OTG_Driver/src/usb_bsp_template.c|src/network|Libraries/STM32_USB_Device_Library/Class" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

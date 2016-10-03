@@ -25,16 +25,16 @@
 /* Includes */
 #include "stm32f4xx.h"
 #include "stm32f4_discovery.h"
-#include "GPIO.h"
-#include "Pwm.h"
-#include "Encoder.h"
-#include "TimerTime.h"
-#include "TimerTime2.h"
-#include "Motor.h"
-#include "Robo.h"
-#include "my_spi.h"
-#include "NRF24.h"
-#include "adc.h"
+//#include "GPIO.h"
+//#include "Pwm.h"
+//#include "Encoder.h"
+//#include "TimerTime.h"
+//#include "TimerTime2.h"
+//#include "Motor.h"
+//#include "Robo.h"
+//#include "my_spi.h"
+//#include "NRF24.h"
+//#include "adc.h"
 
 static __IO uint32_t TimingDelay;
 
@@ -48,23 +48,21 @@ void Delay_ms(uint32_t time_ms);
 
 CircularBuffer<uint8_t> _usbserialbuffer(0,2048);
 
-int main(void)
-{
+uint8_t scanned[256];
+
+#include <stm32f4xx_wwdg.h>
+
+int main(void){
 	SysTick_Config(SystemCoreClock/1000);
-//	usb.Init();
+	usb.Init();
 	nrf24.Init();
-
-	while(1);
-//	NRF24 radio;
-//	radio.is_rx=true;
-//	radio.Config();
-//	radio.SetId(0);
-//	radio.NRF_CE->Set();
-
+	nrf24.Config();
 
 	while(1){
-		usb_device_class_cdc_vcp.GetData(_usbserialbuffer, 256);
-		usb_device_class_cdc_vcp.SendData(_usbserialbuffer);
+//		nrf24.InterruptCallback();
+
+//		usb_device_class_cdc_vcp.GetData(_usbserialbuffer, 32);
+//		usb_device_class_cdc_vcp.SendData(_usbserialbuffer);
 	}
 
 
@@ -83,7 +81,8 @@ int main(void)
 //}
 //
 extern uint32_t LocalTime;
-void SysTick_Handler(void){
+
+extern "C" void SysTick_Handler(void){
 //	TimingDelay_Decrement();
 	LocalTime++;
 }

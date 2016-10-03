@@ -25,16 +25,28 @@ IO_Pin_STM32 USB_DM(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOA, GPIO_Pin_11, GPIO_PuPd_N
 //USB_DEVICE_CLASS_CDC_RNDIS usb_device_class_cdc_rndis(1);
 USB_DEVICE_CLASS_CDC_VCP usb_device_class_cdc_vcp({"RoboIME Serial Port"},1);
 
-USB_STM32 usb(0x29BC, 0x14FD, "IME", "RoboIME", SerialNumberGetHexaString());
+USB_STM32 usb(0x29BC, 0x2000, "IME", "RoboIME", SerialNumberGetHexaString());
 
 IO_Pin_STM32 SPI_SCK_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOA, GPIO_Pin_5, GPIO_PuPd_NOPULL, GPIO_OType_PP, GPIO_AF_SPI1);
 IO_Pin_STM32 SPI_MISO_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOA, GPIO_Pin_6, GPIO_PuPd_NOPULL, GPIO_OType_PP, GPIO_AF_SPI1);
 IO_Pin_STM32 SPI_MOSI_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOA, GPIO_Pin_7, GPIO_PuPd_NOPULL, GPIO_OType_PP, GPIO_AF_SPI1);
 IO_Pin_STM32 NRF24_SS_PIN(IO_Pin::IO_Pin_Mode_OUT, GPIOA, GPIO_Pin_4, GPIO_PuPd_NOPULL, GPIO_OType_PP);
+IO_Pin_STM32 NRF24_CE_PIN(IO_Pin::IO_Pin_Mode_OUT, GPIOA, GPIO_Pin_3, GPIO_PuPd_UP, GPIO_OType_OD);
 IO_Pin_STM32 NRF24_IRQN_PIN(IO_Pin::IO_Pin_Mode_IN, GPIOC, GPIO_Pin_5, GPIO_PuPd_UP, GPIO_OType_OD);
+
+//INTERRUPT_STM32 nrf24_irqn_exti_interrupt(NRF24_IRQN_PIN.GetIRQChannel(), 0x0C, 0x0C, DISABLE);
+
 SPI_STM32 spi(SPI1, NRF24_SS_PIN);
 
-NRF24L01P nrf24(spi, NRF24_SS_PIN, NRF24_IRQN_PIN);
+NRF24L01P nrf24(spi, NRF24_SS_PIN, NRF24_CE_PIN, NRF24_IRQN_PIN);
+
+extern "C" void EXTI9_5_IRQHandler(){
+	if(EXTI_GetITStatus(EXTI_Line5)){
+		EXTI_ClearITPendingBit(EXTI_Line5);
+		nrf24.InterruptCallback();
+	}
+}
+
 /*
 USART_STM32 usart_onewire(USART6, 115200, USART_WordLength_8b, USART_StopBits_2, USART_Parity_No, USART_Mode_Rx | USART_Mode_Tx, USART_HardwareFlowControl_None, 1);
 ONEWIRE onewire(usart_onewire,ONEWIRE_PULL_UP,1000);
@@ -109,12 +121,6 @@ extern "C" void USART6_IRQHandler(){
 	}
 }
 
-extern "C" void EXTI9_5_IRQHandler(){
-	if(EXTI_GetITStatus(EXTI_Line6)){
-		EXTI_ClearITPendingBit(EXTI_Line6);
-		modem.InterruptCallback();
-	}
-}
 
 extern "C" void DMA1_Stream7_IRQHandler(){
 	led_c.On();

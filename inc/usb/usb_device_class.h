@@ -13,21 +13,7 @@ class USB_DEVICE_CLASS{
 public:
 protected:
 	friend class USB_STM32;
-	USB_DEVICE_CLASS(uint8_t interfaces=1, uint8_t inendpoints=0, uint8_t outendpoints=0, std::initializer_list<const char*> stringlist={}, uint8_t enabled=1):
-		_stringlist(stringlist)
-	{
-		if(enabled){
-			while(interfaces--)
-				_interfaces.push_back(_numinterfaces++);
-			while(inendpoints--)
-				_inendpoints.push_back(0x80 | _numinendpoints++);
-			while(outendpoints--)
-				_outendpoints.push_back(_numoutendpoints++);
-			_firstdescriptorstring=_numdescriptorstrings;
-			_numdescriptorstrings+=_stringlist.size();
-			_usb_device_classes_list.push_back(this);
-		}
-	}
+	USB_DEVICE_CLASS(uint8_t interfaces=1, uint8_t inendpoints=0, uint8_t outendpoints=0, std::initializer_list<const char*> stringlist={}, uint8_t enabled=1);
 	virtual uint8_t Init(USB *usb){return USB::USBD_OK;}
 	virtual uint8_t DeInit(){return USB::USBD_OK;}
 	virtual uint8_t Setup(USB::USB_SETUP_REQUEST* req){return USB::USBD_OK;}
@@ -48,7 +34,7 @@ protected:
 		return (interface>=_interfaces[0] && interface<=_interfaces[_interfaces.size()-1]);
 	}
 	static uint8_t GetNumInterfaces(){return _numinterfaces;}
-	static std::list<USB_DEVICE_CLASS*> &GetDeviceClassesList(){return _usb_device_classes_list;}
+	static std::list<USB_DEVICE_CLASS*> &GetDeviceClassesList();
 protected:
 	static uint8_t _numinterfaces;
 	static uint8_t _numinendpoints;
