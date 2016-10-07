@@ -34,6 +34,7 @@ protected:
 		return (interface>=_interfaces[0] && interface<=_interfaces[_interfaces.size()-1]);
 	}
 	static uint8_t GetNumInterfaces(){return _numinterfaces;}
+public:
 	static std::list<USB_DEVICE_CLASS*> &GetDeviceClassesList();
 protected:
 	static uint8_t _numinterfaces;

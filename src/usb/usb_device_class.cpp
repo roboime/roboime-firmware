@@ -4,7 +4,7 @@ uint8_t USB_DEVICE_CLASS::_numinterfaces=0;
 uint8_t USB_DEVICE_CLASS::_numinendpoints=1;
 uint8_t USB_DEVICE_CLASS::_numoutendpoints=1;
 uint8_t USB_DEVICE_CLASS::_numdescriptorstrings=6;
-std::list<USB_DEVICE_CLASS*> USB_DEVICE_CLASS::_usb_device_classes_list;
+//std::list<USB_DEVICE_CLASS*> USB_DEVICE_CLASS::_usb_device_classes_list;
 
 uint8_t* USB_DEVICE_CLASS::GetDescriptorString(uint8_t index) {
 	int8_t ind = index - _firstdescriptorstring;
@@ -27,17 +27,9 @@ USB_DEVICE_CLASS::USB_DEVICE_CLASS(uint8_t interfaces, uint8_t inendpoints, uint
 		_firstdescriptorstring=_numdescriptorstrings;
 		_numdescriptorstrings+=_stringlist.size();
 		_usb_device_classes_list.push_back(this);
-		uint32_t size=_usb_device_classes_list.size();
-		if(size==0){
-			size++;
-		}
 	}
 }
 
 std::list<USB_DEVICE_CLASS*>& USB_DEVICE_CLASS::GetDeviceClassesList() {
-	uint32_t size=_usb_device_classes_list.size();
-	if(size==0){
-		size++;
-	}
 	return _usb_device_classes_list;
 }

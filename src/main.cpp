@@ -25,6 +25,8 @@
 /* Includes */
 #include "stm32f4xx.h"
 #include "stm32f4_discovery.h"
+#include "proto/grSim_Commands.pb.h"
+#include "proto/pb_decode.h"
 //#include "GPIO.h"
 //#include "Pwm.h"
 //#include "Encoder.h"
@@ -52,22 +54,64 @@ uint8_t scanned[256];
 
 #include <stm32f4xx_wwdg.h>
 
+bool pb_circularbuffer_read(pb_istream_t *stream, pb_byte_t *buf, size_t count){
+	bool result=false;
+	CircularBuffer<uint8_t> *circularbuffer=(CircularBuffer<uint8_t> *)(stream->state);
+	if(circularbuffer->Out(buf, count)==count){
+		result=true;
+	}
+	stream->bytes_left=circularbuffer->Ocupied();
+	if(stream->bytes_left==0){
+		stream->bytes_left=1; //keep it alive for pb_decode(...) function
+	}
+	return result;
+}
+pb_istream_t pb_istream_from_circularbuffer(CircularBuffer<uint8_t> *circularbuffer)
+{
+    pb_istream_t stream;
+    /* Cast away the const from buf without a compiler error.  We are
+     * careful to use it only in a const manner in the callbacks.
+     */
+    union {
+        void *state;
+        const void *c_state;
+    } state;
+    stream.callback = &pb_circularbuffer_read;
+    state.c_state = circularbuffer;
+    stream.state = state.state;
+    stream.bytes_left = circularbuffer->Ocupied();
+	if(stream.bytes_left==0){
+		stream.bytes_left=1; //keep it alive for pb_decode(...) function
+	}
+    stream.errmsg = NULL;
+    return stream;
+}
+
+
 int main(void){
 	SysTick_Config(SystemCoreClock/1000);
 	usb.Init();
 	nrf24.Init();
 	nrf24.Config();
 
-	while(1){
-//		nrf24.InterruptCallback();
+	bool status;
 
-//		usb_device_class_cdc_vcp.GetData(_usbserialbuffer, 32);
+	grSim_Robot_Command robotcmd;
+	pb_istream_t istream = pb_istream_from_circularbuffer(&_usbserialbuffer);
+	while(1){
+		nrf24.InterruptCallback();
+
+		usb_device_class_cdc_vcp.GetData(_usbserialbuffer, 1024);
 //		usb_device_class_cdc_vcp.SendData(_usbserialbuffer);
+		status=pb_decode(&istream, grSim_Robot_Command_fields, &robotcmd);
+		if(status){
+
+		}
 	}
 
 
 	while (1){
-//		robo.Receive();
+		//		robo.Receive();
 	}
 }
 
@@ -83,7 +127,7 @@ int main(void){
 extern uint32_t LocalTime;
 
 extern "C" void SysTick_Handler(void){
-//	TimingDelay_Decrement();
+	//	TimingDelay_Decrement();
 	LocalTime++;
 }
 
