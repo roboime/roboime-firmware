@@ -67,7 +67,7 @@
 								<option id="com.atollic.truestudio.common_options.target.instr_set.533555302" name="Instruction set" superClass="com.atollic.truestudio.common_options.target.instr_set" value="com.atollic.truestudio.common_options.target.instr_set.thumb2" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.fpucore.1286717916" name="FPU" superClass="com.atollic.truestudio.common_options.target.fpucore" value="FPv4-SP-D16" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.fpu.318167348" name="Floating point" superClass="com.atollic.truestudio.common_options.target.fpu" value="com.atollic.truestudio.common_options.target.fpu.hard" valueType="enumerated"/>
-								<option id="com.atollic.truestudio.ld.general.clib.1197222891" name="Runtime Library" superClass="com.atollic.truestudio.ld.general.clib"/>
+								<option id="com.atollic.truestudio.ld.general.clib.1197222891" name="Runtime Library:" superClass="com.atollic.truestudio.ld.general.clib"/>
 								<option id="com.atollic.truestudio.ld.general.scriptfile.20975084" name="Linker script" superClass="com.atollic.truestudio.ld.general.scriptfile" value="..\stm32f4_flash.ld" valueType="string"/>
 								<option id="com.atollic.truestudio.ld.optimization.do_garbage.164027663" name="Dead code removal " superClass="com.atollic.truestudio.ld.optimization.do_garbage" value="true" valueType="boolean"/>
 							</tool>
@@ -113,7 +113,7 @@
 								<option id="com.atollic.truestudio.common_options.target.instr_set.1091345083" name="Instruction set" superClass="com.atollic.truestudio.common_options.target.instr_set" value="com.atollic.truestudio.common_options.target.instr_set.thumb2" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.fpucore.1299133031" name="FPU" superClass="com.atollic.truestudio.common_options.target.fpucore" value="FPv4-SP-D16" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.fpu.360973068" name="Floating point" superClass="com.atollic.truestudio.common_options.target.fpu" value="com.atollic.truestudio.common_options.target.fpu.hard" valueType="enumerated"/>
-								<option id="com.atollic.truestudio.ld.general.cclib.611968097" name="Runtime Library" superClass="com.atollic.truestudio.ld.general.cclib"/>
+								<option id="com.atollic.truestudio.ld.general.cclib.611968097" name="Runtime Library:" superClass="com.atollic.truestudio.ld.general.cclib"/>
 								<option id="com.atollic.truestudio.ldcc.optimization.do_garbage.1675950756" name="Dead code removal" superClass="com.atollic.truestudio.ldcc.optimization.do_garbage" value="true" valueType="boolean"/>
 								<option id="com.atollic.truestudio.ldcc.general.scriptfile.1842250718" name="Linker script" superClass="com.atollic.truestudio.ldcc.general.scriptfile" value="..\stm32f4_flash.ld" valueType="string"/>
 								<inputType id="com.atollic.truestudio.ldcc.input.1760205855" name="Input" superClass="com.atollic.truestudio.ldcc.input">
@@ -125,8 +125,11 @@
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.secoutput.63324536" name="Other" superClass="com.atollic.truestudio.exe.debug.toolchain.secoutput"/>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="com.atollic.truestudio.exe.debug.1389025984.1824747561" name="commands.cpp" rcbsApplicability="disable" resourcePath="src/radio/commands.cpp" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gpp.663923603.636305873">
+						<tool id="com.atollic.truestudio.exe.debug.toolchain.gpp.663923603.636305873" name="C++ Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gpp.663923603"/>
+					</fileInfo>
 					<sourceEntries>
-						<entry excluding="src/control|Libraries/STM32_USB_OTG_Driver/src/usb_otg.c|src/radio/commands.cpp|Libraries/STM32_USB_HOST_Library/Class|Libraries/STM32_USB_OTG_Driver/src/usb_bsp_template.c|src/network|Libraries/STM32_USB_Device_Library/Class" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="src/control|Libraries/STM32_USB_OTG_Driver/src/usb_otg.c|Libraries/STM32_USB_HOST_Library/Class|Libraries/STM32_USB_OTG_Driver/src/usb_bsp_template.c|src/network|Libraries/STM32_USB_Device_Library/Class" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

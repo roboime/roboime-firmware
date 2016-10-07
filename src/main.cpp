@@ -27,6 +27,9 @@
 #include "stm32f4_discovery.h"
 #include "proto/grSim_Commands.pb.h"
 #include "proto/pb_decode.h"
+#include "proto/pb_encode.h"
+#include "radio/commands.h"
+
 //#include "GPIO.h"
 //#include "Pwm.h"
 //#include "Encoder.h"
@@ -89,6 +92,8 @@ pb_istream_t pb_istream_from_circularbuffer(CircularBuffer<uint8_t> *circularbuf
 
 
 int main(void){
+	uint64_t address=0xE7E7E7E700;
+
 	SysTick_Config(SystemCoreClock/1000);
 	usb.Init();
 	nrf24.Init();
@@ -96,16 +101,32 @@ int main(void){
 
 	bool status;
 
+	uint8_t testmode=1;
+
 	grSim_Robot_Command robotcmd;
 	pb_istream_t istream = pb_istream_from_circularbuffer(&_usbserialbuffer);
 	while(1){
 		nrf24.InterruptCallback();
 
 		usb_device_class_cdc_vcp.GetData(_usbserialbuffer, 1024);
-//		usb_device_class_cdc_vcp.SendData(_usbserialbuffer);
-		status=pb_decode(&istream, grSim_Robot_Command_fields, &robotcmd);
-		if(status){
 
+		if(testmode){
+			cmdline.In(_usbserialbuffer);
+			cmdline.Out(_usbserialbuffer);
+			if(_usbserialbuffer.Ocupied()){
+
+				usb_device_class_cdc_vcp.SendData(_usbserialbuffer);
+			}
+		} else {
+			status=pb_decode(&istream, grSim_Robot_Command_fields, &robotcmd);
+			if(status){
+				uint8_t robotid=robotcmd.id;
+				uint8_t buffer[32];
+				pb_ostream_t ostream=pb_ostream_from_buffer(buffer, sizeof(buffer));
+				pb_encode(&ostream, grSim_Robot_Command_fields, &robotcmd);
+				uint8_t size=ostream.bytes_written;
+				nrf24.TxPackage_ESB(10, address | robotid, 0, buffer, size);
+			}
 		}
 	}
 
