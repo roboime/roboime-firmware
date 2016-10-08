@@ -108,14 +108,14 @@ uint16_t cmd_potd(uint16_t argc, uint8_t *argv8[]){
 	const char **argv=(const char **)argv8;
 	uint16_t size=0;
 	char* buffer=(char*)argv[0];
-	float calib[3];
+	//float calib[3];
 	uint8_t syntax=1;
 	if(argc==1){
 		syntax=0;
 	} else if(argc==4){
-		calib[0]=atof(argv[1]);
-		calib[1]=atof(argv[2]);
-		calib[2]=atof(argv[3]);
+//		calib[0]=atof(argv[1]);
+//		calib[1]=atof(argv[2]);
+//		calib[2]=atof(argv[3]);
 //		rf_power_ctrl.SetCalDetTrans(calib);
 		syntax=0;
 	}
@@ -321,6 +321,17 @@ uint16_t cmd_motv(uint16_t argc, uint8_t *argv8[]){
 	return size;
 }
 
-
-CommandLine cmdline({"*IDN?", 	"pid", 	"chute", "motv", "robv", "serial", "model", "version", "calpot", "freq", "savecal", "potd", "gps"},
-					{cmd_idn, 	cmd_pid,	cmd_chute, cmd_motv, cmd_robv, cmd_serial, cmd_model, cmd_version, cmd_calpot, cmd_freq, cmd_savecal, cmd_potd, cmd_gps});
+uint16_t cmd_testmode(uint16_t argc, uint8_t *argv8[]){
+	const char **argv=(const char **)argv8;
+	uint16_t size=0;
+	char* buffer=(char*)argv[0];
+	if(argc==2){
+		robo.SetTestMode(atoi(argv[1]));
+		size+=sprintf(buffer+size, "OK\r\n");
+	} else {
+		size+=sprintf(buffer+size, "Syntax: testmode [0, 1]\r\n");
+	}
+	return size;
+}
+CommandLine cmdline({"*IDN?", "testmode",	"pid", 	"chute", "motv", "robv", "serial", "model", "version", "calpot", "freq", "savecal", "potd", "gps"},
+					{cmd_idn,	cmd_testmode, 	cmd_pid,	cmd_chute, cmd_motv, cmd_robv, cmd_serial, cmd_model, cmd_version, cmd_calpot, cmd_freq, cmd_savecal, cmd_potd, cmd_gps});

@@ -6,6 +6,7 @@
 #include <hal_stm32/interrupt_stm32.h>
 #include <radio/version.h>
 #include <list>
+#include <control/Robo.h>
 
 extern "C"{
 	#include "usb_dcd_int.h"
@@ -35,9 +36,12 @@ IO_Pin_STM32 NRF24_SS_PIN(IO_Pin::IO_Pin_Mode_OUT, GPIOA, GPIO_Pin_4, GPIO_PuPd_
 IO_Pin_STM32 NRF24_CE_PIN(IO_Pin::IO_Pin_Mode_OUT, GPIOA, GPIO_Pin_3, GPIO_PuPd_UP, GPIO_OType_OD);
 IO_Pin_STM32 NRF24_IRQN_PIN(IO_Pin::IO_Pin_Mode_IN, GPIOC, GPIO_Pin_5, GPIO_PuPd_UP, GPIO_OType_OD);
 
-INTERRUPT_STM32 timer_robot(TIM6_DAC_IRQn, 0x0C, 0x0C, ENABLE);
 
 //INTERRUPT_STM32 nrf24_irqn_exti_interrupt(NRF24_IRQN_PIN.GetIRQChannel(), 0x0C, 0x0C, DISABLE);
+
+Robo robo(0);
+INTERRUPT_STM32 timer_robot(TIM6_DAC_IRQn, 0x0C, 0x0C, ENABLE);
+
 
 SPI_STM32 spi(SPI1, NRF24_SS_PIN);
 
@@ -49,6 +53,9 @@ extern "C" void EXTI9_5_IRQHandler(){
 		nrf24.InterruptCallback();
 	}
 }
+
+
+
 
 /*
 USART_STM32 usart_onewire(USART6, 115200, USART_WordLength_8b, USART_StopBits_2, USART_Parity_No, USART_Mode_Rx | USART_Mode_Tx, USART_HardwareFlowControl_None, 1);

@@ -4,6 +4,7 @@
  *  Created on: Mar 12, 2016
  *      Author: lenovoi7
  */
+
 #include "Robo.h"
 #include "pins.h"
 
@@ -12,10 +13,13 @@
 #define sin_theta 0.7313
 #define cos_theta -0.682
 
-Robo robo;
 
-Robo::Robo()
+Robo::Robo(uint8_t id, bool testmode):
+	_id(id),
+	_testmode(testmode)
 {
+
+
 	robo_timer = new Timer_Time2(); //valores ja setupados pro timer_time
 
 	for(int i=0; i<4; i++){
@@ -128,7 +132,7 @@ void Robo::control_pos(){
 void Robo::control_speed(){
   vBat = 4.3*batAdc->adc_getConversion();
   if(vBat>6 || 1){
-    for(int i=0; i<1; i++){
+    for(int i=0; i<4; i++){
 	  motors[i]->Control_Speed(speed[i]);
     }
   }

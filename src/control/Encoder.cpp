@@ -52,7 +52,7 @@ Encoder::Encoder( GPIO_TypeDef* Port1, GPIO_TypeDef* Port2,
 	TIM_EncoderInterfaceConfig(Tim, TIM_EncoderMode_TI12, TIM_ICPolarity_Rising, TIM_ICPolarity_Rising);
 	TIM_Cmd(Tim, ENABLE);
 
-	TIM_SetCounter(Tim, (uint32_t) 20000);
+	TIM_SetCounter(Tim, (uint32_t) 0);
 	Encoder_Tim = Tim;
 };
 

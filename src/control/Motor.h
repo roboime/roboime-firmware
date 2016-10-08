@@ -38,12 +38,12 @@ private:
 	int16_t Spe_Calc_Answer(int32_t, int32_t);
 	int16_t Pos_Last_Error[20];
 	float Speed_Last_Error[10];
-	uint32_t last_position;
 	uint32_t last_time;
 	double last_vel_answer;
 	int16_t last_speed_pos;
 
-	uint16_t dutycycle;
+	int16_t last_position;
+	int16_t dutycycle;
 	float lasterror;
 	float error;
 	float derror;

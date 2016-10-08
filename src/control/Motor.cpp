@@ -6,9 +6,9 @@
  */
 #include "Motor.h"
 
-float Motor::cp=0.001f;
-float Motor::cd=0.0f;
-float Motor::ci=0.0f;
+float Motor::cp=100.0f;
+float Motor::cd=0.1f;
+float Motor::ci=100.0f;
 
 
 Motor::Motor(Pwm *A_High,
@@ -38,20 +38,27 @@ void Motor::Control_Pos(float  hold_position){
 };
 void Motor::Control_Speed(float hold_speed){
 	int16_t vel_answer;
-	int32_t position = Motor_Enc->get_position();
+	int16_t position = (int16_t)Motor_Enc->get_position();
 
-	int32_t distance=position-last_position;
+	int16_t distance=position-last_position;
 	last_position=position;
 
-	float speed=(float)distance*1.78e-2;
+	float speed=(float)distance*0.112;
 
 	error=hold_speed-speed;
 	ierror+=error;
+	if(ierror > 1000) ierror = 1000;
+	if(ierror < -1000) ierror = -1000;
+
 	derror=error-lasterror;
+	lasterror=error;
 
 	float out=cp*error + ci * ierror + cd * derror;
 
+
 	dutycycle+=out;
+	if(dutycycle>1000) dutycycle=1000;
+	if(dutycycle<-1000) dutycycle=-1000;
 	SetDutyCycle(dutycycle);
 
 

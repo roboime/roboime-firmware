@@ -71,61 +71,82 @@ bool pb_circularbuffer_read(pb_istream_t *stream, pb_byte_t *buf, size_t count){
 }
 pb_istream_t pb_istream_from_circularbuffer(CircularBuffer<uint8_t> *circularbuffer)
 {
-    pb_istream_t stream;
-    /* Cast away the const from buf without a compiler error.  We are
-     * careful to use it only in a const manner in the callbacks.
-     */
-    union {
-        void *state;
-        const void *c_state;
-    } state;
-    stream.callback = &pb_circularbuffer_read;
-    state.c_state = circularbuffer;
-    stream.state = state.state;
-    stream.bytes_left = circularbuffer->Ocupied();
+	pb_istream_t stream;
+	/* Cast away the const from buf without a compiler error.  We are
+	 * careful to use it only in a const manner in the callbacks.
+	 */
+	union {
+		void *state;
+		const void *c_state;
+	} state;
+	stream.callback = &pb_circularbuffer_read;
+	state.c_state = circularbuffer;
+	stream.state = state.state;
+	stream.bytes_left = circularbuffer->Ocupied();
 	if(stream.bytes_left==0){
 		stream.bytes_left=1; //keep it alive for pb_decode(...) function
 	}
-    stream.errmsg = NULL;
-    return stream;
+	stream.errmsg = NULL;
+	return stream;
 }
 
 
 int main(void){
+	uint8_t channel=10;
 	uint64_t address=0xE7E7E7E700;
 
 	SysTick_Config(SystemCoreClock/1000);
 	usb.Init();
 	nrf24.Init();
 	nrf24.Config();
+	nrf24.StartRX_ESB(channel, 0xE7E7E7E700 + robo.GetId(), 32, 1);
 
 	bool status;
 
-	uint8_t testmode=1;
 
 	grSim_Robot_Command robotcmd;
 	pb_istream_t istream = pb_istream_from_circularbuffer(&_usbserialbuffer);
 	while(1){
 		nrf24.InterruptCallback();
 
+
 		usb_device_class_cdc_vcp.GetData(_usbserialbuffer, 1024);
 
-		if(testmode){
+		if(robo.InTestMode()){
 			cmdline.In(_usbserialbuffer);
 			cmdline.Out(_usbserialbuffer);
 			if(_usbserialbuffer.Ocupied()){
 				usb_device_class_cdc_vcp.SendData(_usbserialbuffer);
 			}
 		} else {
-			status=pb_decode(&istream, grSim_Robot_Command_fields, &robotcmd);
-			if(status){
-				uint8_t robotid=robotcmd.id;
+			status=0;
+
+			if(_usbserialbuffer.Ocupied()){
+				status=pb_decode(&istream, grSim_Robot_Command_fields, &robotcmd);
+				if(status){
+					uint8_t robotid=robotcmd.id;
+					uint8_t buffer[32];
+					pb_ostream_t ostream=pb_ostream_from_buffer(buffer, sizeof(buffer));
+					pb_encode(&ostream, grSim_Robot_Command_fields, &robotcmd);
+					uint8_t size=ostream.bytes_written;
+					nrf24.TxPackage_ESB(10, address | robotid, 0, buffer, size);
+				}
+			} else if(nrf24.RxSize()){
+				nrf24.StartRX_ESB(channel, 0xE7E7E7E700 + robo.GetId(), 32, 1);
+
+				uint8_t rxsize=nrf24.RxSize();
+				if(rxsize>32) rxsize=32;
 				uint8_t buffer[32];
-				pb_ostream_t ostream=pb_ostream_from_buffer(buffer, sizeof(buffer));
-				pb_encode(&ostream, grSim_Robot_Command_fields, &robotcmd);
-				uint8_t size=ostream.bytes_written;
-				nrf24.TxPackage_ESB(10, address | robotid, 0, buffer, size);
+				nrf24.RxData(buffer, rxsize);
+				pb_istream_t istream=pb_istream_from_buffer(buffer, rxsize);
+				status=pb_decode(&istream, grSim_Robot_Command_fields, &robotcmd);
 			}
+			if(status){
+				if(robotcmd.id==robo.GetId()){
+					robo.set_speed(robotcmd.veltangent, robotcmd.velnormal, robotcmd.velangular);
+				}
+			}
+
 		}
 	}
 

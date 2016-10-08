@@ -21,7 +21,7 @@
 
 class Robo {
 public:
-	Robo();
+	Robo(uint8_t id, bool testmode=1);
 	GPIO *high_kick;
 	GPIO *chute_baixo;
 	void HighKick();
@@ -30,7 +30,7 @@ public:
 	void control_pos();
 	dibre *drible;
 	int pos[4];
-	int speed[4];
+	float speed[4];
 	Timer_Time2 *robo_timer;
 	Pwm *ahpwms[4];
 	GPIO *algpios[4];
@@ -48,8 +48,12 @@ public:
     void set_speed(float v_r, float v_t, float w);
     void set_speed(float v[]);
     void set_motor_speed(uint8_t motnr, float vel);
-
-private:
+    bool _testmode;
+    bool InTestMode(){return _testmode;};
+    void SetTestMode(bool testmode) {_testmode=testmode;}
+    uint8_t GetId(){return _id;}
+protected:
+    uint8_t _id;
 };
 
 extern Robo robo;

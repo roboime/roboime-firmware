@@ -45,7 +45,12 @@ void NRF24L01P::TxPackage(uint8_t* data, uint16_t size, uint32_t frequency, MODE
 
 
 uint16_t NRF24L01P::RxSize() {
-	return read_rx_payload_width();
+	uint8_t payloadsize=read_rx_payload_width();
+	if(payloadsize>32){
+		flush_rx();
+		payloadsize=read_rx_payload_width();
+	}
+	return payloadsize;
 }
 
 uint16_t NRF24L01P::RxData(uint8_t* data, uint16_t maxsize) {
@@ -337,7 +342,7 @@ uint8_t NRF24L01P::TxPackage_ESB(uint8_t channel, uint64_t address, uint8_t no_a
 
 
 void NRF24L01P::InterruptCallback(){
-	if(_NIRQ_PIN->Read()){
+//	if(_NIRQ_PIN->Read()){
 		REG.STATUS.value=nop();
 		if(REG.STATUS.MAX_RT){
 			REG.STATUS.value=0;
@@ -347,16 +352,20 @@ void NRF24L01P::InterruptCallback(){
 		}
 		if(REG.STATUS.RX_DR){
 			_receive_irq_count++;
-		}
-		if(REG.STATUS.RX_P_NO){
+			uint8_t payloadsize=read_rx_payload_width();
+			if(payloadsize>32) payloadsize=32;
+			uint8_t buffer[32];
+			read_rx_payload(buffer, payloadsize);
+			_rxbuffer.In(buffer, payloadsize);
 		}
 		if(REG.STATUS.TX_DS){
 			_transmit_irq_count++;
 			_CE_PIN->Reset();
+
 		}
 		if(REG.STATUS.TX_FULL){
 		}
-	}
+//	}
 }
 
 
