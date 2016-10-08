@@ -6,6 +6,11 @@
  */
 #include "Motor.h"
 
+float Motor::cp=0.001f;
+float Motor::cd=0.0f;
+float Motor::ci=0.0f;
+
+
 Motor::Motor(Pwm *A_High,
 		GPIO *A_Low,
 		Pwm *B_High,
@@ -21,25 +26,39 @@ Motor::Motor(Pwm *A_High,
 	Motor_Time = MTimer;
 	last_vel_answer = 0;
 }
-void Motor::Control_Pos(uint32_t hold_position){
+void Motor::Control_Pos(float  hold_position){
 	uint32_t position;
 	int16_t answer;
 	position = Motor_Enc->get_position();
 	answer = this->Pos_Calc_Answer(position, hold_position);	//this eh opcional por estar
 																//pos_calc_answer estar dentro
 																//do objeto
-	this->Answer(answer);
+	this->SetDutyCycle(answer);
 	return;
 };
-void Motor::Control_Speed(int16_t hold_speed){
-	int16_t speed;
+void Motor::Control_Speed(float hold_speed){
 	int16_t vel_answer;
-	uint32_t position = Motor_Enc->get_position();
-	Motor_Enc->set_position((uint32_t) 20000);
-	speed = 300*((int16_t)position-20000);
-    vel_answer = -Spe_Calc_Answer(speed, hold_speed);
-	this->Answer((int16_t)vel_answer);
-	return;
+	int32_t position = Motor_Enc->get_position();
+
+	int32_t distance=position-last_position;
+	last_position=position;
+
+	float speed=(float)distance*1.78e-2;
+
+	error=hold_speed-speed;
+	ierror+=error;
+	derror=error-lasterror;
+
+	float out=cp*error + ci * ierror + cd * derror;
+
+	dutycycle+=out;
+	SetDutyCycle(dutycycle);
+
+
+//	Motor_Enc->set_position((uint32_t) 20000);
+//	speed = 300*((int16_t)position-20000);
+//    vel_answer = -Spe_Calc_Answer(speed, hold_speed);
+//	this->SetDutyCycle((int16_t)vel_answer);
 };
 /*
 void Motor::Control_Speed(int16_t hold_speed){
@@ -53,31 +72,31 @@ void Motor::Control_Speed(int16_t hold_speed){
 	return;
 };
 */
-void Motor::Answer(int16_t answer)
+void Motor::SetDutyCycle(int16_t dutycycle)
 {
-	if (answer > 0)
+	if (dutycycle > 0)
 	{
-		if (answer>1000)
+		if (dutycycle>1000)
 		{
-			answer=1000;
+			dutycycle=1000;
 		}
 		Motor_A_Low->Reset();
 		Motor_B_High->set_DutyCycle(0);
 		while(Motor_A_Low->Status());
-		Motor_A_High->set_DutyCycle(answer);
+		Motor_A_High->set_DutyCycle(dutycycle);
 		Motor_B_Low->Set();
 	}
 	else
 	{
-		answer=-answer;
-		if(answer>1000)
+		dutycycle=-dutycycle;
+		if(dutycycle>1000)
 		{
-			answer=1000;
+			dutycycle=1000;
 		}
 		Motor_B_Low->Reset();
 		Motor_A_High->set_DutyCycle(0);
 		while(Motor_B_Low->Status());
-		Motor_B_High->set_DutyCycle(answer);
+		Motor_B_High->set_DutyCycle(dutycycle);
 		Motor_A_Low->Set();
 	}
 	return;
@@ -135,4 +154,10 @@ int16_t Motor::Spe_Calc_Answer(int32_t speed, int32_t hold_speed){
 	}
 	last_vel_answer = vel_answer;
 	return (int16_t) vel_answer;
+}
+
+void Motor::SetPID(float p, float i, float d) {
+	cp=p;
+	ci=i;
+	cd=d;
 }

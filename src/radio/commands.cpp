@@ -1,6 +1,7 @@
 #include <radio/commands.h>
 #include <radio/bsp.h>
 #include <radio/serialnumber.h>
+#include "control/Robo.h"
 
 uint16_t cmd_cw(uint16_t argc, uint8_t *argv8[]){
 	const char **argv=(const char **)argv8;
@@ -57,29 +58,7 @@ uint16_t cmd_freq(uint16_t argc, uint8_t *argv8[]){
 	return size;
 }
 
-uint16_t cmd_trimpot(uint16_t argc, uint8_t *argv8[]){
-	const char **argv=(const char **)argv8;
-	uint16_t size=0;
-	char* buffer=(char*)argv[0];
-	uint8_t pot=0;
-	uint8_t syntax=1;
-	if(argc==2){
-		pot=atoi(argv[1]);
-		if(pot<40){
-			pot=40;
-		} else {
-			syntax=0;
-		}
-	}
 
-	if(syntax){
-		size+=sprintf(buffer+size, "Syntax: trimpot [value>50]\r\n");
-	} else {
-//		mcp4561_b.SetValue(pot);
-		size+=sprintf(buffer+size, "OK! TRIMPOT at %d!\r\n", pot);
-	}
-	return size;
-}
 
 uint16_t cmd_calpot(uint16_t argc, uint8_t *argv8[]){
 	const char **argv=(const char **)argv8;
@@ -122,25 +101,8 @@ uint16_t cmd_calpot(uint16_t argc, uint8_t *argv8[]){
 	return size;
 }
 
-uint16_t cmd_motv(uint16_t argc, uint8_t *argv8[]){
-	const char **argv=(const char **)argv8;
-	uint16_t size=0;
-	char* buffer=(char*)argv[0];
-	uint8_t motnr=0;
-	if(argc==3 && motnr<5){
-		float vel=0.0f;
-		motnr=atoi(argv[1]);
-		size+=sprintf(buffer+size, "OK\r\n");
-//		size+=sprintf(buffer+size, "%d", (uint16_t)(res));
-//		size+=sprintf(buffer+size, ".%03d\r\n", (uint16_t)(res*1000)%1000);
-	} else if(argc==6){
-		size+=sprintf(buffer+size, "OK\r\n");
-	} else {
-		size+=sprintf(buffer+size, "Syntax: motvv 0..4 vel \r\n");
-		size+=sprintf(buffer+size, "        motvv vel0 vel1 vel2 vel3 vel4\r\n");
-	}
-	return size;
-}
+
+
 
 uint16_t cmd_potd(uint16_t argc, uint8_t *argv8[]){
 	const char **argv=(const char **)argv8;
@@ -271,5 +233,94 @@ uint16_t cmd_gps(uint16_t argc, uint8_t *argv8[]){
 	return size;
 }
 
-CommandLine cmdline({"*IDN?", 	"cw", 	"trimpot", "motv", "serial", "model", "version", "calpot", "freq", "savecal", "potd", "gps"},
-					{cmd_idn, 	cmd_cw,	cmd_trimpot, cmd_motv, cmd_serial, cmd_model, cmd_version, cmd_calpot, cmd_freq, cmd_savecal, cmd_potd, cmd_gps});
+uint16_t cmd_chute(uint16_t argc, uint8_t *argv8[]){
+	const char **argv=(const char **)argv8;
+	uint16_t size=0;
+	char* buffer=(char*)argv[0];
+	uint8_t pot=0;
+
+	if(argc==2 && (pot=atoi(argv[1]))<=2 && pot){
+		size+=sprintf(buffer+size, "OK!\r\n");
+		switch(pot){
+		case 1:
+			robo.ChuteBaixo();
+			break;
+		case 2:
+			robo.HighKick();
+			break;
+		default:
+			break;
+		}
+
+	} else {
+		size+=sprintf(buffer+size, "Syntax: chute [1=baixo 2=alto]\r\n");
+	}
+	return size;
+}
+
+uint16_t cmd_robv(uint16_t argc, uint8_t *argv8[]){
+	const char **argv=(const char **)argv8;
+	uint16_t size=0;
+	char* buffer=(char*)argv[0];
+	uint8_t motnr=0;
+	if(argc==4 && motnr<5){
+		float v[3];
+		v[0]=atof(argv[1]);
+		v[1]=atof(argv[2]);
+		v[2]=atof(argv[3]);
+		robo.set_speed(v[0], v[1], v[2]);
+		size+=sprintf(buffer+size, "OK\r\n");
+	} else {
+		size+=sprintf(buffer+size, "Syntax: robv velt velr vela \r\n");
+	}
+	return size;
+}
+
+uint16_t cmd_pid(uint16_t argc, uint8_t *argv8[]){
+	const char **argv=(const char **)argv8;
+	uint16_t size=0;
+	char* buffer=(char*)argv[0];
+	uint8_t motnr=0;
+	if(argc==4 && motnr<5){
+		float c[3];
+		c[0]=atof(argv[1]);
+		c[1]=atof(argv[2]);
+		c[2]=atof(argv[3]);
+		Motor::SetPID(c[0], c[1], c[2]);
+		size+=sprintf(buffer+size, "OK\r\n");
+	} else {
+		size+=sprintf(buffer+size, "Syntax: robv velt velr vela \r\n");
+	}
+	return size;
+}
+
+
+uint16_t cmd_motv(uint16_t argc, uint8_t *argv8[]){
+	const char **argv=(const char **)argv8;
+	uint16_t size=0;
+	char* buffer=(char*)argv[0];
+	uint8_t motnr=0;
+	if(argc==3 && motnr<5){
+		motnr=atoi(argv[1]);
+		float vel=atof(argv[2]);
+		robo.set_motor_speed(motnr, vel);
+		size+=sprintf(buffer+size, "OK\r\n");
+	} else if(argc==6){
+		float v[5];
+		v[0]=atof(argv[1]);
+		v[1]=atof(argv[2]);
+		v[2]=atof(argv[3]);
+		v[3]=atof(argv[4]);
+
+		robo.set_speed(v);
+		size+=sprintf(buffer+size, "OK\r\n");
+	} else {
+		size+=sprintf(buffer+size, "Syntax: motv 0..4 vel \r\n");
+		size+=sprintf(buffer+size, "        motv vel0 vel1 vel2 vel3 vel4\r\n");
+	}
+	return size;
+}
+
+
+CommandLine cmdline({"*IDN?", 	"pid", 	"chute", "motv", "robv", "serial", "model", "version", "calpot", "freq", "savecal", "potd", "gps"},
+					{cmd_idn, 	cmd_pid,	cmd_chute, cmd_motv, cmd_robv, cmd_serial, cmd_model, cmd_version, cmd_calpot, cmd_freq, cmd_savecal, cmd_potd, cmd_gps});

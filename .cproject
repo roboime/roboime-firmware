@@ -125,11 +125,21 @@
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.secoutput.63324536" name="Other" superClass="com.atollic.truestudio.exe.debug.toolchain.secoutput"/>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="com.atollic.truestudio.exe.debug.1389025984.1824747561" name="commands.cpp" rcbsApplicability="disable" resourcePath="src/radio/commands.cpp" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gpp.663923603.636305873">
-						<tool id="com.atollic.truestudio.exe.debug.toolchain.gpp.663923603.636305873" name="C++ Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gpp.663923603"/>
-					</fileInfo>
+					<folderInfo id="com.atollic.truestudio.exe.debug.1389025984.589229399" name="/" resourcePath="src/control">
+						<toolChain id="com.atollic.truestudio.exe.debug.toolchain.1760830400" name="Atollic ARM Tools" superClass="com.atollic.truestudio.exe.debug.toolchain" unusedChildren="">
+							<option id="com.atollic.truestudio.toolchain_options.mcu.2079748768.569489492" name="Microcontroller" superClass="com.atollic.truestudio.toolchain_options.mcu.2079748768"/>
+							<option id="com.atollic.truestudio.toolchain_options.vendor.382054881.338029703" name="Vendor name" superClass="com.atollic.truestudio.toolchain_options.vendor.382054881"/>
+							<tool id="com.atollic.truestudio.exe.debug.toolchain.as.1190018280" name="Assembler" superClass="com.atollic.truestudio.exe.debug.toolchain.as.1867530198"/>
+							<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.1857252516" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.1674841680"/>
+							<tool id="com.atollic.truestudio.exe.debug.toolchain.ld.1487109678" name="C Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ld.219130374"/>
+							<tool id="com.atollic.truestudio.exe.debug.toolchain.gpp.1324579618" name="C++ Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gpp.663923603"/>
+							<tool id="com.atollic.truestudio.exe.debug.toolchain.ldcc.671335241" name="C++ Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ldcc.971264171"/>
+							<tool id="com.atollic.truestudio.ar.base.1181685348" name="Archiver" superClass="com.atollic.truestudio.ar.base.1138488465"/>
+							<tool id="com.atollic.truestudio.exe.debug.toolchain.secoutput.1810534368" name="Other" superClass="com.atollic.truestudio.exe.debug.toolchain.secoutput.63324536"/>
+						</toolChain>
+					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src/control|Libraries/STM32_USB_OTG_Driver/src/usb_otg.c|Libraries/STM32_USB_HOST_Library/Class|Libraries/STM32_USB_OTG_Driver/src/usb_bsp_template.c|src/network|Libraries/STM32_USB_Device_Library/Class" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="Libraries/STM32_USB_OTG_Driver/src/usb_otg.c|Libraries/STM32_USB_HOST_Library/Class|Libraries/STM32_USB_OTG_Driver/src/usb_bsp_template.c|src/network|Libraries/STM32_USB_Device_Library/Class" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -193,7 +203,7 @@
 								<option id="com.atollic.truestudio.common_options.target.instr_set.1267403610" name="Instruction set" superClass="com.atollic.truestudio.common_options.target.instr_set" value="com.atollic.truestudio.common_options.target.instr_set.thumb2" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.fpucore.1498592769" name="FPU" superClass="com.atollic.truestudio.common_options.target.fpucore" value="FPv4-SP-D16" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.fpu.1688859757" name="Floating point" superClass="com.atollic.truestudio.common_options.target.fpu" value="com.atollic.truestudio.common_options.target.fpu.hard" valueType="enumerated"/>
-								<option id="com.atollic.truestudio.ld.general.clib.1598867723" name="Runtime Library" superClass="com.atollic.truestudio.ld.general.clib"/>
+								<option id="com.atollic.truestudio.ld.general.clib.1598867723" name="Runtime Library:" superClass="com.atollic.truestudio.ld.general.clib"/>
 								<option id="com.atollic.truestudio.ld.general.scriptfile.959548175" name="Linker script" superClass="com.atollic.truestudio.ld.general.scriptfile" value="..\stm32f4_flash.ld" valueType="string"/>
 								<option id="com.atollic.truestudio.ld.optimization.do_garbage.1952642965" name="Dead code removal " superClass="com.atollic.truestudio.ld.optimization.do_garbage" value="true" valueType="boolean"/>
 							</tool>
@@ -230,7 +240,7 @@
 								<option id="com.atollic.truestudio.common_options.target.instr_set.1838740934" name="Instruction set" superClass="com.atollic.truestudio.common_options.target.instr_set" value="com.atollic.truestudio.common_options.target.instr_set.thumb2" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.fpucore.1539632518" name="FPU" superClass="com.atollic.truestudio.common_options.target.fpucore" value="FPv4-SP-D16" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.fpu.803320350" name="Floating point" superClass="com.atollic.truestudio.common_options.target.fpu" value="com.atollic.truestudio.common_options.target.fpu.hard" valueType="enumerated"/>
-								<option id="com.atollic.truestudio.ld.general.cclib.659070212" name="Runtime Library" superClass="com.atollic.truestudio.ld.general.cclib"/>
+								<option id="com.atollic.truestudio.ld.general.cclib.659070212" name="Runtime Library:" superClass="com.atollic.truestudio.ld.general.cclib"/>
 								<option id="com.atollic.truestudio.ldcc.optimization.do_garbage.1351034814" name="Dead code removal" superClass="com.atollic.truestudio.ldcc.optimization.do_garbage" value="true" valueType="boolean"/>
 								<option id="com.atollic.truestudio.ldcc.general.scriptfile.903748401" name="Linker script" superClass="com.atollic.truestudio.ldcc.general.scriptfile" value="..\stm32f4_flash.ld" valueType="string"/>
 								<inputType id="com.atollic.truestudio.ldcc.input.1530399042" name="Input" superClass="com.atollic.truestudio.ldcc.input">

@@ -12,6 +12,8 @@
 #define sin_theta 0.7313
 #define cos_theta -0.682
 
+Robo robo;
+
 Robo::Robo()
 {
 	robo_timer = new Timer_Time2(); //valores ja setupados pro timer_time
@@ -31,11 +33,11 @@ Robo::Robo()
 
 	high_kick = new GPIO(GPIOD, GPIO_Pin_8);
 	chute_baixo = new GPIO(GPIOD, GPIO_Pin_10);
-    radio = new NRF24();
-    radio->is_rx=true;
-    radio->Config();
-    radio->SetId(0);
-    radio->NRF_CE->Set();
+//    radio = new NRF24();
+//    radio->is_rx=true;
+//    radio->Config();
+//    radio->SetId(0);
+//    radio->NRF_CE->Set();
 }
 /*
 Pacote do tx
@@ -125,18 +127,18 @@ void Robo::control_pos(){
 }
 void Robo::control_speed(){
   vBat = 4.3*batAdc->adc_getConversion();
-  if(vBat>7.4){
-    for(int i=0; i<4; i++){
+  if(vBat>6 || 1){
+    for(int i=0; i<1; i++){
 	  motors[i]->Control_Speed(speed[i]);
     }
   }
   else{
     for(int i=0; i<4; i++){
-	  motors[i]->Answer(0);
+	  motors[i]->SetDutyCycle(0);
     }
   }
 }
-void Robo::set_speed(int v_r, int v_t, int w){
+void Robo::set_speed(float v_r, float v_t, float w){
 	float R = 0.06; //TODO valor temporario
 
 	speed[0] = -v_r*cos_phi + v_t*sin_phi + w*R;
@@ -166,4 +168,17 @@ void Robo::set_speed(int v_r, int v_t, int w){
 	        return speeds
 */
 	return;
+}
+
+void Robo::set_speed(float v[]){
+	speed[0] = v[0];
+	speed[1] = v[1];
+	speed[2] = v[2];
+	speed[3] = v[3];
+}
+
+void Robo::set_motor_speed(uint8_t motnr, float vel) {
+	if(motnr<4){
+		speed[motnr]=vel;
+	}
 }

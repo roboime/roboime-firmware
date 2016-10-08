@@ -15,16 +15,16 @@ Timer_Time::Timer_Time(){
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 	TIM_TimeBaseStructure.TIM_ClockDivision=0;
 	TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up;
-	TIM_TimeBaseStructure.TIM_Prescaler=(SystemCoreClock/2/1000);
-	TIM_TimeBaseStructure.TIM_Period=1;
+	TIM_TimeBaseStructure.TIM_Prescaler=84;
+	TIM_TimeBaseStructure.TIM_Period=1000;
 	TIM_TimeBaseInit(TIM6,&TIM_TimeBaseStructure);
 
 	//codigo novo
 	TIM_ITConfig(TIM6,TIM_IT_Update,ENABLE);
 	TIM_Cmd(TIM6,ENABLE);
 
-	NVIC_SetPriority(TIM6_DAC_IRQn,1); //Mudado de TIM6_IRQn para TIM6_DAC_IRQn
-	NVIC_EnableIRQ(TIM6_DAC_IRQn);
+//	NVIC_SetPriority(TIM6_DAC_IRQn,1); //Mudado de TIM6_IRQn para TIM6_DAC_IRQn
+//	NVIC_EnableIRQ(TIM6_DAC_IRQn);
 
 };
 uint32_t Timer_Time::current_time(){

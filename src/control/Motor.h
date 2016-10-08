@@ -23,9 +23,10 @@ public:
 			GPIO *B_Low,
 			Encoder *Enc,
 			Timer_Time2 *MTimer);
-	void Control_Pos(uint32_t hold_position);
-	void Control_Speed(int16_t hold_speed);
-	void Answer(int16_t answer);
+	void Control_Pos(float hold_position);
+	void Control_Speed(float hold_speed);
+	void SetDutyCycle(int16_t dutycycle);
+	static void SetPID(float p, float i, float d);
 private:
 	Pwm *Motor_A_High;
 	Pwm *Motor_B_High;
@@ -41,5 +42,16 @@ private:
 	uint32_t last_time;
 	double last_vel_answer;
 	int16_t last_speed_pos;
+
+	uint16_t dutycycle;
+	float lasterror;
+	float error;
+	float derror;
+	float ierror;
+	static float cp;
+	static float cd;
+	static float ci;
+
+
 };
 #endif /* MOTOR_H_ */

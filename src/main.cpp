@@ -33,10 +33,10 @@
 //#include "GPIO.h"
 //#include "Pwm.h"
 //#include "Encoder.h"
-//#include "TimerTime.h"
+#include "TimerTime.h"
 //#include "TimerTime2.h"
 //#include "Motor.h"
-//#include "Robo.h"
+#include "Robo.h"
 //#include "my_spi.h"
 //#include "NRF24.h"
 //#include "adc.h"
@@ -46,8 +46,7 @@ static __IO uint32_t TimingDelay;
 void TimingDelay_Decrement(void);
 void Delay_ms(uint32_t time_ms);
 
-//Robo robo;
-//Timer_Time robo_irq_timer;
+Timer_Time robo_irq_timer;
 
 #include "radio/bsp.h"
 
@@ -56,6 +55,7 @@ CircularBuffer<uint8_t> _usbserialbuffer(0,2048);
 uint8_t scanned[256];
 
 #include <stm32f4xx_wwdg.h>
+
 
 bool pb_circularbuffer_read(pb_istream_t *stream, pb_byte_t *buf, size_t count){
 	bool result=false;
@@ -114,7 +114,6 @@ int main(void){
 			cmdline.In(_usbserialbuffer);
 			cmdline.Out(_usbserialbuffer);
 			if(_usbserialbuffer.Ocupied()){
-
 				usb_device_class_cdc_vcp.SendData(_usbserialbuffer);
 			}
 		} else {
@@ -136,15 +135,15 @@ int main(void){
 	}
 }
 
-//extern "C" {
-//void TIM6_DAC_IRQHandler(){
-//	if(TIM_GetITStatus(TIM6,TIM_IT_Update)){
-//		TIM_ClearITPendingBit(TIM6,TIM_IT_Update);
-//		robo.control_speed();
-//	}
-//}
-//}
-//
+extern "C" {
+void TIM6_DAC_IRQHandler(){
+	if(TIM_GetITStatus(TIM6,TIM_IT_Update)){
+		TIM_ClearITPendingBit(TIM6,TIM_IT_Update);
+		robo.control_speed();
+	}
+}
+}
+
 extern uint32_t LocalTime;
 
 extern "C" void SysTick_Handler(void){

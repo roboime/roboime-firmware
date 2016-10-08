@@ -45,8 +45,12 @@ public:
     void Receive();
     void procPacket(uint8_t *dataPacket);
     NRF24 *radio;
-    void set_speed(int v_r, int v_t, int w);
+    void set_speed(float v_r, float v_t, float w);
+    void set_speed(float v[]);
+    void set_motor_speed(uint8_t motnr, float vel);
 
 private:
 };
+
+extern Robo robo;
 #endif /* ROBO_H_ */
