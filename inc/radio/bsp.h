@@ -37,6 +37,8 @@
 #include <hal_stm32/flash_memory_stm32.h>
 #include <radio/scpi.h>
 #include <hal/nrf24l01p.h>
+#include <control/motor.h>
+
 
 extern I2C_STM32 i2c_a;
 extern I2C_STM32 i2c_b;
@@ -77,3 +79,7 @@ extern SCPI SCPI_USB;
 
 extern NRF24L01P nrf24;
 extern IO_Pin_STM32 Botao;
+extern Motor motor0;
+extern Motor motor1;
+extern Motor motor2;
+extern Motor motor3;

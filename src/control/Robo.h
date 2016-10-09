@@ -21,7 +21,7 @@
 
 class Robo {
 public:
-	Robo(uint8_t id, bool testmode=1);
+	Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, uint8_t id, bool testmode=1);
 	GPIO *high_kick;
 	GPIO *chute_baixo;
 	void HighKick();
@@ -31,19 +31,11 @@ public:
 	dibre *drible;
 	int pos[4];
 	float speed[4];
-	Timer_Time2 *robo_timer;
-	Pwm *ahpwms[4];
-	GPIO *algpios[4];
-    Pwm *bhpwms[4];
-    GPIO *blgpios[4];
-    Encoder *encoders[4];
     Motor *motors[4];
     adc *batAdc;
     float vBat;
     int nVerifyPacket;
     int nPacketReceived;
-    void Receive();
-    void procPacket(uint8_t *dataPacket);
     NRF24 *radio;
     void set_speed(float v_r, float v_t, float w);
     void set_speed(float v[]);
