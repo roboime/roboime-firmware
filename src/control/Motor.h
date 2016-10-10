@@ -25,7 +25,7 @@ public:
 			Timer_Time2 *MTimer);
 	void Control_Pos(float hold_position);
 	void Control_Speed(float hold_speed);
-	void SetDutyCycle(int16_t dutycycle);
+	void SetDutyCycle(int16_t answer);
 	static void SetPID(float p, float i, float d);
 private:
 	Pwm *Motor_A_High;

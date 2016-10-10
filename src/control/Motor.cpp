@@ -6,9 +6,9 @@
  */
 #include "Motor.h"
 
-float Motor::cp=100.0f;
-float Motor::cd=0.1f;
-float Motor::ci=100.0f;
+float Motor::cp=10.0f;
+float Motor::cd=0.0f;
+float Motor::ci=0.0f;
 
 
 Motor::Motor(Pwm *A_High,
@@ -73,31 +73,31 @@ void Motor::Control_Speed(int16_t hold_speed){
 	return;
 };
 */
-void Motor::SetDutyCycle(int16_t dutycycle)
+void Motor::SetDutyCycle(int16_t answer)
 {
-	if (dutycycle > 0)
+	if (answer > 0)
 	{
-		if (dutycycle>1000)
+		if (answer>1000)
 		{
-			dutycycle=1000;
+			answer=1000;
 		}
 		Motor_A_Low->Reset();
 		Motor_B_High->set_DutyCycle(0);
 		while(Motor_A_Low->Status());
-		Motor_A_High->set_DutyCycle(dutycycle);
+		Motor_A_High->set_DutyCycle(answer);
 		Motor_B_Low->Set();
 	}
 	else
 	{
-		dutycycle=-dutycycle;
-		if(dutycycle>1000)
+		answer=-answer;
+		if(answer>1000)
 		{
-			dutycycle=1000;
+			answer=1000;
 		}
 		Motor_B_Low->Reset();
 		Motor_A_High->set_DutyCycle(0);
 		while(Motor_B_Low->Status());
-		Motor_B_High->set_DutyCycle(dutycycle);
+		Motor_B_High->set_DutyCycle(answer);
 		Motor_A_Low->Set();
 	}
 	return;

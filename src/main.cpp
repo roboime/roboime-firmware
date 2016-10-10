@@ -148,10 +148,12 @@ int main(void){
 				if(rxsize>32) rxsize=32;
 				uint8_t buffer[32];
 				nrf24.RxData(buffer, rxsize);
-				usb_device_class_cdc_vcp.SendData(buffer, rxsize);
 
 				pb_istream_t istream=pb_istream_from_buffer(buffer, rxsize);
 				status=pb_decode(&istream, grSim_Robot_Command_fields, &robotcmd);
+				char usbBuffer[20];
+				int usbSize=sprintf(usbBuffer, "%f \r\n", robotcmd.velangular);
+				usb_device_class_cdc_vcp.SendData((uint8_t*)usbBuffer, usbSize);
 			}
 			if(status){
 				if(robotcmd.id==robo.GetId()){

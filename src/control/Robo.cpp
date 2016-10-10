@@ -119,14 +119,14 @@ void Robo::ChuteBaixo(){
 
 void Robo::control_pos(){
 	for(int i=0; i<4; i++){
-		motors[i]->Control_Pos(pos[1]);
+		motors[i]->Control_Pos(pos[i]);
 	}
 }
 void Robo::control_speed(){
   vBat = 4.3*batAdc->adc_getConversion();
   if(vBat>6 || 1){
     for(int i=0; i<4; i++){
-	  motors[i]->Control_Speed(speed[1]);
+	  motors[i]->Control_Speed(speed[i]);
     }
   }
   else{
