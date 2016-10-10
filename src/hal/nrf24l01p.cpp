@@ -196,14 +196,14 @@ void NRF24L01P::Init(){
 }
 
 void NRF24L01P::Config(){
+	REG.DYNPD.DPL_P0=1;
+	REG.DYNPD.DPL_P1=1;
+	write_register(REG_ADDR.DYNPD, REG.DYNPD.value);
+
 	REG.FEATURE.EN_DPL=1;
 	REG.FEATURE.EN_ACK_PAY=1;
 	REG.FEATURE.EN_DYN_ACK=1;
 	write_register(REG_ADDR.FEATURE, REG.FEATURE.value);
-
-	REG.DYNPD.DPL_P0=1;
-	REG.DYNPD.DPL_P1=1;
-	write_register(REG_ADDR.DYNPD, REG.DYNPD.value);
 
 	REG.CONFIG.PWR_UP=1;
 	write_register(REG_ADDR.CONFIG, REG.CONFIG.value);
@@ -236,7 +236,82 @@ uint8_t NRF24L01P::Scan(uint8_t *buffer){
 	_CE_PIN->Reset();
 	return 1;
 }
-
+int NRF24L01P::DataSent(){
+  REG.STATUS.value = read_register(REG_ADDR.STATUS);
+  return (REG.STATUS.TX_DS);
+}
+int NRF24L01P::DataReady(){
+  REG.STATUS.value = read_register(REG_ADDR.STATUS);
+  return (REG.STATUS.RX_DR);
+}
+int NRF24L01P::MaxRt(){
+  REG.STATUS.value = read_register(REG_ADDR.STATUS);
+  return (REG.STATUS.MAX_RT);
+}
+int NRF24L01P::CleanDataSent(){
+  uint8_t new_value=0b00100000;
+  return write_register(REG_ADDR.STATUS, new_value);
+}
+int NRF24L01P::CleanDataReady(){
+  uint8_t new_value=0b01000000;
+  return write_register(REG_ADDR.STATUS, new_value);
+}
+int NRF24L01P::CleanMaxRt(){
+  uint8_t new_value=0b00010000;
+  return write_register(REG_ADDR.STATUS, &new_value, 1);
+}
+int NRF24L01P::RxEmpty(){
+  REG.FIFO_STATUS.value = read_register(REG_ADDR.FIFO_STATUS);
+  return (REG.FIFO_STATUS.RX_EMPTY);
+}
+int NRF24L01P::RxFull(){
+  REG.FIFO_STATUS.value = read_register(REG_ADDR.FIFO_STATUS);
+  return (REG.FIFO_STATUS.RX_FULL);
+}
+int NRF24L01P::TxEmpty(){
+	REG.FIFO_STATUS.value = read_register(REG_ADDR.FIFO_STATUS);
+	return (REG.FIFO_STATUS.TX_EMPTY);
+}
+int NRF24L01P::TxFull(){
+	REG.FIFO_STATUS.value = read_register(REG_ADDR.FIFO_STATUS);
+	return (REG.FIFO_STATUS.TX_FULL);
+}
+void NRF24L01P::Receive(){
+  if((DataReady())||(RxEmpty()==0)){
+	_CE_PIN->Reset();
+    CleanDataReady();
+    uint8_t data_in[5];
+    read_rx_payload(data_in, 5);
+    flush_rx();
+	if(MaxRt()){
+	  CleanMaxRt();
+	  flush_tx();
+	}
+	_CE_PIN->Set();
+  }
+}
+void NRF24L01P::send(){
+	uint8_t bufOut[]={'g', 'u', 's', 't', 'a'};
+	write_tx_payload(bufOut, 5);
+	_CE_PIN->Set();
+	int counter;
+	while(TxEmpty()!=0){
+		counter++;
+	    if(counter==0xeeee2){
+	    	flush_tx();
+	    }
+	}
+	_CE_PIN->Reset();
+	if(DataSent()){
+		CleanDataSent();
+		led_a.Toggle();
+	}
+	if(MaxRt()){
+		CleanMaxRt();
+        flush_tx();
+		led_b.Toggle();
+	}
+}
 void NRF24L01P::CW(uint8_t state){
 	if(state){
 		REG.CONFIG=REG_DEFAULT.CONFIG;
@@ -244,8 +319,11 @@ void NRF24L01P::CW(uint8_t state){
 		REG.CONFIG.PWR_UP=1;
 		write_register(REG_ADDR.CONFIG, 2);
 
-		REG.RF_CH.RF_CH=1;
+		REG.RF_CH.RF_CH=10;
 		write_register(REG_ADDR.RF_CH, REG.RF_CH.value);
+
+		REG.TX_ADDR.TX_ADDR = 0xE7E7E7E700;
+		write_register(REG_ADDR.TX_ADDR, REG.TX_ADDR.value, 5);
 
 		REG.RF_SETUP.CONT_WAVE=1;
 		REG.RF_SETUP.PLL_LOCK=1;
@@ -407,8 +485,8 @@ const NRF24L01P::NRF24_REG NRF24L01P::REG_DEFAULT={
 				.Reserved=0,
 		}},
 		.SETUP_RETR={{
-				.ARC=0b0011,
-				.ARD=0,
+				.ARC=0,
+				.ARD=0b0011,
 		}},
 		.RF_CH={{
 				.RF_CH=0b0000010,

@@ -26,7 +26,18 @@ public:
 	uint8_t GetRSSI();
 	void Calibrate(uint32_t freq){}
 	void Recovery(){}
-
+	void Receive();
+	void send();
+	int CleanMaxRt();
+	int CleanDataReady();
+	int CleanDataSent();
+	int MaxRt();
+	int DataReady();
+	int DataSent();
+	int RxEmpty();
+	int RxFull();
+	int TxEmpty();
+	int TxFull();
 
 	void InterruptCallback();
 	void Init();
@@ -37,7 +48,7 @@ public:
 	uint8_t TxPackage_ESB(uint8_t no_ack, uint8_t* data, uint16_t size);
 	uint8_t StartRX_ESB(uint8_t channel, uint64_t address, uint16_t size, uint8_t en_auto_ack);
 
-protected:
+//protected:
 	uint8_t write_register(uint8_t address, uint8_t *buffer, uint8_t size);
 	uint8_t write_register(uint8_t address, uint8_t value);
 
@@ -252,10 +263,10 @@ protected:
 
 	typedef union{
 		struct {											//Transmit observe register
-			uint8_t ARC_CNT:1;								//Count retransmitted packets. The counter is reset
+			uint8_t ARC_CNT:4;								//Count retransmitted packets. The counter is reset
 															//when transmission of a new packet starts. See
 															//page 75.
-			uint8_t PLOS_CNT:1;								//Count lost packets. The counter is overflow protected
+			uint8_t PLOS_CNT:4;								//Count lost packets. The counter is overflow protected
 															//to 15, and discontinues at max until reset.
 															//The counter is reset by writing to RF_CH. See
 															//page 75.

@@ -333,5 +333,76 @@ uint16_t cmd_testmode(uint16_t argc, uint8_t *argv8[]){
 	}
 	return size;
 }
-CommandLine cmdline({"*IDN?", "testmode",	"pid", 	"chute", "motv", "robv", "serial", "model", "version", "calpot", "freq", "savecal", "potd", "gps"},
-					{cmd_idn,	cmd_testmode, 	cmd_pid,	cmd_chute, cmd_motv, cmd_robv, cmd_serial, cmd_model, cmd_version, cmd_calpot, cmd_freq, cmd_savecal, cmd_potd, cmd_gps});
+uint16_t cmd_readregister(uint16_t argc, uint8_t *argv8[]){
+	const char **argv=(const char **)argv8;
+	uint16_t size=0;
+	char* buffer=(char*)argv[0];
+	uint8_t buf = nrf24.read_register(0x04);
+	size+=sprintf(buffer+size,"%d\r\n", buf);
+	uint8_t buf2 = nrf24.REG_ADDR.FEATURE;
+	size+=sprintf(buffer+size,"%d\r\n", buf2);
+	return size;
+}
+uint16_t cmd_writeregister(uint16_t argc, uint8_t *argv8[]){
+	const char **argv=(const char **)argv8;
+	uint16_t size=0;
+	char* buffer=(char*)argv[0];
+	uint8_t buf = nrf24.write_register(0x04, 0x30);
+	size+=sprintf(buffer+size,"%d\r\n", buf);
+	return size;
+}
+uint16_t cmd_writefoo(uint16_t argc, uint8_t *argv8[]){
+	const char **argv=(const char **)argv8;
+	uint16_t size=0;
+	char* buffer=(char*)argv[0];
+	uint8_t data[]={'r','e','n','a','n'};
+	//nrf24.TxPackage_ESB(0,data,5);
+	nrf24.send();
+	size+=sprintf(buffer+size, "ok \r\n");
+
+	return size;
+}
+uint16_t cmd_readfoo(uint16_t argc, uint8_t *argv8[]){
+	const char **argv=(const char **)argv8;
+	uint16_t size=0;
+	char* buffer=(char*)argv[0];
+	uint8_t data[32];
+	//uint8_t n_write=nrf24._rxbuffer.Out(data,5);
+	nrf24.Receive();
+	/*for(int i=0;i<n_write;i++){
+		*(buffer+size)=data[i];
+		size++;
+	}*/
+	size+=sprintf(buffer+size,"ok\r\n");
+
+	return size;
+}
+
+uint16_t cmd_enterrxmode(uint16_t argc, uint8_t *argv8[]){
+	const char **argv=(const char **)argv8;
+	uint16_t size=0;
+	char* buffer=(char*)argv[0];
+
+	//nrf24.StartRX_ESB(10, 0xE7E7E7E700, 32, 1);
+	nrf24.write_register(nrf24.REG_ADDR.CONFIG, (uint8_t)0b00001011);
+	nrf24._CE_PIN->Set();
+
+	size+=sprintf(buffer+size,"ok\r\n");
+
+	return size;
+}
+
+uint16_t cmd_entertxmode(uint16_t argc, uint8_t *argv8[]){
+	const char **argv=(const char **)argv8;
+	uint16_t size=0;
+	char* buffer=(char*)argv[0];
+
+	//nrf24.CW(1);
+	nrf24.write_register(nrf24.REG_ADDR.CONFIG, (uint8_t)0b00001010);
+
+	size+=sprintf(buffer+size,"ok\r\n");
+
+	return size;
+}
+CommandLine cmdline({"*IDN?", "testmode",	"pid", 	"chute", "motv", "writeregister", "readregister", "writefoo", "readfoo", "enterrxmode", "entertxmode", "robv", "serial", "model", "version", "calpot", "freq", "savecal", "potd", "gps"},
+					{cmd_idn,	cmd_testmode, 	cmd_pid,	cmd_chute, cmd_motv, cmd_writeregister, cmd_readregister, cmd_writefoo, cmd_readfoo, cmd_enterrxmode, cmd_entertxmode, cmd_robv, cmd_serial, cmd_model, cmd_version, cmd_calpot, cmd_freq, cmd_savecal, cmd_potd, cmd_gps});
