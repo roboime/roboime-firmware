@@ -77,3 +77,4 @@ extern SCPI SCPI_USB;
 
 extern NRF24L01P nrf24;
 extern IO_Pin_STM32 Botao;
+extern IO_Pin_STM32 LIS3DSH_CSN;

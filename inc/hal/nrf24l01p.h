@@ -21,7 +21,7 @@ public:
 	void ContinueRX(uint16_t size){}
 	void GeneratePoll(){}
 	void SetRXFrequency(uint32_t freqHz);
-	uint8_t Busy(){return 0;}
+	uint8_t Busy(){return _busy;}
 	void CW(uint8_t state);
 	uint8_t GetRSSI();
 	void Calibrate(uint32_t freq){}
@@ -70,6 +70,7 @@ protected:
 	uint32_t _retransmit_irq_count;
 	uint32_t _receive_irq_count;
 	uint32_t _transmit_irq_count;
+	uint8_t _busy;
 
 	typedef enum {
 		R_REGISTER				=0x00,

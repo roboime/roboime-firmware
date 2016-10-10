@@ -14,6 +14,7 @@ NRF24L01P::NRF24L01P(SPI &spi, IO_Pin &SS_PIN, IO_Pin &CE_PIN, IO_Pin &NIRQ_PIN)
 	_retransmit_irq_count(0),
 	_receive_irq_count(0),
 	_transmit_irq_count(0),
+	_busy(1),
 	REG(REG_DEFAULT)
 {
 }
@@ -45,20 +46,11 @@ void NRF24L01P::TxPackage(uint8_t* data, uint16_t size, uint32_t frequency, MODE
 
 
 uint16_t NRF24L01P::RxSize() {
-	uint8_t payloadsize=read_rx_payload_width();
-	if(payloadsize>32){
-		flush_rx();
-		payloadsize=read_rx_payload_width();
-	}
-	return payloadsize;
+	return _rxbuffer.Ocupied();
 }
 
 uint16_t NRF24L01P::RxData(uint8_t* data, uint16_t maxsize) {
-	uint8_t size=read_rx_payload_width();
-	if(maxsize<size){
-		size=maxsize;
-	}
-	return read_rx_payload(data, size);
+	return _rxbuffer.Out(data, maxsize);
 }
 
 void NRF24L01P::SetRXFrequency(uint32_t freqHz) {
@@ -159,6 +151,8 @@ uint8_t NRF24L01P::nop() {
 
 void NRF24L01P::Init(){
 	_CE_PIN->Reset();
+	_SS_PIN->Set();
+	delay_ms(5);
 	REG=REG_DEFAULT;
 
 	uint8_t config=read_register(REG_ADDR.CONFIG);
@@ -193,6 +187,8 @@ void NRF24L01P::Init(){
 
 	write_register(REG_ADDR.DYNPD, REG.DYNPD.value);
 	write_register(REG_ADDR.FEATURE, REG.FEATURE.value);
+	flush_rx();
+	flush_tx();
 }
 
 void NRF24L01P::Config(){
@@ -207,11 +203,7 @@ void NRF24L01P::Config(){
 
 	REG.CONFIG.PWR_UP=1;
 	write_register(REG_ADDR.CONFIG, REG.CONFIG.value);
-	uint8_t config=read_register(REG_ADDR.CONFIG);
-	if(config==REG.CONFIG.value){
-		//OK
-	}
-	config=nop();
+	_busy=0;
 }
 
 uint8_t NRF24L01P::Scan(uint8_t *buffer){
@@ -270,11 +262,16 @@ void NRF24L01P::StartRX(uint16_t size, uint32_t freqHz) {
 
 uint8_t NRF24L01P::StartRX_ESB(uint8_t channel, uint64_t address, uint16_t size, uint8_t en_auto_ack) {
 	uint8_t error=0;
+	REG.CONFIG.value=read_register(REG_ADDR.CONFIG);
+	REG.CONFIG.PRIM_RX=1;
+	REG.CONFIG.PWR_UP=1;
+	write_register(REG_ADDR.CONFIG, REG.CONFIG.value);
+
 	REG.STATUS.value=nop();
-	if(REG.STATUS.MAX_RT){
-		error=1;
-		return error;
-	}
+	REG.STATUS.MAX_RT=1;
+	REG.STATUS.RX_DR=1;
+	REG.STATUS.TX_DS=1;
+	write_register(REG_ADDR.STATUS, REG.STATUS.value);
 
 	if(REG.RF_CH.RF_CH!=channel){
 		REG.RF_CH.RF_CH=channel;
@@ -300,11 +297,11 @@ uint8_t NRF24L01P::StartRX_ESB(uint8_t channel, uint64_t address, uint16_t size,
 		REG.EN_AA.ENAA_P0=(en_auto_ack!=0);
 		write_register(REG_ADDR.EN_AA, REG.EN_AA.value);
 	}
+	flush_rx();
+	flush_tx();
 
-	REG.CONFIG.PRIM_RX=1;
-	REG.CONFIG.PWR_UP=1;
-	write_register(REG_ADDR.CONFIG, REG.CONFIG.value);
 	_CE_PIN->Set();
+	delay_ticks(21840);//130us
 	return error;
 }
 
@@ -314,14 +311,18 @@ uint8_t NRF24L01P::TxPackage_ESB(uint8_t no_ack, uint8_t* data, uint16_t size){
 
 uint8_t NRF24L01P::TxPackage_ESB(uint8_t channel, uint64_t address, uint8_t no_ack, uint8_t* data, uint16_t size) {
 	uint8_t error=0;
-	REG.STATUS.value=nop();
-	if(REG.STATUS.MAX_RT || REG.STATUS.TX_FULL){
-		error=1;
-		return error;
-	}
+	_CE_PIN->Reset();
+	_busy=1;
+	REG.CONFIG.value=read_register(REG_ADDR.CONFIG);
+	REG.CONFIG.PRIM_RX=0;
+	REG.CONFIG.PWR_UP=1;
+	write_register(REG_ADDR.CONFIG, REG.CONFIG.value);
+	delay_ticks(25200);//150us
+
 	if(size>32){
 		size=32;
 	}
+
 	if(REG.RF_CH.RF_CH!=channel){
 		REG.RF_CH.RF_CH=channel;
 		write_register(REG_ADDR.RF_CH, REG.RF_CH.value);
@@ -331,40 +332,82 @@ uint8_t NRF24L01P::TxPackage_ESB(uint8_t channel, uint64_t address, uint8_t no_a
 		write_register(REG_ADDR.TX_ADDR, REG.TX_ADDR.value, 5);
 	}
 
+	if(REG.RX_ADDR_P0.RX_ADDR_P0!=address){
+		REG.RX_ADDR_P0.RX_ADDR_P0=address;
+		write_register(REG_ADDR.RX_ADDR_P0, REG.RX_ADDR_P0.value, 5);
+	}
+
 	if(no_ack){
 		write_tx_payload_no_ack(data, size);
 	} else {
 		write_tx_payload(data, size);
 	}
 	_CE_PIN->Set();
+	delay_ticks(2520); //15us
 	return error;
 }
 
 
 void NRF24L01P::InterruptCallback(){
+	static uint32_t led_a_time=0;
+	static uint32_t led_b_time=0;
+	static uint32_t led_c_time=0;
+	static uint32_t led_d_time=0;
+
 //	if(_NIRQ_PIN->Read()){
 		REG.STATUS.value=nop();
 		if(REG.STATUS.MAX_RT){
+			flush_tx();
 			REG.STATUS.value=0;
 			REG.STATUS.MAX_RT=1;
 			write_register(REG_ADDR.STATUS, REG.STATUS.value);
+			REG.STATUS.value=nop();
 			_retransmit_irq_count++;
+			_busy=0;
+			led_c.On();
+			led_c_time=GetLocalTime();
 		}
 		if(REG.STATUS.RX_DR){
 			_receive_irq_count++;
 			uint8_t payloadsize=read_rx_payload_width();
-			if(payloadsize>32) payloadsize=32;
-			uint8_t buffer[32];
-			read_rx_payload(buffer, payloadsize);
-			_rxbuffer.In(buffer, payloadsize);
+			if(payloadsize>32) {
+				flush_rx();
+				led_c.On();
+				led_c_time=GetLocalTime();
+			} else {
+				uint8_t buffer[32];
+				read_rx_payload(buffer, payloadsize);
+				_rxbuffer.In(buffer, payloadsize);
+				led_d.On();
+				led_d_time=GetLocalTime();
+			}
+			REG.STATUS.value=0;
+			REG.STATUS.RX_DR=1;
+			write_register(REG_ADDR.STATUS, REG.STATUS.value);
+			REG.STATUS.value=nop();
 		}
 		if(REG.STATUS.TX_DS){
 			_transmit_irq_count++;
 			_CE_PIN->Reset();
-
+			REG.STATUS.value=0;
+			REG.STATUS.TX_DS=1;
+			write_register(REG_ADDR.STATUS, REG.STATUS.value);
+			REG.STATUS.value=nop();
+			_busy=0;
+			led_a.On();
+			led_a_time=GetLocalTime();
 		}
 		if(REG.STATUS.TX_FULL){
+			nrf24.flush_tx();
+			REG.STATUS.value=nop();
+			_busy=0;
+			led_b.On();
+			led_b_time=GetLocalTime();
 		}
+		if(led_a_time && (GetLocalTime()-led_a_time)>50) {led_a.Off(); led_a_time=0;}
+		if(led_b_time && (GetLocalTime()-led_b_time)>50) {led_b.Off(); led_b_time=0;}
+		if(led_c_time && (GetLocalTime()-led_c_time)>50) {led_c.Off(); led_c_time=0;}
+		if(led_d_time && (GetLocalTime()-led_d_time)>50) {led_d.Off(); led_d_time=0;}
 //	}
 }
 
@@ -408,7 +451,7 @@ const NRF24L01P::NRF24_REG NRF24L01P::REG_DEFAULT={
 		}},
 		.SETUP_RETR={{
 				.ARC=0b0011,
-				.ARD=0,
+				.ARD=0b0011,
 		}},
 		.RF_CH={{
 				.RF_CH=0b0000010,

@@ -15,8 +15,8 @@
 
 
 Robo::Robo(uint8_t id, bool testmode):
-	_id(id),
-	_testmode(testmode)
+	_testmode(testmode),
+	_id(id)
 {
 
 
@@ -66,37 +66,37 @@ Pacote do rx
 16 uint8_t hardware id
  */
 void Robo::Receive(){
-  if(radio->DataReady()||(radio->RxEmpty()==0)){
-    radio->NRF_CE->Reset();
-    radio->CleanDataReady();
-    uint8_t data_in[27];
-    radio->ReadPayload(data_in, 27);
-    procPacket(data_in);
-    radio->FlushRx();
-    nPacketReceived++;
-    if(nPacketReceived>10){
-      radio->FlushTx();
-      radio->CleanDataSent();
-  	  uint8_t data_out[17];
-  	  uint8_t batLevel = 10*vBat;
-  	  data_out[13] = batLevel;
-  	  radio->WriteAckPayload(data_out, 17);
-  	  nPacketReceived = 0;
-    }
-	if(radio->MaxRt()){
-	  radio->CleanMaxRt();
-	  radio->FlushTx();
-	}
-    radio->NRF_CE->Set();
-    nVerifyPacket=0;
-  }
-  else{
-    nVerifyPacket++;
-  }
-  if(nVerifyPacket>0x3ee2){
-    set_speed(0, 0, 0);
-    nVerifyPacket=0;
-  }
+//  if(radio->DataReady()||(radio->RxEmpty()==0)){
+//    radio->NRF_CE->Reset();
+//    radio->CleanDataReady();
+//    uint8_t data_in[27];
+//    radio->ReadPayload(data_in, 27);
+//    procPacket(data_in);
+//    radio->FlushRx();
+//    nPacketReceived++;
+//    if(nPacketReceived>10){
+//      radio->FlushTx();
+//      radio->CleanDataSent();
+//  	  uint8_t data_out[17];
+//  	  uint8_t batLevel = 10*vBat;
+//  	  data_out[13] = batLevel;
+//  	  radio->WriteAckPayload(data_out, 17);
+//  	  nPacketReceived = 0;
+//    }
+//	if(radio->MaxRt()){
+//	  radio->CleanMaxRt();
+//	  radio->FlushTx();
+//	}
+//    radio->NRF_CE->Set();
+//    nVerifyPacket=0;
+//  }
+//  else{
+//    nVerifyPacket++;
+//  }
+//  if(nVerifyPacket>0x3ee2){
+//    set_speed(0, 0, 0);
+//    nVerifyPacket=0;
+//  }
 }
 void Robo::procPacket(uint8_t *dataPacket){
   if(dataPacket[0]=='a'){

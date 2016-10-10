@@ -67,7 +67,7 @@
 								<option id="com.atollic.truestudio.common_options.target.instr_set.533555302" name="Instruction set" superClass="com.atollic.truestudio.common_options.target.instr_set" value="com.atollic.truestudio.common_options.target.instr_set.thumb2" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.fpucore.1286717916" name="FPU" superClass="com.atollic.truestudio.common_options.target.fpucore" value="FPv4-SP-D16" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.fpu.318167348" name="Floating point" superClass="com.atollic.truestudio.common_options.target.fpu" value="com.atollic.truestudio.common_options.target.fpu.hard" valueType="enumerated"/>
-								<option id="com.atollic.truestudio.ld.general.clib.1197222891" name="Runtime Library:" superClass="com.atollic.truestudio.ld.general.clib"/>
+								<option id="com.atollic.truestudio.ld.general.clib.1197222891" name="Runtime Library" superClass="com.atollic.truestudio.ld.general.clib"/>
 								<option id="com.atollic.truestudio.ld.general.scriptfile.20975084" name="Linker script" superClass="com.atollic.truestudio.ld.general.scriptfile" value="..\stm32f4_flash.ld" valueType="string"/>
 								<option id="com.atollic.truestudio.ld.optimization.do_garbage.164027663" name="Dead code removal " superClass="com.atollic.truestudio.ld.optimization.do_garbage" value="true" valueType="boolean"/>
 							</tool>
@@ -113,7 +113,7 @@
 								<option id="com.atollic.truestudio.common_options.target.instr_set.1091345083" name="Instruction set" superClass="com.atollic.truestudio.common_options.target.instr_set" value="com.atollic.truestudio.common_options.target.instr_set.thumb2" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.fpucore.1299133031" name="FPU" superClass="com.atollic.truestudio.common_options.target.fpucore" value="FPv4-SP-D16" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.fpu.360973068" name="Floating point" superClass="com.atollic.truestudio.common_options.target.fpu" value="com.atollic.truestudio.common_options.target.fpu.hard" valueType="enumerated"/>
-								<option id="com.atollic.truestudio.ld.general.cclib.611968097" name="Runtime Library:" superClass="com.atollic.truestudio.ld.general.cclib"/>
+								<option id="com.atollic.truestudio.ld.general.cclib.611968097" name="Runtime Library" superClass="com.atollic.truestudio.ld.general.cclib"/>
 								<option id="com.atollic.truestudio.ldcc.optimization.do_garbage.1675950756" name="Dead code removal" superClass="com.atollic.truestudio.ldcc.optimization.do_garbage" value="true" valueType="boolean"/>
 								<option id="com.atollic.truestudio.ldcc.general.scriptfile.1842250718" name="Linker script" superClass="com.atollic.truestudio.ldcc.general.scriptfile" value="..\stm32f4_flash.ld" valueType="string"/>
 								<inputType id="com.atollic.truestudio.ldcc.input.1760205855" name="Input" superClass="com.atollic.truestudio.ldcc.input">
@@ -129,17 +129,27 @@
 						<toolChain id="com.atollic.truestudio.exe.debug.toolchain.1760830400" name="Atollic ARM Tools" superClass="com.atollic.truestudio.exe.debug.toolchain" unusedChildren="">
 							<option id="com.atollic.truestudio.toolchain_options.mcu.2079748768.569489492" name="Microcontroller" superClass="com.atollic.truestudio.toolchain_options.mcu.2079748768"/>
 							<option id="com.atollic.truestudio.toolchain_options.vendor.382054881.338029703" name="Vendor name" superClass="com.atollic.truestudio.toolchain_options.vendor.382054881"/>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.as.1190018280" name="Assembler" superClass="com.atollic.truestudio.exe.debug.toolchain.as.1867530198"/>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.1857252516" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.1674841680"/>
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.atollic.truestudio.exe.debug.toolchain.platform" isAbstract="false" name="Debug platform" superClass="com.atollic.truestudio.exe.debug.toolchain.platform"/>
+							<tool id="com.atollic.truestudio.exe.debug.toolchain.as.1190018280" name="Assembler" superClass="com.atollic.truestudio.exe.debug.toolchain.as.1867530198">
+								<inputType id="com.atollic.truestudio.as.input.886527021" name="Input" superClass="com.atollic.truestudio.as.input"/>
+							</tool>
+							<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.1857252516" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.1674841680">
+								<inputType id="com.atollic.truestudio.gcc.input.932745276" superClass="com.atollic.truestudio.gcc.input"/>
+							</tool>
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.ld.1487109678" name="C Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ld.219130374"/>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.gpp.1324579618" name="C++ Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gpp.663923603"/>
+							<tool id="com.atollic.truestudio.exe.debug.toolchain.gpp.1324579618" name="C++ Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gpp.663923603">
+								<inputType id="com.atollic.truestudio.gpp.input.672012356" superClass="com.atollic.truestudio.gpp.input"/>
+							</tool>
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.ldcc.671335241" name="C++ Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ldcc.971264171"/>
 							<tool id="com.atollic.truestudio.ar.base.1181685348" name="Archiver" superClass="com.atollic.truestudio.ar.base.1138488465"/>
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.secoutput.1810534368" name="Other" superClass="com.atollic.truestudio.exe.debug.toolchain.secoutput.63324536"/>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="com.atollic.truestudio.exe.debug.1389025984.1417049246" name="NRF24.cpp" rcbsApplicability="disable" resourcePath="src/control/NRF24.cpp" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gpp.1324579618.1616873162">
+						<tool id="com.atollic.truestudio.exe.debug.toolchain.gpp.1324579618.1616873162" name="C++ Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gpp.1324579618"/>
+					</fileInfo>
 					<sourceEntries>
-						<entry excluding="Libraries/STM32_USB_OTG_Driver/src/usb_otg.c|Libraries/STM32_USB_HOST_Library/Class|Libraries/STM32_USB_OTG_Driver/src/usb_bsp_template.c|src/network|Libraries/STM32_USB_Device_Library/Class" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="src/control/NRF24.cpp|Libraries/STM32_USB_OTG_Driver/src/usb_otg.c|Libraries/STM32_USB_HOST_Library/Class|Libraries/STM32_USB_OTG_Driver/src/usb_bsp_template.c|src/network|Libraries/STM32_USB_Device_Library/Class" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
