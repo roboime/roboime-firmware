@@ -82,7 +82,7 @@ pb_istream_t pb_istream_from_circularbuffer(CircularBuffer<uint8_t> *circularbuf
 	stream.callback = &pb_circularbuffer_read;
 	state.c_state = circularbuffer;
 	stream.state = state.state;
-	stream.bytes_left = circularbuffer->Ocupied();
+	stream.bytes_left = 1;
 	if(stream.bytes_left==0){
 		stream.bytes_left=1; //keep it alive for pb_decode(...) function
 	}
@@ -111,7 +111,6 @@ int main(void){
 
 
 	grSim_Robot_Command robotcmd;
-	pb_istream_t istream = pb_istream_from_circularbuffer(&_usbserialbuffer);
 	while(1){
 		nrf24.InterruptCallback();
 
@@ -126,6 +125,9 @@ int main(void){
 		} else {
 			status=0;
 			if(_usbserialbuffer.Ocupied()){
+				uint8_t buffer[32];
+				uint8_t size=_usbserialbuffer.Out(buffer, 32);
+				pb_istream_t istream = pb_istream_from_buffer(buffer,size);
 				status=pb_decode(&istream, grSim_Robot_Command_fields, &robotcmd);
 				if(status){
 					uint8_t robotid=robotcmd.id;
@@ -137,6 +139,8 @@ int main(void){
 					while(nrf24.Busy()){
 						nrf24.InterruptCallback();
 					}
+				} else {
+					_usbserialbuffer.Clear();
 				}
 			} else if(nrf24.RxSize()){
 				nrf24.StartRX_ESB(channel, address + robo.GetId(), 32, 1);
