@@ -145,11 +145,11 @@
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.secoutput.1810534368" name="Other" superClass="com.atollic.truestudio.exe.debug.toolchain.secoutput.63324536"/>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="com.atollic.truestudio.exe.debug.1389025984.1417049246" name="NRF24.cpp" rcbsApplicability="disable" resourcePath="src/control/NRF24.cpp" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gpp.1324579618.1616873162">
-						<tool id="com.atollic.truestudio.exe.debug.toolchain.gpp.1324579618.1616873162" name="C++ Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gpp.1324579618"/>
+					<fileInfo id="com.atollic.truestudio.exe.debug.1389025984.1850124096" name="scpi.cpp" rcbsApplicability="disable" resourcePath="src/radio/scpi.cpp" toolsToInvoke="com.atollic.truestudio.exe.debug.toolchain.gpp.663923603.1400626825">
+						<tool id="com.atollic.truestudio.exe.debug.toolchain.gpp.663923603.1400626825" name="C++ Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gpp.663923603"/>
 					</fileInfo>
 					<sourceEntries>
-						<entry excluding="src/control/NRF24.cpp|Libraries/STM32_USB_OTG_Driver/src/usb_otg.c|Libraries/STM32_USB_HOST_Library/Class|Libraries/STM32_USB_OTG_Driver/src/usb_bsp_template.c|src/network|Libraries/STM32_USB_Device_Library/Class" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="src/radio/scpi.cpp|src/scpi|src/control/NRF24.cpp|Libraries/STM32_USB_OTG_Driver/src/usb_otg.c|Libraries/STM32_USB_HOST_Library/Class|Libraries/STM32_USB_OTG_Driver/src/usb_bsp_template.c|src/network|Libraries/STM32_USB_Device_Library/Class" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

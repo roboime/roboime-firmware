@@ -37,7 +37,6 @@ void Motor::Control_Pos(float  hold_position){
 	return;
 };
 void Motor::Control_Speed(float hold_speed){
-	int16_t vel_answer;
 	int16_t position = (int16_t)Motor_Enc->get_position();
 
 	int16_t distance=position-last_position;
@@ -61,11 +60,6 @@ void Motor::Control_Speed(float hold_speed){
 	if(dutycycle<-1000) dutycycle=-1000;
 	SetDutyCycle(dutycycle);
 
-
-//	Motor_Enc->set_position((uint32_t) 20000);
-//	speed = 300*((int16_t)position-20000);
-//    vel_answer = -Spe_Calc_Answer(speed, hold_speed);
-//	this->SetDutyCycle((int16_t)vel_answer);
 };
 /*
 void Motor::Control_Speed(int16_t hold_speed){

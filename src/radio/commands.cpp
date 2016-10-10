@@ -333,5 +333,18 @@ uint16_t cmd_testmode(uint16_t argc, uint8_t *argv8[]){
 	}
 	return size;
 }
-CommandLine cmdline({"*IDN?", "testmode",	"pid", 	"chute", "motv", "robv", "serial", "model", "version", "calpot", "freq", "savecal", "potd", "gps"},
-					{cmd_idn,	cmd_testmode, 	cmd_pid,	cmd_chute, cmd_motv, cmd_robv, cmd_serial, cmd_model, cmd_version, cmd_calpot, cmd_freq, cmd_savecal, cmd_potd, cmd_gps});
+uint16_t cmd_writefoo(uint16_t argc, uint8_t *argv8[]){
+	const char **argv=(const char **)argv8;
+	uint16_t size=0;
+	char* buffer=(char*)argv[0];
+	if(argc==2){
+		size+=sprintf(buffer+size, "OK\r\n");
+	} else {
+		int x=7;
+		size+=sprintf(buffer+size, "Hello picoli %d \r\n", x);
+	}
+	return size;
+}
+
+CommandLine cmdline({"*IDN?", "testmode",	"pid", 	"chute", "motv", "writefoo", "robv", "serial", "model", "version", "calpot", "freq", "savecal", "potd", "gps"},
+					{cmd_idn,	cmd_testmode, 	cmd_pid,	cmd_chute, cmd_motv, cmd_writefoo, cmd_robv, cmd_serial, cmd_model, cmd_version, cmd_calpot, cmd_freq, cmd_savecal, cmd_potd, cmd_gps});
