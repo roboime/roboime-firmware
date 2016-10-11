@@ -356,6 +356,7 @@ void NRF24L01P::InterruptCallback(){
 
 //	if(_NIRQ_PIN->Read()){
 		REG.STATUS.value=nop();
+		REG.FIFO_STATUS.value=read_register(REG_ADDR.FIFO_STATUS);
 		if(REG.STATUS.MAX_RT){
 			flush_tx();
 			REG.STATUS.value=0;
@@ -367,7 +368,7 @@ void NRF24L01P::InterruptCallback(){
 			led_c.On();
 			led_c_time=GetLocalTime();
 		}
-		if(REG.STATUS.RX_DR){
+		if(REG.STATUS.RX_DR||(!REG.FIFO_STATUS.RX_EMPTY)){
 			_receive_irq_count++;
 			uint8_t payloadsize=read_rx_payload_width();
 			if(payloadsize>32) {
@@ -381,23 +382,27 @@ void NRF24L01P::InterruptCallback(){
 				led_d.On();
 				led_d_time=GetLocalTime();
 			}
-			REG.STATUS.value=0;
-			REG.STATUS.RX_DR=1;
-			write_register(REG_ADDR.STATUS, REG.STATUS.value);
+			if(REG.STATUS.RX_DR){
+				REG.STATUS.value=0;
+				REG.STATUS.RX_DR=1;
+				write_register(REG_ADDR.STATUS, REG.STATUS.value);
+			}
 			REG.STATUS.value=nop();
 		}
-		if(REG.STATUS.TX_DS){
+		if(REG.STATUS.TX_DS||(REG.FIFO_STATUS.TX_EMPTY&&(_busy==1))){
 			_transmit_irq_count++;
 			_CE_PIN->Reset();
-			REG.STATUS.value=0;
-			REG.STATUS.TX_DS=1;
-			write_register(REG_ADDR.STATUS, REG.STATUS.value);
+			if(REG.STATUS.RX_DR){
+				REG.STATUS.value=0;
+				REG.STATUS.TX_DS=1;
+				write_register(REG_ADDR.STATUS, REG.STATUS.value);
+			}
 			REG.STATUS.value=nop();
 			_busy=0;
 			led_a.On();
 			led_a_time=GetLocalTime();
 		}
-		if(REG.STATUS.TX_FULL){
+		if(REG.STATUS.TX_FULL||REG.FIFO_STATUS.TX_FULL){
 			nrf24.flush_tx();
 			REG.STATUS.value=nop();
 			_busy=0;

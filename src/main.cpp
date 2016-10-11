@@ -94,7 +94,7 @@ pb_istream_t pb_istream_from_circularbuffer(CircularBuffer<uint8_t> *circularbuf
 int main(void){
 	uint8_t channel=100;
 	uint64_t address=0xE7E7E7E700;
-	LIS3DSH_CSN.Set();
+	//LIS3DSH_CSN.Set();
 
 	SysTick_Config(SystemCoreClock/1000);
 	usb.Init();
