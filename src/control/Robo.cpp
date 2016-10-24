@@ -13,7 +13,7 @@
 #define sin_theta 0.7313
 #define cos_theta -0.682
 
-Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, uint8_t id, bool testmode):
+Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, adc *sensorAdc, uint8_t id, bool testmode):
 	_testmode(testmode),
 	_id(id)
 {
@@ -22,8 +22,8 @@ Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboM
 	motors[2]=roboMotor2;
 	motors[3]=roboMotor3;
 
-	batAdc = new adc();
-	batAdc->ADC_Config();
+	roboAdc = sensorAdc;
+	roboAdc->ADC_Config();
 
 	drible = new dibre();
 
@@ -106,15 +106,21 @@ Pacote do rx
 //  }
 //}
 void Robo::HighKick(){
-	high_kick->Set();
-	for(int i=0;i<0xeee2;i++);
-	high_kick->Reset();
+	float sensorValue2 = roboAdc->readSensor(3);
+	if(sensorValue2>0.100){
+		high_kick->Set();
+		for(int i=0;i<0xeee2;i++);
+		high_kick->Reset();
+	}
 }
 
 void Robo::ChuteBaixo(){
-	chute_baixo->Set();
-	for(int i=0;i<0xeee2;i++);
-	chute_baixo->Reset();
+	float sensorValue2 = roboAdc->readSensor(3);
+	if(sensorValue2>0.100){
+		chute_baixo->Set();
+		for(int i=0;i<0xeee2;i++);
+		chute_baixo->Reset();
+	}
 }
 
 void Robo::control_pos(){
@@ -123,8 +129,8 @@ void Robo::control_pos(){
 	}
 }
 void Robo::control_speed(){
-  vBat = 4.3*batAdc->adc_getConversion();
-  if(vBat>6 || 1){
+  vBat = 4.3*roboAdc->adc_getConversion();
+  if(vBat>6){
     for(int i=0; i<4; i++){
 	  motors[i]->Control_Speed(speed[i]);
     }
@@ -136,7 +142,7 @@ void Robo::control_speed(){
   }
 }
 void Robo::set_speed(float v_r, float v_t, float w){
-	float R = 0.06; //TODO valor temporario
+	float R = 0.08; //TODO valor temporario
 
 	speed[0] = -v_r*cos_phi + v_t*sin_phi + w*R;
 	speed[2] = -v_r*cos_phi - v_t*sin_phi + w*R;

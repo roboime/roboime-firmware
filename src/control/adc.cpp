@@ -81,3 +81,7 @@ void adc::ADC_Config(){
 float adc::adc_getConversion(){
   return (float) 3.87*(ADCConvertedValue[0]/(float)4950);
 }
+float adc::readSensor(int nSensor){
+	return (float) 3.87*(ADCConvertedValue[nSensor]/(float)4950);
+}
+

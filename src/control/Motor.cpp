@@ -6,9 +6,9 @@
  */
 #include "Motor.h"
 
-float Motor::cp=10.0f;
-float Motor::cd=0.0f;
-float Motor::ci=0.0f;
+float Motor::cp=7.3f;
+float Motor::cd=60.2f;
+float Motor::ci=0.04f;
 
 
 Motor::Motor(Pwm *A_High,
@@ -42,7 +42,7 @@ void Motor::Control_Speed(float hold_speed){
 	int16_t distance=position-last_position;
 	last_position=position;
 
-	float speed=(float)distance*0.112;
+	float speed=(float)distance*0.230;
 
 	error=hold_speed-speed;
 	ierror+=error;

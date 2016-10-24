@@ -21,7 +21,7 @@
 
 class Robo {
 public:
-	Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, uint8_t id, bool testmode=1);
+	Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, adc *sensorAdc, uint8_t id, bool testmode=1);
 	GPIO *high_kick;
 	GPIO *chute_baixo;
 	void HighKick();
@@ -32,7 +32,7 @@ public:
 	int pos[4];
 	float speed[4];
     Motor *motors[4];
-    adc *batAdc;
+    adc *roboAdc;
     float vBat;
     int nVerifyPacket;
     int nPacketReceived;

@@ -90,7 +90,6 @@ pb_istream_t pb_istream_from_circularbuffer(CircularBuffer<uint8_t> *circularbuf
 	return stream;
 }
 
-
 int main(void){
 	uint8_t channel=100;
 	uint64_t address=0xE7E7E7E700;
@@ -101,6 +100,7 @@ int main(void){
 	nrf24.Init();
 	nrf24.Config();
 
+	nrf24.StartRX_ESB(channel, address + robo.GetId(), 32, 1);
 	nrf24.TxPackage_ESB(channel, address + robo.GetId(), 0,(uint8_t*) "TESTE", 5);
 	while(nrf24.Busy()){
 		nrf24.InterruptCallback();
@@ -111,8 +111,10 @@ int main(void){
 
 
 	grSim_Robot_Command robotcmd;
+	uint32_t loopCounter;
 	while(1){
 		nrf24.InterruptCallback();
+		loopCounter++;
 
 		usb_device_class_cdc_vcp.GetData(_usbserialbuffer, 1024);
 
@@ -157,10 +159,20 @@ int main(void){
 			}
 			if(status){
 				if(robotcmd.id==robo.GetId()){
+					loopCounter = 0;
 					robo.set_speed(robotcmd.veltangent, robotcmd.velnormal, robotcmd.velangular);
+					if(robotcmd.kickspeedx!=0)
+						robo.ChuteBaixo();
+					if(robotcmd.kickspeedz!=0)
+						//robo.HighKick();
+					if(robotcmd.spinner)
+						robo.drible->Set_Vel(100);
 				}
 			}
-
+		}
+		if(loopCounter>0x37e2){
+			robo.set_speed(0, 0, 0);
+			loopCounter = 0;
 		}
 	}
 

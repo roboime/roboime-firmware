@@ -12,6 +12,7 @@ class adc{
 public:
 	void ADC_Config();
 	float adc_getConversion();
+	float readSensor(int nSensor);
 private:
 };
 

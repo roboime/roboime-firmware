@@ -23,8 +23,8 @@ Timer_Time::Timer_Time(){
 	TIM_ITConfig(TIM6,TIM_IT_Update,ENABLE);
 	TIM_Cmd(TIM6,ENABLE);
 
-//	NVIC_SetPriority(TIM6_DAC_IRQn,1); //Mudado de TIM6_IRQn para TIM6_DAC_IRQn
-//	NVIC_EnableIRQ(TIM6_DAC_IRQn);
+	//NVIC_SetPriority(TIM6_DAC_IRQn,5); //Mudado de TIM6_IRQn para TIM6_DAC_IRQn
+	//NVIC_EnableIRQ(TIM6_DAC_IRQn);
 
 };
 uint32_t Timer_Time::current_time(){

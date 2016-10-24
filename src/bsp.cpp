@@ -69,7 +69,8 @@ GPIO blgpio3(GPIOB, GPIO_Pin_11);
 Encoder encoder3(GPIOB, GPIOB, GPIO_Pin_6, GPIO_Pin_7, TIM4, GPIO_PinSource6, GPIO_PinSource7, GPIO_AF_TIM4);
 Motor motor3(&ahpwm3, &algpio3, &bhpwm3, &blgpio3, &encoder3, &robo_timer);
 
-Robo robo(&motor0, &motor1, &motor2, &motor3, 0,0);
+adc sensorAdc;
+Robo robo(&motor0, &motor1, &motor2, &motor3, &sensorAdc, (uint8_t)2 ,0);
 INTERRUPT_STM32 timer_robot(TIM6_DAC_IRQn, 0x0C, 0x0C, ENABLE);
 
 
