@@ -135,12 +135,15 @@ void Robo::control_speed(){
 	  motors[i]->Control_Speed(speed[i]); //manda a velocidade speed[i] pro motor[i] na unidade m/s
     }
   }
-  else{
+  else{//medida de proteção: se a bateria estiver fraca, o robô para
     for(int i=0; i<4; i++){
 	  motors[i]->SetDutyCycle(0);
     }
   }
 }
+
+//recebe as velocidades radial, tangente em m/s e w em rad/s
+//grava em speed[] os valores em m/s da velocidade DAS RODAS
 void Robo::set_speed(float v_r, float v_t, float w){
 	float R = 0.09; //Raio do robo = 9cm
 

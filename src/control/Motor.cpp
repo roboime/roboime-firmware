@@ -5,7 +5,17 @@
  *      Author: lenovoi7
  */
 #include "Motor.h"
-#define convert 0.230
+
+//valor aproximado do raio da roda omni, em metros
+#define R_roda 0.028
+#define PI 3.1415926
+//tempo (em s) entre as interrupções geradas pelo TIM6
+#define TIM6_delay 0.001
+//número de divisões do encoder
+#define ENC_DIV 400
+//para cada 8 giros do motor, a roda gira 1 vez
+#define FT_TRANS 8
+#define convert 2*PI*R_roda/(TIM6_delay*ENC_DIV*FT_TRANS)
 
 float Motor::cp=7.3f;
 float Motor::cd=60.2f;
@@ -37,14 +47,16 @@ void Motor::Control_Pos(float  hold_position){
 	this->SetDutyCycle(answer);
 	return;
 };
-void Motor::Control_Speed(float hold_speed){
-	//hold_speed está em m/s
+
+//será chamada pelo handler da interrupção gerada pelo TIM6(a cada 1 ms)
+void Motor::Control_Speed(float hold_speed){//hold_speed está em m/s
+	//position é medida em divisões de encoder (ou 1/400 de volta)
 	int16_t position = (int16_t)Motor_Enc->get_position();
 
 	int16_t distance=position-last_position;
 	last_position=position;
 
-	float speed=(float)distance*convert; //converte da unidade da roda para m/s
+	float speed=(float)distance*convert; //converte da unidade da roda para m/s (vel do centro da roda)
 	                                     //talvez seja melhor converter de m/s pra unidade da roda
 
 	error=hold_speed-speed;
