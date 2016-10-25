@@ -5,6 +5,7 @@
  *      Author: lenovoi7
  */
 #include "Motor.h"
+#define rob2wheel
 
 Motor::Motor(Pwm *A_High,
 		GPIO *A_Low,
@@ -31,12 +32,16 @@ void Motor::Control_Pos(uint32_t hold_position){
 	this->Answer(answer);
 	return;
 };
+
 void Motor::Control_Speed(int16_t hold_speed){
+	//hold_speed em m/s
 	int16_t speed;
 	int16_t vel_answer;
 	uint32_t position = Motor_Enc->get_position();
 	Motor_Enc->set_position((uint32_t) 20000);
 	speed = 300*((int16_t)position-20000);
+	//300 transforma speed em unidade arbritaria da roda em m/s
+	//agora tanto speed quando hold_speed estão na mesma unidade
     vel_answer = -Spe_Calc_Answer(speed, hold_speed);
 	this->Answer((int16_t)vel_answer);
 	return;
@@ -108,7 +113,7 @@ int16_t Motor::Pos_Calc_Answer(uint32_t position, uint32_t hold_position)
 
 //Falta definir o que é o valor speed, que deve ter sinal
 int16_t Motor::Spe_Calc_Answer(int32_t speed, int32_t hold_speed){
-	if(hold_speed>1000)
+	if(hold_speed>1000) //1000 é um numero magico
 		hold_speed=1000;
 	if(hold_speed<-1000)
 		hold_speed=-1000;
@@ -127,6 +132,7 @@ int16_t Motor::Spe_Calc_Answer(int32_t speed, int32_t hold_speed){
 		integral = integral + Speed_Last_Error[i];
 	}
 	vel_answer=last_vel_answer + error*0.004 + derivative*0;
+	//Kp=0.004, Ki=0, Kd=0;
 	if(vel_answer > 1000){
 		vel_answer = 1000;
 	}

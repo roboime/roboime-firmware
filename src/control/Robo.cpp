@@ -146,7 +146,7 @@ void Robo::control_speed(){
   vBat = 4.3*batAdc->adc_getConversion();
   if(vBat>7.4){
     for(int i=0; i<4; i++){
-	  motors[i]->Control_Speed(speed[i]);
+	  motors[i]->Control_Speed(speed[i]); //manda a velocidade speed[i] pro motor[i] na unidade m/s
     }
   }
   else{
@@ -156,12 +156,14 @@ void Robo::control_speed(){
   }
 }
 void Robo::set_speed(int v_r, int v_t, int w){
-	float R = 0.06; //TODO valor temporario
+	float R = 0.09; //Raio do robo = 9cm
 
 	speed[0] = -v_r*cos_phi + v_t*sin_phi + w*R;
 	speed[2] = -v_r*cos_phi - v_t*sin_phi + w*R;
 	speed[3] = -v_r*cos_theta - v_t*sin_theta + w*R;
 	speed[1] = -v_r*cos_theta + v_t*sin_theta + w*R;
+
+	//speed[] está em m/s. Cuidado para manter a mesma unidade qnd passar pros motores
 	/*
 	self.wheel_angles = [
 	            +58.0,  # wheel 0
