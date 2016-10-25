@@ -5,6 +5,7 @@
  *      Author: lenovoi7
  */
 #include "Motor.h"
+#define convert 0.230
 
 float Motor::cp=7.3f;
 float Motor::cd=60.2f;
@@ -37,12 +38,14 @@ void Motor::Control_Pos(float  hold_position){
 	return;
 };
 void Motor::Control_Speed(float hold_speed){
+	//hold_speed está em m/s
 	int16_t position = (int16_t)Motor_Enc->get_position();
 
 	int16_t distance=position-last_position;
 	last_position=position;
 
-	float speed=(float)distance*0.230;
+	float speed=(float)distance*convert; //converte da unidade da roda para m/s
+	                                     //talvez seja melhor converter de m/s pra unidade da roda
 
 	error=hold_speed-speed;
 	ierror+=error;
@@ -147,6 +150,7 @@ int16_t Motor::Spe_Calc_Answer(int32_t speed, int32_t hold_speed){
 		integral = integral + Speed_Last_Error[i];
 	}
 	vel_answer=last_vel_answer + error*0.004 + derivative*0;
+	//Kp=0,004, Ki=0, Kd=0
 	if(vel_answer > 1000){
 		vel_answer = 1000;
 	}
