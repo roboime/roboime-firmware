@@ -151,7 +151,10 @@ void Robo::set_speed(float v_r, float v_t, float w){
 	speed[2] = -v_r*cos_phi - v_t*sin_phi + w*R;
 	speed[3] = -v_r*cos_theta - v_t*sin_theta + w*R;
 	speed[1] = -v_r*cos_theta + v_t*sin_theta + w*R;
-
+/*		speed[0] = 0.176; //teste: para cada roda girar com período 1s
+		speed[2] = 0.176;
+		speed[3] = 0.176;
+		speed[1] = 0.176;*/
 	//speed[] está em m/s. Cuidado para manter a mesma unidade qnd passar pros motores
 
 }
