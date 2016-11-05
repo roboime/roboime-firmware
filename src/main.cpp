@@ -128,14 +128,14 @@ int main(void){
 			status=0;
 			if(_usbserialbuffer.Ocupied()){
 				uint8_t buffer[32];
-				uint8_t size=_usbserialbuffer.Out(buffer, 32);
+				uint8_t size=_usbserialbuffer.Out(buffer, 32);//escreve em buffer o que recebeu
 				pb_istream_t istream = pb_istream_from_buffer(buffer,size);
-				status=pb_decode(&istream, grSim_Robot_Command_fields, &robotcmd);
-				if(status){
-					uint8_t robotid=robotcmd.id;
+				status=pb_decode(&istream, grSim_Robot_Command_fields, &robotcmd);//preenche robotcmd
+				if(status){//caso haja sucesso na decodificação
+					uint8_t robotid=robotcmd.id;//extrai o  id do pacote
 					uint8_t buffer[32];
 					pb_ostream_t ostream=pb_ostream_from_buffer(buffer, sizeof(buffer));
-					pb_encode(&ostream, grSim_Robot_Command_fields, &robotcmd);
+					pb_encode(&ostream, grSim_Robot_Command_fields, &robotcmd);//escreve em ostream os dados de robotcmd
 					uint8_t size=ostream.bytes_written;
 					nrf24.TxPackage_ESB(channel, address | robotid, 0, buffer, size);
 					while(nrf24.Busy()){
