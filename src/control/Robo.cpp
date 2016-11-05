@@ -142,6 +142,14 @@ void Robo::control_speed(){
   }
 }
 
+//armazena as velocidades lineares dos centros das RODAS em ptr
+void Robo::get_wheel_speeds(float ptr[]){
+	for(int i=0; i<4; i++){
+		ptr[i]=motors[i]->real_wheel_speed;
+	}
+	return;
+}
+
 //recebe as velocidades radial, tangente em m/s e w em rad/s
 //grava em speed[] os valores em m/s da velocidade DAS RODAS
 void Robo::set_speed(float v_r, float v_t, float w){

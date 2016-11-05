@@ -288,8 +288,15 @@ uint16_t cmd_pid(uint16_t argc, uint8_t *argv8[]){
 		c[2]=atof(argv[3]);
 		Motor::SetPID(c[0], c[1], c[2]);
 		size+=sprintf(buffer+size, "OK\r\n");
+	} else if(argc==1){
+		float pid_cte[3];
+		Motor::GetPID(pid_cte);
+		size+=sprintf(buffer+size, "cp: %.4f \r\n", pid_cte[0]);
+		size+=sprintf(buffer+size, "ci: %.4f \r\n", pid_cte[1]);
+		size+=sprintf(buffer+size, "cd: %.4f \r\n", pid_cte[2]);
 	} else {
-		size+=sprintf(buffer+size, "Syntax: robv velt velr vela \r\n");
+		size+=sprintf(buffer+size, "Syntax: pid \r\n");
+		size+=sprintf(buffer+size, "        pid cp ci cd \r\n");
 	}
 	return size;
 }
@@ -300,7 +307,11 @@ uint16_t cmd_motv(uint16_t argc, uint8_t *argv8[]){
 	uint16_t size=0;
 	char* buffer=(char*)argv[0];
 	uint8_t motnr=0;
-	if(argc==3 && motnr<5){
+	if(argc==2){//com 1 argumento, motv imprime a velocidade da roda
+		robo.get_wheel_speeds(robo.real_wheel_speed);
+		motnr=atoi(argv[1]);
+		size+=sprintf(buffer+size, "Roda %d: %.2f m/s\r\n",motnr,robo.real_wheel_speed[motnr]);
+	} else if(argc==3 && motnr<5){
 		motnr=atoi(argv[1]);
 		float vel=atof(argv[2]);
 		robo.set_motor_speed(motnr, vel);
@@ -316,6 +327,7 @@ uint16_t cmd_motv(uint16_t argc, uint8_t *argv8[]){
 		size+=sprintf(buffer+size, "OK\r\n");
 	} else {
 		size+=sprintf(buffer+size, "Syntax: motv 0..4 vel \r\n");
+		size+=sprintf(buffer+size, "        motv 0..4 \r\n");
 		size+=sprintf(buffer+size, "        motv vel0 vel1 vel2 vel3 vel4\r\n");
 	}
 	return size;
@@ -346,5 +358,24 @@ uint16_t cmd_writefoo(uint16_t argc, uint8_t *argv8[]){
 	return size;
 }
 
-CommandLine cmdline({"*IDN?", "testmode",	"pid", 	"chute", "motv", "writefoo", "robv", "serial", "model", "version", "calpot", "freq", "savecal", "potd", "gps"},
-					{cmd_idn,	cmd_testmode, 	cmd_pid,	cmd_chute, cmd_motv, cmd_writefoo, cmd_robv, cmd_serial, cmd_model, cmd_version, cmd_calpot, cmd_freq, cmd_savecal, cmd_potd, cmd_gps});
+// imprime as velocidades de cada RODA
+uint16_t cmd_readv(uint16_t argc, uint8_t *argv8[]){
+	const char **argv=(const char **)argv8;
+	uint16_t size=0;
+	char* buffer=(char*)argv[0];
+	if(argc==1){
+		float v[4];
+		robo.get_wheel_speeds(v);
+		for(int i=0; i<4;i++){
+			size+=sprintf(buffer+size, "Roda %d: %.2f m/s\r\n",i,v[i]);
+		}
+		size+=sprintf(buffer+size, "OK\r\n");
+	} else {
+		size+=sprintf(buffer+size, "Syntax: readv\r\n");
+	}
+	return size;
+}
+
+
+CommandLine cmdline({"*IDN?", "testmode",	"pid", 	"chute", "readv", "motv", "writefoo", "robv", "serial", "model", "version", "calpot", "freq", "savecal", "potd", "gps"},
+					{cmd_idn,	cmd_testmode, 	cmd_pid,	cmd_chute, cmd_readv, cmd_motv, cmd_writefoo, cmd_robv, cmd_serial, cmd_model, cmd_version, cmd_calpot, cmd_freq, cmd_savecal, cmd_potd, cmd_gps});

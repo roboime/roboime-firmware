@@ -171,7 +171,7 @@ int main(void){
 			}
 		}
 		if(loopCounter>0x37e2){
-			robo.set_speed(0, 0, 0);
+			//robo.set_speed(0, 0, 0);
 			loopCounter = 0;
 		}
 	}
@@ -186,6 +186,7 @@ extern "C" {
 void TIM6_DAC_IRQHandler(){
 	if(TIM_GetITStatus(TIM6,TIM_IT_Update)){
 		TIM_ClearITPendingBit(TIM6,TIM_IT_Update);
+		robo.get_wheel_speeds(robo.real_wheel_speed);//update real_wheel_speed com as velocidades medidas
 		robo.control_speed();
 	}
 }

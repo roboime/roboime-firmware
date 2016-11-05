@@ -31,12 +31,14 @@ public:
 	dibre *drible;
 	int pos[4];
 	float speed[4];
+	float real_wheel_speed[4];//armazenará as velocidades medidas (m/s) das RODAS
     Motor *motors[4];
     adc *roboAdc;
     float vBat;
     int nVerifyPacket;
     int nPacketReceived;
     NRF24 *radio;
+    void get_wheel_speeds(float ptr[]);//armazena as velocidades lineares dos centros das RODAS em ptr
     void set_speed(float v_r, float v_t, float w);
     void set_speed(float v[]);
     void set_motor_speed(uint8_t motnr, float vel);
