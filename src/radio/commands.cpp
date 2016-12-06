@@ -310,7 +310,7 @@ uint16_t cmd_motv(uint16_t argc, uint8_t *argv8[]){
 	if(argc==2){//com 1 argumento, motv imprime a velocidade da roda
 		robo.get_wheel_speeds(robo.real_wheel_speed);
 		motnr=atoi(argv[1]);
-		size+=sprintf(buffer+size, "Roda %d: %.2f m/s\r\n",motnr,robo.real_wheel_speed[motnr]);
+		size+=sprintf(buffer+size, "Roda %d: %.3f m/s\r\n",motnr,robo.real_wheel_speed[motnr]);
 	} else if(argc==3 && motnr<5){
 		motnr=atoi(argv[1]);
 		float vel=atof(argv[2]);
