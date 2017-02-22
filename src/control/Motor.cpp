@@ -6,10 +6,14 @@
  */
 #include "Motor.h"
 
-
-float Motor::cp=7.3f;
-float Motor::cd=60.2f;
-float Motor::ci=0.04f;
+/*
+ * Usou-se ziegler-nichols frequency response method
+ * Kc=3.2
+ * Tc =0.7s
+ */
+float Motor::cp=1.92f;
+float Motor::cd=0.168f;
+float Motor::ci=5.486f;
 
 
 Motor::Motor(Pwm *A_High,
