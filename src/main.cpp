@@ -54,6 +54,8 @@ CircularBuffer<uint8_t> _usbserialbuffer(0,2048);
 
 uint8_t scanned[256];
 
+bool controlbit;
+
 #include <stm32f4xx_wwdg.h>
 
 
@@ -109,13 +111,10 @@ int main(void){
 
 	bool status;
 
-
+	uint32_t last_packet_ms = 0;
 	grSim_Robot_Command robotcmd;
-	uint32_t loopCounter;
 	while(1){
 		nrf24.InterruptCallback();
-		loopCounter++;
-
 		usb_device_class_cdc_vcp.GetData(_usbserialbuffer, 1024);
 
 		if(robo.InTestMode()){
@@ -124,6 +123,7 @@ int main(void){
 			if(_usbserialbuffer.Ocupied()){
 				usb_device_class_cdc_vcp.SendData(_usbserialbuffer);
 			}
+			controlbit = true;
 		} else {
 			status=0;
 			if(_usbserialbuffer.Ocupied()){
@@ -156,10 +156,11 @@ int main(void){
 				char usbBuffer[20];
 				int usbSize=sprintf(usbBuffer, "%f \r\n", robotcmd.velangular);
 				usb_device_class_cdc_vcp.SendData((uint8_t*)usbBuffer, usbSize);
+				last_packet_ms = GetLocalTime();
+				controlbit = true;
 			}
 			if(status){
 				if(robotcmd.id==robo.GetId()){
-					loopCounter = 0;
 					robo.set_speed(robotcmd.veltangent, robotcmd.velnormal, robotcmd.velangular);
 					if(robotcmd.kickspeedx!=0)
 						robo.ChuteBaixo();
@@ -169,10 +170,9 @@ int main(void){
 						robo.drible->Set_Vel(100);
 				}
 			}
-		}
-		if(loopCounter>0x37e2){
-			//robo.set_speed(0, 0, 0);
-			loopCounter = 0;
+			if(((GetLocalTime()-last_packet_ms)>100)){
+				controlbit = false;
+			}
 		}
 	}
 
@@ -187,7 +187,14 @@ void TIM6_DAC_IRQHandler(){
 	if(TIM_GetITStatus(TIM6,TIM_IT_Update)){
 		TIM_ClearITPendingBit(TIM6,TIM_IT_Update);
 		robo.get_wheel_speeds(robo.real_wheel_speed);//update real_wheel_speed com as velocidades medidas
-		robo.control_speed();
+		if(controlbit){
+			robo.control_speed();
+		}
+		if(!controlbit){
+			for(int j=0; j<4; j++){
+				robo.motors[j]->SetDutyCycle(0);
+			}
+		}
 	}
 }
 }

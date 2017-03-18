@@ -11,9 +11,9 @@
  * Kc=3.2
  * Tc =0.7s
  */
-float Motor::cp=1.92f;
-float Motor::cd=0.168f;
-float Motor::ci=5.486f;
+float Motor::cp=10.0f;
+float Motor::cd=1.0f;
+float Motor::ci=14.0f;
 
 
 Motor::Motor(Pwm *A_High,
@@ -52,21 +52,28 @@ int16_t Motor::Get_Desloc(){
 void Motor::Control_Speed(float hold_speed){
 	//position é medida em divisões de encoder (ou 1/400 de volta)
 	int16_t position = (int16_t)Motor_Enc->get_position();
+	Motor_Enc->set_position(20000);
 
-	int16_t distance=position-last_position;
-	last_position=position;
+	int16_t distance=position-20000;
+
+	//last_position=position;
 
 	float speed=(float)distance*CONVERSION; //converte da unidade da roda para m/s (vel do centro da roda)
 	                                     //talvez seja melhor converter de m/s pra unidade da roda
 	real_wheel_speed=speed;
 
 	error=hold_speed-speed;
-	ierror+=error;
-	if(ierror > 1000) ierror = 1000;
-	if(ierror < -1000) ierror = -1000;
+	ierror = 0;
+	for(int j = 18; j > 0; j--){
+		last_error[j+1]=last_error[j];
+		ierror = ierror + last_error[j+1];
+	}
+	last_error[0]=error;
+	ierror = ierror + last_error[0];
+	//if(ierror > 1000) ierror = 1000;
+	//if(ierror < -1000) ierror = -1000;
 
-	derror=error-lasterror;
-	lasterror=error;
+	derror=error-last_error[1];
 
 	float out=cp*error + ci * ierror + cd * derror;
 

@@ -62,6 +62,7 @@ private:
 	float lasterror;
 	float error;
 	float derror;
+	float last_error[20];
 	float ierror;
 	static float cp;
 	static float cd;
