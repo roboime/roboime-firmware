@@ -102,6 +102,11 @@ int main(void){
 	nrf24.Init();
 	nrf24.Config();
 
+	mina220.SelfTest();
+	mina22d.SelfTest();
+	mina221.SelfTest();
+	mina223.SelfTest();
+
 	nrf24.StartRX_ESB(channel, address + robo.GetId(), 32, 1);
 	nrf24.TxPackage_ESB(channel, address + robo.GetId(), 0,(uint8_t*) "TESTE", 5);
 	while(nrf24.Busy()){

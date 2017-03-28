@@ -84,3 +84,7 @@ extern Motor motor0;
 extern Motor motor1;
 extern Motor motor2;
 extern Motor motor3;
+extern INA220 mina220;
+extern INA220 mina221;
+extern INA220 mina223;
+extern INA220 mina22d;
