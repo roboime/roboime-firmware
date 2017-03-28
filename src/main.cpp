@@ -25,10 +25,9 @@
 /* Includes */
 #include "stm32f4xx.h"
 #include "stm32f4_discovery.h"
-#include "hal/ina220.h"
-#include "hal_stm32/i2c_stm32.h"
-#include "hal_stm32/io_pin_stm32.h"
+
 #include <utils/time_functions.h>
+#include "GPIO.h"
 
 static __IO uint32_t TimingDelay;
 
@@ -41,22 +40,18 @@ int main(void){
 
 	SysTick_Config(SystemCoreClock/1000);
 
-	delay_ms(3);
-	/*IO_Pin_STM32 i2c_scl(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOB, GPIO_Pin_8);
+	GPIO sw1(GPIOE, GPIO_Pin_2);
+	GPIO sw2(GPIOD, GPIO_Pin_7);
+	GPIO sw3(GPIOD, GPIO_Pin_6);
 
-	IO_Pin_STM32 i2c_sda(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOB, GPIO_Pin_9);
+	bool id[3];
 
-	I2C_STM32 my_i2c(i2c_sda, i2c_scl, I2C1, 20000, 5000002);
-	INA220 mina(my_i2c, (uint8_t) 0b1000101);*/
+	id[0] = sw1.Status();
+	id[1] = sw2.Status();
+	id[2] = sw3.Status();
 
-	IO_Pin_STM32 I2C_A_SDA_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOB, GPIO_Pin_9, GPIO_PuPd_NOPULL, GPIO_OType_OD, GPIO_AF_I2C1);
-	IO_Pin_STM32 I2C_A_SCL_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOB, GPIO_Pin_8, GPIO_PuPd_NOPULL, GPIO_OType_OD, GPIO_AF_I2C1);
-	I2C_STM32 i2c_a(I2C_A_SDA_PIN, I2C_A_SCL_PIN, I2C1, 100000, 0x4000);
-
-	INA220 mina220(i2c_a, 0x80);
 
 	delay_ms(3);
-	mina220.SelfTest();
 	while(1){
 
 
