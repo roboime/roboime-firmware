@@ -18,7 +18,7 @@ GPIO::GPIO(GPIO_TypeDef* Port, uint16_t Pin) {
 	if(Port == GPIOE)
 		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
 	GPIO_InitTypeDef GPIO_InitStructure;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
@@ -30,7 +30,7 @@ GPIO::GPIO(GPIO_TypeDef* Port, uint16_t Pin) {
 	GPIO_Pin = Pin;
 }
 bool GPIO::Status(){
-  uint8_t status_bit = GPIO_ReadOutputDataBit(GPIO_Port, GPIO_Pin);
+  uint8_t status_bit = GPIO_ReadInputDataBit(GPIO_Port, GPIO_Pin);
   if(status_bit==Bit_SET)
     return true;
   return false;

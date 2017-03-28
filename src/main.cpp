@@ -46,6 +46,12 @@ int main(void){
 
 	bool id[3];
 
+
+	sw1.Set();
+	sw2.Set();
+	sw3.Set();
+
+
 	id[0] = sw1.Status();
 	id[1] = sw2.Status();
 	id[2] = sw3.Status();
