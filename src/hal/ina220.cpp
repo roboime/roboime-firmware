@@ -30,8 +30,9 @@ float INA220::ReadPower() {
 
 uint8_t INA220::SelfTest() {
 	uint8_t temp[2] = { 0x80, 0x00 };
+	uint8_t temp2[2] = { 0x71, 0x00 };
 	_i2c->WriteRegBuffer(_address, 0x00, temp, 2);
-	_i2c->ReadRegBuffer(_address, 0x00, temp, 2);
+	_i2c->ReadRegBuffer(_address, 0x00, temp2, 2);
 	if (temp[0] == 0x39 && temp[1] == 0x9f) {
 		temp[0] = 0x06;
 		temp[1] = 0x67;
