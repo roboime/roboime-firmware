@@ -179,3 +179,14 @@ void Robo::set_motor_speed(uint8_t motnr, float vel) {
 		speed[motnr]=vel;
 	}
 }
+void Robo::interrupt_control(){
+	get_wheel_speeds(robo.real_wheel_speed);//update real_wheel_speed com as velocidades medidas
+	if(controlbit){
+		control_speed();
+	}
+	if(!controlbit){
+		for(int j=0; j<4; j++){
+			motors[j]->SetDutyCycle(0);
+		}
+	}
+}

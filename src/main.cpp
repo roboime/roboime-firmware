@@ -54,7 +54,6 @@ CircularBuffer<uint8_t> _usbserialbuffer(0,2048);
 
 uint8_t scanned[256];
 
-bool controlbit;
 
 #include <stm32f4xx_wwdg.h>
 
@@ -102,11 +101,6 @@ int main(void){
 	nrf24.Init();
 	nrf24.Config();
 
-	mina220.SelfTest();
-	mina22d.SelfTest();
-	mina221.SelfTest();
-	mina223.SelfTest();
-
 	nrf24.StartRX_ESB(channel, address + robo.GetId(), 32, 1);
 	nrf24.TxPackage_ESB(channel, address + robo.GetId(), 0,(uint8_t*) "TESTE", 5);
 	while(nrf24.Busy()){
@@ -128,7 +122,7 @@ int main(void){
 			if(_usbserialbuffer.Ocupied()){
 				usb_device_class_cdc_vcp.SendData(_usbserialbuffer);
 			}
-			controlbit = true;
+			robo.controlbit = true;
 		} else {
 			status=0;
 			if(_usbserialbuffer.Ocupied()){
@@ -162,7 +156,7 @@ int main(void){
 				int usbSize=sprintf(usbBuffer, "%f \r\n", robotcmd.velangular);
 				usb_device_class_cdc_vcp.SendData((uint8_t*)usbBuffer, usbSize);
 				last_packet_ms = GetLocalTime();
-				controlbit = true;
+				robo.controlbit = true;
 			}
 			if(status){
 				if(robotcmd.id==robo.GetId()){
@@ -176,7 +170,7 @@ int main(void){
 				}
 			}
 			if(((GetLocalTime()-last_packet_ms)>100)){
-				controlbit = false;
+				robo.controlbit = false;
 			}
 		}
 	}
@@ -191,15 +185,7 @@ extern "C" {
 void TIM6_DAC_IRQHandler(){
 	if(TIM_GetITStatus(TIM6,TIM_IT_Update)){
 		TIM_ClearITPendingBit(TIM6,TIM_IT_Update);
-		robo.get_wheel_speeds(robo.real_wheel_speed);//update real_wheel_speed com as velocidades medidas
-		if(controlbit){
-			robo.control_speed();
-		}
-		if(!controlbit){
-			for(int j=0; j<4; j++){
-				robo.motors[j]->SetDutyCycle(0);
-			}
-		}
+		robo.interrupt_control();
 	}
 }
 }

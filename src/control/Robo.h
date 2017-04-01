@@ -46,6 +46,8 @@ public:
     bool InTestMode(){return _testmode;};
     void SetTestMode(bool testmode) {_testmode=testmode;}
     uint8_t GetId(){return _id;}
+    void interrupt_control();
+    bool controlbit;
 protected:
     uint8_t _id;
 };
