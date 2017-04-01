@@ -28,6 +28,7 @@
 
 #include <utils/time_functions.h>
 #include "GPIO.h"
+#include "hal_stm32/io_pin_stm32.h"
 
 static __IO uint32_t TimingDelay;
 
@@ -40,22 +41,39 @@ int main(void){
 
 	SysTick_Config(SystemCoreClock/1000);
 
-	GPIO sw1(GPIOE, GPIO_Pin_2);
+	bool id[3];
+	uint8_t status[3];
+
+	IO_Pin_STM32 sw1(IO_Pin::IO_Pin_Mode_IN, GPIOD, GPIO_Pin_6, GPIO_PuPd_UP, GPIO_OType_PP);
+	IO_Pin_STM32 sw2(IO_Pin::IO_Pin_Mode_IN, GPIOD, GPIO_Pin_7, GPIO_PuPd_UP, GPIO_OType_PP);
+	IO_Pin_STM32 sw3(IO_Pin::IO_Pin_Mode_IN, GPIOE, GPIO_Pin_2, GPIO_PuPd_UP, GPIO_OType_PP);
+
+	/*GPIO sw1(GPIOE, GPIO_Pin_2);
 	GPIO sw2(GPIOD, GPIO_Pin_7);
 	GPIO sw3(GPIOD, GPIO_Pin_6);
-
-	bool id[3];
-
+	sw1.Set();
+	sw2.Set();
+	sw3.Set();
+	id[0] = sw1.Status();
+	id[1] = sw2.Status();
+	id[2] = sw3.Status();*/
 
 	sw1.Set();
 	sw2.Set();
 	sw3.Set();
 
+	status[0]=sw1.Read();
+	status[1]=sw2.Read();
+	status[2]=sw3.Read();
 
-	id[0] = sw1.Status();
-	id[1] = sw2.Status();
-	id[2] = sw3.Status();
+	for (int i=0;i<3;i++){
+		if(status[i]==Bit_SET) id[i]=true;
+		else id[i]=false;
+	}
 
+	id[0];
+	id[1];
+	id[2];
 
 	delay_ms(3);
 	while(1){
