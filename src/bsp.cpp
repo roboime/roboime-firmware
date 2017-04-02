@@ -74,7 +74,7 @@ GPIO blgpio3(GPIOB, GPIO_Pin_11);
 Encoder encoder3(GPIOB, GPIOB, GPIO_Pin_6, GPIO_Pin_7, TIM4, GPIO_PinSource6, GPIO_PinSource7, GPIO_AF_TIM4);
 Motor motor3(&ahpwm3, &algpio3, &bhpwm3, &blgpio3, &encoder3, &robo_timer);
 
-adc sensorAdc;
+myADC sensorAdc;
 
 Robo robo(&motor0, &motor1, &motor2, &motor3, &sensorAdc, &nrf24, (uint8_t)2 , false);
 
@@ -85,7 +85,7 @@ Timer_Time robo_irq_timer;
 extern "C" void EXTI9_5_IRQHandler(){
 	if(EXTI_GetITStatus(EXTI_Line5)){
 		EXTI_ClearITPendingBit(EXTI_Line5);
-		nrf24.InterruptCallback();
+		//nrf24.InterruptCallback();
 	}
 }
 

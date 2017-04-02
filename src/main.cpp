@@ -86,14 +86,13 @@ pb_istream_t pb_istream_from_circularbuffer(CircularBuffer<uint8_t> *circularbuf
 	stream.errmsg = NULL;
 	return stream;
 }
-void interruptTransmitter();
 
 int main(void){
 	//LIS3DSH_CSN.Set();
 
 	SysTick_Config(SystemCoreClock/1000);
 	usb.Init();
-
+	robo.init();
 
 
 	while(1){

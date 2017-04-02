@@ -6,8 +6,10 @@
  */
 #include "adc.h"
 __IO uint16_t ADCConvertedValue[4];
+myADC::myADC(){
 
-void adc::ADC_Config(){
+}
+void myADC::ADC_Config(){
   ADC_InitTypeDef       ADC_InitStructure;
   ADC_CommonInitTypeDef ADC_CommonInitStructure;
   //DMA_InitTypeDef       DMA_InitStructure;
@@ -78,10 +80,10 @@ void adc::ADC_Config(){
   ADC_Cmd(ADC1, ENABLE);
   ADC_SoftwareStartConv(ADC1);
 }
-float adc::adc_getConversion(){
+float myADC::adc_getConversion(){
   return (float) 3.87*(ADCConvertedValue[0]/(float)4950);
 }
-float adc::readSensor(int nSensor){
+float myADC::readSensor(int nSensor){
 	return (float) 3.87*(ADCConvertedValue[nSensor]/(float)4950);
 }
 

@@ -13,24 +13,25 @@
 #define sin_theta 0.7313
 #define cos_theta -0.682
 
-Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, adc *sensorAdc, NRF24L01P *nrf24, uint8_t id, bool testmode):
-	_nrf24(nrf24),
+Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, myADC *sensorAdc, NRF24L01P *mynrf24, uint8_t id, bool testmode):
+	_nrf24(mynrf24),
 	_testmode(testmode),
-	_id(id),
-	roboAdc(sensorAdc)
+	_id(id)
 {
 	motors[0]=roboMotor0;
 	motors[1]=roboMotor1;
 	motors[2]=roboMotor2;
 	motors[3]=roboMotor3;
 
+	roboAdc=sensorAdc;
 	roboAdc->ADC_Config();
 
 	drible = new dibre();
 
 	high_kick = new GPIO(GPIOD, GPIO_Pin_8);
 	chute_baixo = new GPIO(GPIOD, GPIO_Pin_10);
-
+}
+void Robo::init(){
 	_nrf24->Init();
 	_nrf24->Config();
 
@@ -41,75 +42,6 @@ Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboM
 	}
 	_nrf24->StartRX_ESB(channel, address + GetId(), 32, 1);
 }
-/*
-Pacote do tx
-
-00 uint8_t[1] tipo de pacote e versão do protocolo
-01-07 int16_t[3] posição medida pela câmera
-08 uint8_t pos_delay
-09 uint8_t kick_duration
-10 uint8_t kick_flags
-11 uint8_t dribler_speed
-12 uint8_t skill_id
-13-26 skill_data
-
-Pacote do rx
-
-00 uint8_t tipo de pacote e versão do protocolo
-01-06 int16_t[3] posição atual calibrada com os sensores do robo
-07-12 int16_t[3] velocidade medida pelo robô
-13 uint8_t battery level
-14 uint8_t kick capacitors level
-15 uint8_t flags como os sensor de posse da bola
-16 uint8_t hardware id
- */
-//void Robo::Receive(){
-//  if(radio->DataReady()||(radio->RxEmpty()==0)){
-//    radio->NRF_CE->Reset();
-//    radio->CleanDataReady();
-//    uint8_t data_in[27];
-//    radio->ReadPayload(data_in, 27);
-//    procPacket(data_in);
-//    radio->FlushRx();
-//    nPacketReceived++;
-//    if(nPacketReceived>10){
-//      radio->FlushTx();
-//      radio->CleanDataSent();
-//  	  uint8_t data_out[17];
-//  	  uint8_t batLevel = 10*vBat;
-//  	  data_out[13] = batLevel;
-//  	  radio->WriteAckPayload(data_out, 17);
-//  	  nPacketReceived = 0;
-//    }
-//	if(radio->MaxRt()){
-//	  radio->CleanMaxRt();
-//	  radio->FlushTx();
-//	}
-//    radio->NRF_CE->Set();
-//    nVerifyPacket=0;
-//  }
-//  else{
-//    nVerifyPacket++;
-//  }
-//  if(nVerifyPacket>0x3ee2){
-//    set_speed(0, 0, 0);
-//    nVerifyPacket=0;
-//  }
-//}
-//void Robo::procPacket(uint8_t *dataPacket){
-//  if(dataPacket[0]=='a'){
-//	if((dataPacket[10]&0b00000001)) ChuteBaixo();
-//	if((dataPacket[10]&0b00000010)) HighKick();
-//	int drible_vel;
-//	drible_vel = 10*dataPacket[11];
-//	drible->Set_Vel(drible_vel);
-//	if(dataPacket[12]==0){
-//      int16_t v[3];
-//      memcpy(v, (dataPacket+13), 6);
-//      set_speed(v[0], v[1], v[2]);
-//	}
-//  }
-//}
 void Robo::HighKick(){
 	float sensorValue2 = roboAdc->readSensor(3);
 	if(sensorValue2>0.100){

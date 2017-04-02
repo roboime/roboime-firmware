@@ -8,8 +8,9 @@
 #include "stm32f4_discovery.h"
 #ifndef ADC_H_
 #define ADC_H_
-class adc{
+class myADC{
 public:
+	myADC();
 	void ADC_Config();
 	float adc_getConversion();
 	float readSensor(int nSensor);
