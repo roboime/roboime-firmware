@@ -13,16 +13,17 @@
 #define sin_theta 0.7313
 #define cos_theta -0.682
 
-Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, adc *sensorAdc, uint8_t id, bool testmode):
+Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, adc *sensorAdc, NRF24L01P *nrf24, uint8_t id, bool testmode):
+	_nrf24(nrf24),
 	_testmode(testmode),
-	_id(id)
+	_id(id),
+	roboAdc(sensorAdc)
 {
 	motors[0]=roboMotor0;
 	motors[1]=roboMotor1;
 	motors[2]=roboMotor2;
 	motors[3]=roboMotor3;
 
-	roboAdc = sensorAdc;
 	roboAdc->ADC_Config();
 
 	drible = new dibre();
@@ -30,11 +31,15 @@ Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboM
 	high_kick = new GPIO(GPIOD, GPIO_Pin_8);
 	chute_baixo = new GPIO(GPIOD, GPIO_Pin_10);
 
-//    radio = new NRF24();
-//    radio->is_rx=true;
-//    radio->Config();
-//    radio->SetId(0);
-//    radio->NRF_CE->Set();
+	_nrf24->Init();
+	_nrf24->Config();
+
+	_nrf24->StartRX_ESB(channel, address + GetId(), 32, 1);
+	_nrf24->TxPackage_ESB(channel, address + GetId(), 0,(uint8_t*) "TESTE", 5);
+	while(_nrf24->Busy()){
+		_nrf24->InterruptCallback();
+	}
+	_nrf24->StartRX_ESB(channel, address + GetId(), 32, 1);
 }
 /*
 Pacote do tx
@@ -188,5 +193,69 @@ void Robo::interrupt_control(){
 		for(int j=0; j<4; j++){
 			motors[j]->SetDutyCycle(0);
 		}
+	}
+}
+void Robo::interruptReceive(){
+    bool status=0;
+	if(_nrf24->RxSize()){
+		_nrf24->StartRX_ESB(channel, address + robo.GetId(), 32, 1);
+		uint8_t rxsize=_nrf24->RxSize();
+		if(rxsize>32) rxsize=32;
+		uint8_t buffer[32];
+		_nrf24->RxData(buffer, rxsize);
+		pb_istream_t istream=pb_istream_from_buffer(buffer, rxsize);
+		status=pb_decode(&istream, grSim_Robot_Command_fields, &robotcmd);
+		char usbBuffer[20];
+		int usbSize=sprintf(usbBuffer, "%f \r\n", robotcmd.velangular);
+		usb_device_class_cdc_vcp.SendData((uint8_t*)usbBuffer, usbSize);
+		last_packet_ms = GetLocalTime();
+		controlbit = true;
+	}
+	if(status){
+		if(robotcmd.id==GetId()){
+			processPacket();
+		}
+	}
+	if((GetLocalTime()-last_packet_ms)>100){
+		controlbit = false;
+	}
+}
+void Robo::interruptTestMode(){
+	cmdline.In(_usbserialbuffer);
+	cmdline.Out(_usbserialbuffer);
+	if(_usbserialbuffer.Ocupied()){
+		usb_device_class_cdc_vcp.SendData(_usbserialbuffer);
+	}
+	robo.controlbit = true;
+}
+void Robo::processPacket(){
+	robo.set_speed(robotcmd.veltangent, robotcmd.velnormal, robotcmd.velangular);
+	if(robotcmd.kickspeedx!=0)
+	robo.ChuteBaixo();
+	if(robotcmd.kickspeedz!=0)
+	//robo.HighKick();
+	if(robotcmd.spinner)
+	robo.drible->Set_Vel(100);
+}
+
+void Robo::interruptTransmitter(){
+    bool status=0;
+	uint8_t buffer[32];
+	uint8_t size=_usbserialbuffer.Out(buffer, 32);//escreve em buffer o que recebeu
+	pb_istream_t istream = pb_istream_from_buffer(buffer,size);
+	status=pb_decode(&istream, grSim_Robot_Command_fields, &robotcmd);//preenche robotcmd
+	if(status){//caso haja sucesso na decodificação
+		uint8_t robotid=robotcmd.id;//extrai o  id do pacote
+		uint8_t buffer[32];
+		pb_ostream_t ostream=pb_ostream_from_buffer(buffer, sizeof(buffer));
+		pb_encode(&ostream, grSim_Robot_Command_fields, &robotcmd);//escreve em ostream os dados de robotcmd
+		uint8_t size=ostream.bytes_written;
+		_nrf24->TxPackage_ESB(channel, address | robotid, 0, buffer, size);
+		while(_nrf24->Busy()){
+			_nrf24->InterruptCallback();
+		}
+	}
+	else {
+		_usbserialbuffer.Clear();
 	}
 }

@@ -88,3 +88,5 @@ extern INA220 mina220;
 extern INA220 mina221;
 extern INA220 mina223;
 extern INA220 mina22d;
+extern CircularBuffer<uint8_t> _usbserialbuffer;
+

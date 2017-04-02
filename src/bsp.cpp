@@ -7,6 +7,7 @@
 #include <radio/version.h>
 #include <list>
 #include <control/Robo.h>
+#include "TimerTime.h"
 
 extern "C"{
 	#include "usb_dcd_int.h"
@@ -35,6 +36,10 @@ IO_Pin_STM32 SPI_MOSI_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOA, GPIO_Pin_7, GPIO_P
 IO_Pin_STM32 NRF24_SS_PIN(IO_Pin::IO_Pin_Mode_OUT, GPIOA, GPIO_Pin_4, GPIO_PuPd_NOPULL, GPIO_OType_PP);
 IO_Pin_STM32 NRF24_CE_PIN(IO_Pin::IO_Pin_Mode_OUT, GPIOA, GPIO_Pin_3, GPIO_PuPd_NOPULL, GPIO_OType_PP);
 IO_Pin_STM32 NRF24_IRQN_PIN(IO_Pin::IO_Pin_Mode_IN, GPIOC, GPIO_Pin_5, GPIO_PuPd_UP, GPIO_OType_OD);
+
+SPI_STM32 spi(SPI1, NRF24_SS_PIN);
+
+NRF24L01P nrf24(spi, NRF24_SS_PIN, NRF24_CE_PIN, NRF24_IRQN_PIN);
 
 IO_Pin_STM32 LIS3DSH_CSN(IO_Pin::IO_Pin_Mode_IN, GPIOE, GPIO_Pin_3, GPIO_PuPd_NOPULL, GPIO_OType_OD);
 
@@ -70,13 +75,12 @@ Encoder encoder3(GPIOB, GPIOB, GPIO_Pin_6, GPIO_Pin_7, TIM4, GPIO_PinSource6, GP
 Motor motor3(&ahpwm3, &algpio3, &bhpwm3, &blgpio3, &encoder3, &robo_timer);
 
 adc sensorAdc;
-Robo robo(&motor0, &motor1, &motor2, &motor3, &sensorAdc, (uint8_t)2 , false);
+
+Robo robo(&motor0, &motor1, &motor2, &motor3, &sensorAdc, &nrf24, (uint8_t)2 , false);
+
 INTERRUPT_STM32 timer_robot(TIM6_DAC_IRQn, 0x0C, 0x0C, ENABLE);
-
-
-SPI_STM32 spi(SPI1, NRF24_SS_PIN);
-
-NRF24L01P nrf24(spi, NRF24_SS_PIN, NRF24_CE_PIN, NRF24_IRQN_PIN);
+CircularBuffer<uint8_t> _usbserialbuffer(0,2048);
+Timer_Time robo_irq_timer;
 
 extern "C" void EXTI9_5_IRQHandler(){
 	if(EXTI_GetITStatus(EXTI_Line5)){
@@ -85,6 +89,12 @@ extern "C" void EXTI9_5_IRQHandler(){
 	}
 }
 
+extern "C" void TIM6_DAC_IRQHandler(){
+	if(TIM_GetITStatus(TIM6,TIM_IT_Update)){
+		TIM_ClearITPendingBit(TIM6,TIM_IT_Update);
+		robo.interrupt_control();
+	}
+}
 
 IO_Pin_STM32 I2C_A_SDA_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOB, GPIO_Pin_9, GPIO_PuPd_NOPULL, GPIO_OType_OD, GPIO_AF_I2C1);
 IO_Pin_STM32 I2C_A_SCL_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOB, GPIO_Pin_8, GPIO_PuPd_NOPULL, GPIO_OType_OD, GPIO_AF_I2C1);
