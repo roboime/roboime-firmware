@@ -13,9 +13,8 @@
 #define sin_theta 0.7313
 #define cos_theta -0.682
 
-Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, adc *sensorAdc, uint8_t id, bool testmode):
-	_testmode(testmode),
-	_id(id)
+Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, adc *sensorAdc, Switch *Switch, bool testmode):
+	_testmode(testmode)
 {
 	motors[0]=roboMotor0;
 	motors[1]=roboMotor1;
@@ -30,11 +29,14 @@ Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboM
 	high_kick = new GPIO(GPIOD, GPIO_Pin_8);
 	chute_baixo = new GPIO(GPIOD, GPIO_Pin_10);
 
+	_id = Switch->id;
+
 //    radio = new NRF24();
 //    radio->is_rx=true;
 //    radio->Config();
 //    radio->SetId(0);
 //    radio->NRF_CE->Set();
+
 }
 /*
 Pacote do tx

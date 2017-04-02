@@ -7,6 +7,7 @@
 #include <radio/version.h>
 #include <list>
 #include <control/Robo.h>
+#include <control/Switch.h>
 
 extern "C"{
 	#include "usb_dcd_int.h"
@@ -69,8 +70,15 @@ GPIO blgpio3(GPIOB, GPIO_Pin_11);
 Encoder encoder3(GPIOB, GPIOB, GPIO_Pin_6, GPIO_Pin_7, TIM4, GPIO_PinSource6, GPIO_PinSource7, GPIO_AF_TIM4);
 Motor motor3(&ahpwm3, &algpio3, &bhpwm3, &blgpio3, &encoder3, &robo_timer);
 
+IO_Pin_STM32 sw1(IO_Pin::IO_Pin_Mode_IN, GPIOD, GPIO_Pin_6, GPIO_PuPd_UP, GPIO_OType_PP);
+IO_Pin_STM32 sw2(IO_Pin::IO_Pin_Mode_IN, GPIOD, GPIO_Pin_7, GPIO_PuPd_UP, GPIO_OType_PP);
+IO_Pin_STM32 sw3(IO_Pin::IO_Pin_Mode_IN, GPIOE, GPIO_Pin_2, GPIO_PuPd_UP, GPIO_OType_PP);
+
 adc sensorAdc;
-Robo robo(&motor0, &motor1, &motor2, &motor3, &sensorAdc, (uint8_t)2 , false);
+
+Switch Switch(sw1, sw2, sw3);
+
+Robo robo(&motor0, &motor1, &motor2, &motor3, &sensorAdc, &Switch , false);
 INTERRUPT_STM32 timer_robot(TIM6_DAC_IRQn, 0x0C, 0x0C, ENABLE);
 
 

@@ -18,10 +18,14 @@
 #include "adc.h"
 #include "dibre.h"
 #include "NRF24.h"
+#include "Switch.h"
+
+#include <utils/time_functions.h>
+
 
 class Robo {
 public:
-	Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, adc *sensorAdc, uint8_t id, bool testmode=1);
+	Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, adc *sensorAdc, Switch *Switch, bool testmode=1);
 	GPIO *high_kick;
 	GPIO *chute_baixo;
 	void HighKick();
@@ -45,6 +49,13 @@ public:
     bool _testmode;
     bool InTestMode(){return _testmode;};
     void SetTestMode(bool testmode) {_testmode=testmode;}
+
+/*
+    IO_Pin_STM32 sw1(IO_Pin_Mode mode, GPIO_TypeDef *GPIOx, uint32_t pins, GPIOPuPd_TypeDef pupd=GPIO_PuPd_NOPULL, GPIOOType_TypeDef GPIO_OType=GPIO_OType_PP);
+    IO_Pin_STM32 sw2(IO_Pin_Mode mode, GPIO_TypeDef *GPIOx, uint32_t pins, GPIOPuPd_TypeDef pupd=GPIO_PuPd_NOPULL, GPIOOType_TypeDef GPIO_OType=GPIO_OType_PP);
+    IO_Pin_STM32 sw3(IO_Pin_Mode mode, GPIO_TypeDef *GPIOx, uint32_t pins, GPIOPuPd_TypeDef pupd=GPIO_PuPd_NOPULL, GPIOOType_TypeDef GPIO_OType=GPIO_OType_PP);
+*/
+
     uint8_t GetId(){return _id;}
 protected:
     uint8_t _id;
