@@ -30,6 +30,9 @@ Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboM
 
 	high_kick = new GPIO(GPIOD, GPIO_Pin_8);
 	chute_baixo = new GPIO(GPIOD, GPIO_Pin_10);
+	channel=100;
+	address=0xE7E7E7E700;
+	last_packet_ms = 0;
 }
 void Robo::init(){
 	_nrf24->Init();
@@ -135,11 +138,9 @@ void Robo::interruptReceive(){
 		if(rxsize>32) rxsize=32;
 		uint8_t buffer[32];
 		_nrf24->RxData(buffer, rxsize);
+		usb_device_class_cdc_vcp.SendData((uint8_t*)buffer, rxsize);
 		pb_istream_t istream=pb_istream_from_buffer(buffer, rxsize);
 		status=pb_decode(&istream, grSim_Robot_Command_fields, &robotcmd);
-		char usbBuffer[20];
-		int usbSize=sprintf(usbBuffer, "%f \r\n", robotcmd.velangular);
-		usb_device_class_cdc_vcp.SendData((uint8_t*)usbBuffer, usbSize);
 		last_packet_ms = GetLocalTime();
 		controlbit = true;
 	}
@@ -190,4 +191,9 @@ void Robo::interruptTransmitter(){
 	else {
 		_usbserialbuffer.Clear();
 	}
+}
+void Robo::interruptAckPayload(){
+	char ackBuffer[20];
+	int ackSize=sprintf(ackBuffer, "test \n");
+	_nrf24->write_ack_payload((uint8_t *) ackBuffer, ackSize);
 }

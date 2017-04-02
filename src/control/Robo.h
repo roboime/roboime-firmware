@@ -57,10 +57,11 @@ public:
     void processPacket();
 	void interruptTransmitter();
 	void init();
+	void interruptAckPayload();
 
     bool controlbit;
-	uint8_t channel=100;
-	uint64_t address=0xE7E7E7E700;
+	uint8_t channel;
+	uint64_t address;
 
     uint32_t last_packet_ms = 0;
     grSim_Robot_Command robotcmd;

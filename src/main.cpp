@@ -106,8 +106,9 @@ int main(void){
 			if(_usbserialbuffer.Ocupied()){
 				robo.interruptTransmitter();
 			}
-			else if(nrf24.RxSize()){
+			if(nrf24.RxSize()){
 				robo.interruptReceive();
+				robo.interruptAckPayload();
 			}
 		}
 
