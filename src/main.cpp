@@ -94,7 +94,6 @@ int main(void){
 	usb.Init();
 	robo.init();
 
-
 	while(1){
 		robo._nrf24->InterruptCallback();
 		usb_device_class_cdc_vcp.GetData(_usbserialbuffer, 1024);
@@ -111,12 +110,6 @@ int main(void){
 				robo.interruptAckPayload();
 			}
 		}
-
-	}
-
-
-	while (1){
-		//		robo.Receive();
 	}
 }
 extern uint32_t LocalTime;
