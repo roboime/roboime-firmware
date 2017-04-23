@@ -36,6 +36,7 @@ public:
 	uint8_t TxPackage_ESB(uint8_t channel, uint64_t address, uint8_t no_ack, uint8_t* data, uint16_t size);
 	uint8_t TxPackage_ESB(uint8_t no_ack, uint8_t* data, uint16_t size);
 	uint8_t StartRX_ESB(uint8_t channel, uint64_t address, uint16_t size, uint8_t en_auto_ack);
+	uint8_t write_ack_payload(uint8_t *buffer, uint8_t size);
 
 protected:
 	uint8_t write_register(uint8_t address, uint8_t *buffer, uint8_t size);
@@ -48,7 +49,6 @@ protected:
 	uint8_t read_rx_payload(uint8_t *buffer, uint8_t size);
 	uint8_t write_tx_payload(uint8_t *buffer, uint8_t size);
 	uint8_t write_tx_payload_no_ack(uint8_t *buffer, uint8_t size);
-	uint8_t write_ack_payload(uint8_t *buffer, uint8_t size);
 	uint8_t flush_tx();
 	uint8_t flush_rx();
 	uint8_t reuse_tx_pl();

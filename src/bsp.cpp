@@ -8,6 +8,7 @@
 #include <list>
 #include <control/Robo.h>
 #include <control/Switch.h>
+#include "TimerTime.h"
 
 extern "C"{
 	#include "usb_dcd_int.h"
@@ -36,6 +37,10 @@ IO_Pin_STM32 SPI_MOSI_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOA, GPIO_Pin_7, GPIO_P
 IO_Pin_STM32 NRF24_SS_PIN(IO_Pin::IO_Pin_Mode_OUT, GPIOA, GPIO_Pin_4, GPIO_PuPd_NOPULL, GPIO_OType_PP);
 IO_Pin_STM32 NRF24_CE_PIN(IO_Pin::IO_Pin_Mode_OUT, GPIOA, GPIO_Pin_3, GPIO_PuPd_NOPULL, GPIO_OType_PP);
 IO_Pin_STM32 NRF24_IRQN_PIN(IO_Pin::IO_Pin_Mode_IN, GPIOC, GPIO_Pin_5, GPIO_PuPd_UP, GPIO_OType_OD);
+
+SPI_STM32 spi(SPI1, NRF24_SS_PIN);
+
+NRF24L01P nrf24(spi, NRF24_SS_PIN, NRF24_CE_PIN, NRF24_IRQN_PIN);
 
 IO_Pin_STM32 LIS3DSH_CSN(IO_Pin::IO_Pin_Mode_IN, GPIOE, GPIO_Pin_3, GPIO_PuPd_NOPULL, GPIO_OType_OD);
 
@@ -78,21 +83,25 @@ adc sensorAdc;
 
 Switch Switch(sw1, sw2, sw3);
 
-Robo robo(&motor0, &motor1, &motor2, &motor3, &sensorAdc, &Switch , false);
+Robo robo(&motor0, &motor1, &motor2, &motor3, &sensorAdc, &nrf24, &Switch , false);
+
 INTERRUPT_STM32 timer_robot(TIM6_DAC_IRQn, 0x0C, 0x0C, ENABLE);
-
-
-SPI_STM32 spi(SPI1, NRF24_SS_PIN);
-
-NRF24L01P nrf24(spi, NRF24_SS_PIN, NRF24_CE_PIN, NRF24_IRQN_PIN);
+CircularBuffer<uint8_t> _usbserialbuffer(0,2048);
+Timer_Time robo_irq_timer;
 
 extern "C" void EXTI9_5_IRQHandler(){
 	if(EXTI_GetITStatus(EXTI_Line5)){
 		EXTI_ClearITPendingBit(EXTI_Line5);
-		nrf24.InterruptCallback();
+		//nrf24.InterruptCallback();
 	}
 }
 
+extern "C" void TIM6_DAC_IRQHandler(){
+	if(TIM_GetITStatus(TIM6,TIM_IT_Update)){
+		TIM_ClearITPendingBit(TIM6,TIM_IT_Update);
+		robo.interrupt_control();
+	}
+}
 
 IO_Pin_STM32 I2C_A_SDA_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOB, GPIO_Pin_9, GPIO_PuPd_NOPULL, GPIO_OType_OD, GPIO_AF_I2C1);
 IO_Pin_STM32 I2C_A_SCL_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOB, GPIO_Pin_8, GPIO_PuPd_NOPULL, GPIO_OType_OD, GPIO_AF_I2C1);
@@ -104,7 +113,7 @@ INA220 mina223(i2c_a, 0x8A);
 INA220 mina22d(i2c_a, 0x86);//trocado
 
 
-/*
+/*TOP SECRET - SHIU
 USART_STM32 usart_onewire(USART6, 115200, USART_WordLength_8b, USART_StopBits_2, USART_Parity_No, USART_Mode_Rx | USART_Mode_Tx, USART_HardwareFlowControl_None, 1);
 ONEWIRE onewire(usart_onewire,ONEWIRE_PULL_UP,1000);
 

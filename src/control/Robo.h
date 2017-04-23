@@ -17,15 +17,20 @@
 #include "Motor.h"
 #include "adc.h"
 #include "dibre.h"
-#include "NRF24.h"
 #include "Switch.h"
+
+#include "proto/grSim_Commands.pb.h"
+#include "proto/pb_decode.h"
+#include "proto/pb_encode.h"
+#include "radio/commands.h"
+#include <radio/bsp.h>
 
 #include <utils/time_functions.h>
 
 
 class Robo {
 public:
-	Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, adc *sensorAdc, Switch *Switch, bool testmode=1);
+	Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, adc *sensorAdc, NRF24L01P *mynrf24, Switch *Switch, bool testmode=1);
 	GPIO *high_kick;
 	GPIO *chute_baixo;
 	void HighKick();
@@ -41,7 +46,7 @@ public:
     float vBat;
     int nVerifyPacket;
     int nPacketReceived;
-    NRF24 *radio;
+    NRF24L01P *_nrf24;
     void get_wheel_speeds(float ptr[]);//armazena as velocidades lineares dos centros das RODAS em ptr
     void set_speed(float v_r, float v_t, float w);
     void set_speed(float v[]);
@@ -49,14 +54,21 @@ public:
     bool _testmode;
     bool InTestMode(){return _testmode;};
     void SetTestMode(bool testmode) {_testmode=testmode;}
-
-/*
-    IO_Pin_STM32 sw1(IO_Pin_Mode mode, GPIO_TypeDef *GPIOx, uint32_t pins, GPIOPuPd_TypeDef pupd=GPIO_PuPd_NOPULL, GPIOOType_TypeDef GPIO_OType=GPIO_OType_PP);
-    IO_Pin_STM32 sw2(IO_Pin_Mode mode, GPIO_TypeDef *GPIOx, uint32_t pins, GPIOPuPd_TypeDef pupd=GPIO_PuPd_NOPULL, GPIOOType_TypeDef GPIO_OType=GPIO_OType_PP);
-    IO_Pin_STM32 sw3(IO_Pin_Mode mode, GPIO_TypeDef *GPIOx, uint32_t pins, GPIOPuPd_TypeDef pupd=GPIO_PuPd_NOPULL, GPIOOType_TypeDef GPIO_OType=GPIO_OType_PP);
-*/
-
     uint8_t GetId(){return _id;}
+    void interrupt_control();
+    void interruptReceive();
+    void interruptTestMode();
+    void processPacket();
+   	void interruptTransmitter();
+   	void init();
+   	void interruptAckPayload();
+
+    bool controlbit;
+   	uint8_t channel;
+   	uint64_t address;
+
+    uint32_t last_packet_ms = 0;
+    grSim_Robot_Command robotcmd;
 protected:
     uint8_t _id;
 };
