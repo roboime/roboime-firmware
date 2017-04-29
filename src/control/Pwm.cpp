@@ -39,7 +39,7 @@ Pwm::Pwm(GPIO_TypeDef* Port, uint32_t Pin, TIM_TypeDef * Tim, uint8_t Af_Pin, ui
 
 	TIM_TimeBaseStructure.TIM_ClockDivision=TIM_CKD_DIV1;
 	TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up;
-	TIM_TimeBaseStructure.TIM_Prescaler=(SystemCoreClock/168000000)-1;
+	TIM_TimeBaseStructure.TIM_Prescaler=(SystemCoreClock/20000000)-1;
 	TIM_TimeBaseStructure.TIM_Period=168000000/168000;
 
 	TIM_TimeBaseInit(Tim, &TIM_TimeBaseStructure);

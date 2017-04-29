@@ -15,7 +15,7 @@ Timer_Time::Timer_Time(){
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 	TIM_TimeBaseStructure.TIM_ClockDivision=0;
 	TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up;
-	TIM_TimeBaseStructure.TIM_Prescaler=84;
+	TIM_TimeBaseStructure.TIM_Prescaler=83;
 	TIM_TimeBaseStructure.TIM_Period=1000;
 	TIM_TimeBaseInit(TIM6,&TIM_TimeBaseStructure);
 
