@@ -15,7 +15,8 @@
 
 Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, adc *sensorAdc, NRF24L01P *mynrf24, Switch *Switch, bool testmode):
 	_nrf24(mynrf24),
-	_testmode(testmode)
+	_testmode(testmode),
+	printv(false)
 {
 	motors[0]=roboMotor0;
 	motors[1]=roboMotor1;
@@ -35,8 +36,6 @@ Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboM
 	channel=100;
 	address=0xE7E7E7E700;
 	last_packet_ms = 0;
-//  5º dia: ainda estou na classe robo
-
 }
 
 void Robo::init(){
@@ -128,15 +127,29 @@ void Robo::set_motor_speed(uint8_t motnr, float vel) {
 
 void Robo::interrupt_control(){
 	get_wheel_speeds(robo.real_wheel_speed);//update real_wheel_speed com as velocidades medidas
-	if(controlbit){
+	if(controlbit&&(!stepbit)){
 		control_speed();
 	}
 	if(!controlbit){
 		for(int j=0; j<4; j++){
-			motors[j]->SetDutyCycle(0);
+			if(!stepbit)motors[j]->SetDutyCycle(0);
+			motors[j]->Calc_Speed();
 		}
 	}
+	if (printv){
+		robotcmd_test.kickspeedx = robo.motors[0]->real_wheel_speed;
+		robotcmd_test.kickspeedz = robo.motors[1]->real_wheel_speed;
+		robotcmd_test.veltangent = robo.motors[2]->real_wheel_speed;
+		robotcmd_test.velnormal = robo.motors[3]->real_wheel_speed;
+		robotcmd_test.velangular=(float)GetLocalTime();
+		uint8_t buffer[32];
+		pb_ostream_t ostream=pb_ostream_from_buffer(buffer, sizeof(buffer));
+		pb_encode(&ostream, grSim_Robot_Command_fields, &robotcmd_test);//escreve em ostream os dados de robotcmd_test
+
+		usb_device_class_cdc_vcp.SendData((uint8_t*)buffer, sizeof(buffer));
+	}
 }
+
 void Robo::interruptReceive(){
     bool status=0;
 	if(_nrf24->RxSize()){
@@ -166,7 +179,7 @@ void Robo::interruptTestMode(){
 	if(_usbserialbuffer.Ocupied()){
 		usb_device_class_cdc_vcp.SendData(_usbserialbuffer);
 	}
-	robo.controlbit = true;
+	//robo.controlbit = true;
 }
 void Robo::processPacket(){
 	robo.set_speed(robotcmd.veltangent, robotcmd.velnormal, robotcmd.velangular);
@@ -177,6 +190,8 @@ void Robo::processPacket(){
 	if(robotcmd.spinner)
 	robo.drible->Set_Vel(100);
 }
+
+//  5º dia: ainda estou na classe robo
 
 void Robo::interruptTransmitter(){
     bool status=0;
@@ -204,3 +219,4 @@ void Robo::interruptAckPayload(){
 	int ackSize=sprintf(ackBuffer, "test \n");
 	_nrf24->write_ack_payload((uint8_t *) ackBuffer, ackSize);
 }
+

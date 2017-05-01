@@ -36,6 +36,7 @@ public:
 			Timer_Time2 *MTimer);
 	void Control_Pos(float hold_position);
 	void Control_Speed(float hold_speed);
+	void Calc_Speed();
 	void SetDutyCycle(int16_t answer);
 	int16_t Get_Desloc();//retorna o deslocamento do eixo do motor, unidade: divisões de encoder
 	static void SetPID(float p, float i, float d);

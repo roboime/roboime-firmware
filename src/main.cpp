@@ -41,7 +41,7 @@ void Delay_ms(uint32_t time_ms);
 
 uint8_t scanned[256];
 
-bool controlbit;
+
 
 #include <stm32f4xx_wwdg.h>
 

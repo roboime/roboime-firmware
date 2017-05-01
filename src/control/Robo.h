@@ -63,12 +63,15 @@ public:
    	void init();
    	void interruptAckPayload();
 
+   	bool stepbit;
     bool controlbit;
+    bool printv;
    	uint8_t channel;
    	uint64_t address;
 
     uint32_t last_packet_ms = 0;
     grSim_Robot_Command robotcmd;
+    grSim_Robot_Command robotcmd_test;
 protected:
     uint8_t _id;
 };

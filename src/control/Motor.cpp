@@ -84,6 +84,20 @@ void Motor::Control_Speed(float hold_speed){
 	SetDutyCycle(dutycycle);
 
 };
+
+void Motor::Calc_Speed(){
+	//position é medida em divisões de encoder (ou 1/400 de volta)
+	int16_t position = (int16_t)Motor_Enc->get_position();
+	Motor_Enc->set_position(20000);
+
+	int16_t distance=position-20000;
+
+	//last_position=position;
+
+	float speed=(float)distance*CONVERSION; //converte da unidade da roda para m/s (vel do centro da roda)
+	                                     //talvez seja melhor converter de m/s pra unidade da roda
+	real_wheel_speed=speed;
+};
 /*
 void Motor::Control_Speed(int16_t hold_speed){
 	int16_t speed;
