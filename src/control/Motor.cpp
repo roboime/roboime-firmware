@@ -21,7 +21,8 @@ Motor::Motor(Pwm *A_High,
 		Pwm *B_High,
 		GPIO *B_Low,
 		Encoder *Enc,
-		Timer_Time2 *MTimer)
+		Timer_Time2 *MTimer,
+		INA220 *ina220)
 {
 	Motor_A_High = A_High;
 	Motor_A_Low = A_Low;
@@ -30,6 +31,7 @@ Motor::Motor(Pwm *A_High,
 	Motor_Enc = Enc;
 	Motor_Time = MTimer;
 	last_vel_answer = 0;
+	mina22 = ina220;
 }
 void Motor::Control_Pos(float  hold_position){
 	uint32_t position;

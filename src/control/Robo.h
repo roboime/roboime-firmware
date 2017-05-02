@@ -64,10 +64,12 @@ public:
    	void interruptAckPayload();
 
    	bool stepbit;
+   	bool printI;
     bool controlbit;
     bool printv;
    	uint8_t channel;
    	uint64_t address;
+   	int16_t dutycycles[4];
 
     uint32_t last_packet_ms = 0;
     grSim_Robot_Command robotcmd;

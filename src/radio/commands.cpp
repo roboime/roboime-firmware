@@ -409,6 +409,9 @@ uint16_t cmd_step(uint16_t argc, uint8_t *argv8[]){
 		motnr=atoi(argv[1]);
 		int vel=atoi(argv[2]);
 		robo.motors[motnr]->SetDutyCycle(vel);
+		for(int i=0; i<4; i++){
+			robo.dutycycles[i]=(int16_t) vel;
+		}
 		size+=sprintf(buffer+size, "OK, %d %d\r\n", motnr, vel);
 	} else if(argc==5){
 		float v[4];
@@ -421,6 +424,9 @@ uint16_t cmd_step(uint16_t argc, uint8_t *argv8[]){
 		robo.motors[1]->SetDutyCycle(v[1]);
 		robo.motors[2]->SetDutyCycle(v[2]);
 		robo.motors[3]->SetDutyCycle(v[3]);
+		for(int i=0; i<4; i++){
+			robo.dutycycles[i]=(int16_t) v[i];
+		}
 		size+=sprintf(buffer+size, "OK\r\n");
 	} else {
 		size+=sprintf(buffer+size, "Syntax: step motor dutycycle \r\n");
@@ -450,5 +456,29 @@ uint16_t cmd_ctl_or_step(uint16_t argc, uint8_t *argv8[]){
 	return size;
 }
 
-CommandLine cmdline({"*IDN?", "testmode",	"pid", 	"chute", "readv", "motv", "writefoo", "robv", "serial", "model", "version", "calpot", "freq", "savecal", "potd", "gps", "sendv", "n_sendv", "step", "ctl_or_step"},
-					{cmd_idn,	cmd_testmode, 	cmd_pid,	cmd_chute, cmd_readv, cmd_motv, cmd_writefoo, cmd_robv, cmd_serial, cmd_model, cmd_version, cmd_calpot, cmd_freq, cmd_savecal, cmd_potd, cmd_gps, cmd_sendv, cmd_n_sendv, cmd_step, cmd_ctl_or_step});
+uint16_t cmd_sendI(uint16_t argc, uint8_t *argv8[]){
+	const char **argv=(const char **)argv8;
+	uint16_t size=0;
+	char* buffer=(char*)argv[0];
+	if(argc==1){//com 1 argumento, printI imprime a corrente da roda
+		robo.printI = true;
+		} else {
+		size+=sprintf(buffer+size, "Syntax: sendI\r\n");
+	}
+	return size;
+}
+
+uint16_t cmd_n_sendI(uint16_t argc, uint8_t *argv8[]){
+	const char **argv=(const char **)argv8;
+	uint16_t size=0;
+	char* buffer=(char*)argv[0];
+	if(argc==1){//com 1 argumento, printT imprime a corrente da roda
+		robo.printI = false;
+		} else {
+		size+=sprintf(buffer+size, "Syntax: n_sendI\r\n");
+	}
+	return size;
+}
+
+CommandLine cmdline({"*IDN?", "testmode",	"pid", 	"chute", "readv", "motv", "writefoo", "robv", "serial", "model", "version", "calpot", "freq", "savecal", "potd", "gps", "sendv", "n_sendv", "step", "ctl_or_step", "sendI", "n_sendI"},
+					{cmd_idn,	cmd_testmode, 	cmd_pid,	cmd_chute, cmd_readv, cmd_motv, cmd_writefoo, cmd_robv, cmd_serial, cmd_model, cmd_version, cmd_calpot, cmd_freq, cmd_savecal, cmd_potd, cmd_gps, cmd_sendv, cmd_n_sendv, cmd_step, cmd_ctl_or_step, cmd_sendI, cmd_n_sendI});

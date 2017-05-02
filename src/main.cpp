@@ -90,6 +90,8 @@ int main(void){
 	mina22d.SelfTest();
 	mina221.SelfTest();
 	mina223.SelfTest();
+	mina220.ReadCurrent();
+	robo.motors[0]->mina22->ReadCurrent();
 
 	while(1){
 		robo._nrf24->InterruptCallback();
@@ -97,6 +99,7 @@ int main(void){
 
 		if(robo.InTestMode()){
 			robo.interruptTestMode();
+			delay_ms(2);
 		}
 		else {
 			if(_usbserialbuffer.Ocupied()){

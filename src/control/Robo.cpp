@@ -142,11 +142,26 @@ void Robo::interrupt_control(){
 		robotcmd_test.veltangent = robo.motors[2]->real_wheel_speed;
 		robotcmd_test.velnormal = robo.motors[3]->real_wheel_speed;
 		robotcmd_test.velangular=(float)GetLocalTime();
+		robotcmd_test.id=robo.dutycycles[0];
+		robotcmd_test.spinner=true;
 		uint8_t buffer[32];
 		pb_ostream_t ostream=pb_ostream_from_buffer(buffer, sizeof(buffer));
 		pb_encode(&ostream, grSim_Robot_Command_fields, &robotcmd_test);//escreve em ostream os dados de robotcmd_test
 
-		usb_device_class_cdc_vcp.SendData((uint8_t*)buffer, sizeof(buffer));
+		_usbserialbuffer2.In((uint8_t*)buffer, (uint16_t) ostream.bytes_written);
+	}
+	if ((!printv)&&(printI)){
+		robotcmd_test.kickspeedx = motors[0]->mina22->ReadCurrent();
+		robotcmd_test.kickspeedz = motors[1]->mina22->ReadCurrent();
+		robotcmd_test.veltangent = motors[2]->mina22->ReadCurrent();
+		robotcmd_test.velnormal = motors[3]->mina22->ReadCurrent();
+		robotcmd_test.velangular=(float)GetLocalTime();
+		robotcmd_test.spinner=false;
+		uint8_t buffer[32];
+		pb_ostream_t ostream=pb_ostream_from_buffer(buffer, sizeof(buffer));
+		pb_encode(&ostream, grSim_Robot_Command_fields, &robotcmd_test);
+
+		_usbserialbuffer2.In((uint8_t*)buffer, (uint16_t) ostream.bytes_written);
 	}
 }
 
@@ -177,7 +192,10 @@ void Robo::interruptTestMode(){
 	cmdline.In(_usbserialbuffer);
 	cmdline.Out(_usbserialbuffer);
 	if(_usbserialbuffer.Ocupied()){
-		usb_device_class_cdc_vcp.SendData(_usbserialbuffer);
+		//usb_device_class_cdc_vcp.SendData(_usbserialbuffer);
+	}
+	if(_usbserialbuffer2.Ocupied()){
+		usb_device_class_cdc_vcp.SendData(_usbserialbuffer2);
 	}
 	//robo.controlbit = true;
 }

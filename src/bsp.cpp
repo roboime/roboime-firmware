@@ -47,33 +47,39 @@ IO_Pin_STM32 LIS3DSH_CSN(IO_Pin::IO_Pin_Mode_IN, GPIOE, GPIO_Pin_3, GPIO_PuPd_NO
 //INTERRUPT_STM32 nrf24_irqn_exti_interrupt(NRF24_IRQN_PIN.GetIRQChannel(), 0x0C, 0x0C, DISABLE);
 Timer_Time2 robo_timer;
 
+//checar os minas no desenho da placa
+
 Pwm ahpwm0(GPIOC, GPIO_Pin_9, TIM8, GPIO_PinSource9, GPIO_AF_TIM8, 4, false);
 GPIO algpio0(GPIOE, GPIO_Pin_5);
 Pwm bhpwm0(GPIOC, GPIO_Pin_7, TIM8, GPIO_PinSource7, GPIO_AF_TIM8, 2, false);
 GPIO blgpio0(GPIOC, GPIO_Pin_13);
 Encoder encoder0(GPIOB, GPIOB, GPIO_Pin_4, GPIO_Pin_5, TIM3, GPIO_PinSource4, GPIO_PinSource5, GPIO_AF_TIM3);
-Motor motor0(&ahpwm0, &algpio0, &bhpwm0, &blgpio0, &encoder0, &robo_timer);
+INA220 mina220(i2c_a, 0x80);
+Motor motor0(&ahpwm0, &algpio0, &bhpwm0, &blgpio0, &encoder0, &robo_timer, &mina220);
 
 Pwm ahpwm1(GPIOA, GPIO_Pin_8, TIM1, GPIO_PinSource8, GPIO_AF_TIM1, 1, false);
 GPIO algpio1(GPIOE, GPIO_Pin_6);
 Pwm bhpwm1(GPIOC, GPIO_Pin_8, TIM8, GPIO_PinSource8, GPIO_AF_TIM8, 3, false);
 GPIO blgpio1(GPIOE, GPIO_Pin_4);
 Encoder encoder1(GPIOA, GPIOB, GPIO_Pin_15, GPIO_Pin_3, TIM2, GPIO_PinSource15, GPIO_PinSource3, GPIO_AF_TIM2);
-Motor motor1(&ahpwm1, &algpio1, &bhpwm1, &blgpio1, &encoder1, &robo_timer);
+INA220 mina221(i2c_a, 0x82);//trocado
+Motor motor1(&ahpwm1, &algpio1, &bhpwm1, &blgpio1, &encoder1, &robo_timer, &mina221);
 
 Pwm ahpwm2(GPIOC, GPIO_Pin_6, TIM8, GPIO_PinSource6, GPIO_AF_TIM8, 1, false);
 GPIO algpio2(GPIOC, GPIO_Pin_2);
 Pwm bhpwm2(GPIOE, GPIO_Pin_11, TIM1, GPIO_PinSource11, GPIO_AF_TIM1, 2, false);
 GPIO blgpio2(GPIOB, GPIO_Pin_1);
 Encoder encoder2(GPIOA, GPIOA, GPIO_Pin_0, GPIO_Pin_1, TIM5, GPIO_PinSource0, GPIO_PinSource1, GPIO_AF_TIM5);
-Motor motor2(&ahpwm2, &algpio2, &bhpwm2, &blgpio2, &encoder2, &robo_timer);
+INA220 mina22d(i2c_a, 0x86);//trocado
+Motor motor2(&ahpwm2, &algpio2, &bhpwm2, &blgpio2, &encoder2, &robo_timer, &mina22d);
 
 Pwm ahpwm3(GPIOE, GPIO_Pin_14, TIM1, GPIO_PinSource14, GPIO_AF_TIM1, 4, false);
 GPIO algpio3(GPIOB, GPIO_Pin_12);
 Pwm bhpwm3(GPIOE, GPIO_Pin_13, TIM1, GPIO_PinSource13, GPIO_AF_TIM1, 3, false);
 GPIO blgpio3(GPIOB, GPIO_Pin_11);
 Encoder encoder3(GPIOB, GPIOB, GPIO_Pin_6, GPIO_Pin_7, TIM4, GPIO_PinSource6, GPIO_PinSource7, GPIO_AF_TIM4);
-Motor motor3(&ahpwm3, &algpio3, &bhpwm3, &blgpio3, &encoder3, &robo_timer);
+INA220 mina223(i2c_a, 0x8A);
+Motor motor3(&ahpwm3, &algpio3, &bhpwm3, &blgpio3, &encoder3, &robo_timer, &mina223);
 
 IO_Pin_STM32 sw1(IO_Pin::IO_Pin_Mode_IN, GPIOD, GPIO_Pin_6, GPIO_PuPd_UP, GPIO_OType_PP);
 IO_Pin_STM32 sw2(IO_Pin::IO_Pin_Mode_IN, GPIOD, GPIO_Pin_7, GPIO_PuPd_UP, GPIO_OType_PP);
@@ -87,6 +93,7 @@ Robo robo(&motor0, &motor1, &motor2, &motor3, &sensorAdc, &nrf24, &Switch , true
 
 INTERRUPT_STM32 timer_robot(TIM6_DAC_IRQn, 0x0C, 0x0C, ENABLE);
 CircularBuffer<uint8_t> _usbserialbuffer(0,2048);
+CircularBuffer<uint8_t> _usbserialbuffer2(0,2048);
 Timer_Time robo_irq_timer;
 
 extern "C" void EXTI9_5_IRQHandler(){
@@ -106,11 +113,6 @@ extern "C" void TIM6_DAC_IRQHandler(){
 IO_Pin_STM32 I2C_A_SDA_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOB, GPIO_Pin_9, GPIO_PuPd_NOPULL, GPIO_OType_OD, GPIO_AF_I2C1);
 IO_Pin_STM32 I2C_A_SCL_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOB, GPIO_Pin_8, GPIO_PuPd_NOPULL, GPIO_OType_OD, GPIO_AF_I2C1);
 I2C_STM32 i2c_a(I2C_A_SDA_PIN, I2C_A_SCL_PIN, I2C1, 100000, 0x4000);
-
-INA220 mina220(i2c_a, 0x80);
-INA220 mina221(i2c_a, 0x82);//trocado
-INA220 mina223(i2c_a, 0x8A);
-INA220 mina22d(i2c_a, 0x86);//trocado
 
 
 /*TOP SECRET - SHIU
