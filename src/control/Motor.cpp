@@ -11,9 +11,9 @@
  * Kc=3.2
  * Tc =0.7s
  */
-float Motor::cp=10.0f;
-float Motor::cd=1.0f;
-float Motor::ci=14.0f;
+float Motor::cp=8000.0f;
+float Motor::cd=1000.0f;
+float Motor::ci=10.0f;
 
 
 Motor::Motor(Pwm *A_High,
@@ -80,7 +80,7 @@ void Motor::Control_Speed(float hold_speed){
 	float out=cp*error + ci * ierror + cd * derror;
 
 
-	dutycycle+=out;
+	dutycycle=out;
 	if(dutycycle>1000) dutycycle=1000;
 	if(dutycycle<-1000) dutycycle=-1000;
 	SetDutyCycle(dutycycle);

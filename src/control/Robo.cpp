@@ -52,7 +52,7 @@ void Robo::init(){
 
 void Robo::HighKick(){
 	float sensorValue2 = roboAdc->readSensor(3);
-	if(sensorValue2>0.100){
+	if(sensorValue2>0.20){
 		high_kick->Set();
 		for(int i=0;i<0xeee2;i++);
 		high_kick->Reset();
@@ -61,7 +61,7 @@ void Robo::HighKick(){
 
 void Robo::ChuteBaixo(){
 	float sensorValue2 = roboAdc->readSensor(3);
-	if(sensorValue2>0.100){
+	if(sensorValue2>0.17){
 		chute_baixo->Set();
 		for(int i=0;i<0xeee2;i++);
 		chute_baixo->Reset();
