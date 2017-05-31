@@ -173,7 +173,7 @@ void Robo::interruptReceive(){
 		if(rxsize>32) rxsize=32;
 		uint8_t buffer[32];
 		_nrf24->RxData(buffer, rxsize);
-		usb_device_class_cdc_vcp.SendData((uint8_t*)buffer, rxsize);
+		//usb_device_class_cdc_vcp.SendData((uint8_t*)buffer, rxsize);
 		pb_istream_t istream=pb_istream_from_buffer(buffer, rxsize);
 		status=pb_decode(&istream, grSim_Robot_Command_fields, &robotcmd);
 		last_packet_ms = GetLocalTime();

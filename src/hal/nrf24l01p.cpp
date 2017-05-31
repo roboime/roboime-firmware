@@ -332,10 +332,10 @@ uint8_t NRF24L01P::TxPackage_ESB(uint8_t channel, uint64_t address, uint8_t no_a
 		write_register(REG_ADDR.TX_ADDR, REG.TX_ADDR.value, 5);
 	}
 
-//	if(REG.RX_ADDR_P0.RX_ADDR_P0!=address){
-//		REG.RX_ADDR_P0.RX_ADDR_P0=address;
-//		write_register(REG_ADDR.RX_ADDR_P0, REG.RX_ADDR_P0.value, 5);
-//	}
+	if(REG.RX_ADDR_P0.RX_ADDR_P0!=address){
+		REG.RX_ADDR_P0.RX_ADDR_P0=address;
+		write_register(REG_ADDR.RX_ADDR_P0, REG.RX_ADDR_P0.value, 5);
+	}
 // Erro quando transmite para outro robo
 
 	if(no_ack){
