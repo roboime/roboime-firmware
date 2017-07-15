@@ -8,10 +8,14 @@
 #include "Robo.h"
 #include "pins.h"
 
-#define sin_phi 0.8480
-#define cos_phi 0.52
-#define sin_theta 0.7313
-#define cos_theta -0.682
+#define sin_phi 0.5
+#define cos_phi 0.86603
+#define sin_theta 0.70711
+#define cos_theta 0.70711
+
+/*#define alfa 1
+#define Massa 3
+#define Raio 0.09*/
 
 Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, adc *sensorAdc, NRF24L01P *mynrf24, Switch *Switch, bool testmode):
 	_nrf24(mynrf24),
@@ -75,9 +79,31 @@ void Robo::control_pos(){
 }
 void Robo::control_speed(){
   vBat = 4.3*roboAdc->adc_getConversion();
+//testa e corrige eventual deslizamento
+  float M1;
+  float M2;
+  float v0= motors[0]->real_wheel_speed;
+  float v1= motors[1]->real_wheel_speed;
+  float v2= motors[2]->real_wheel_speed;
+  float v3= motors[3]->real_wheel_speed;
+
+  M1 = 0.2*(v0-v3)+0.24495*(v1-v2);
+  M2 = -0.24495*(v0-v3)+0.3*(v1-v2);
   if(vBat>6){
-    for(int i=0; i<4; i++){
-	  motors[i]->Control_Speed(speed[i]); //manda a velocidade speed[i] pro motor[i] na unidade m/s
+    if(M1<0.01 and M2<0.01){
+    	for(int i=0; i<4; i++){
+    		motors[i]->Control_Speed(speed[i]); //manda a velocidade speed[i] pro motor[i] na unidade m/s
+    	}
+    }
+    else {
+    	//nem o valor de alfa nem a massa interferem no espaço nulo.
+    	speed[0]=v0*0.8+0.2*v2+0.245*(v1-v3);
+    	speed[2]=v2*0.8+0.2*v0-0.245*(v1-v3);
+    	speed[3]=v3*0.7+0.245*(v2-v0)+0.3*v1;
+    	speed[1]=v1*0.7-0.245*(v2-v0)+0.3*v3;
+    	for(int i=0; i<4; i++){
+     		motors[i]->Control_Speed(speed[i]); //manda a velocidade speed[i] pro motor[i] na unidade m/s
+     	}
     }
   }
   else{//medida de proteção: se a bateria estiver fraca, o robô para
@@ -100,14 +126,11 @@ void Robo::get_wheel_speeds(float ptr[]){
 void Robo::set_speed(float v_r, float v_t, float w){
 	float R = 0.09; //Raio do robo = 9cm
 
-	speed[0] = -v_r*cos_phi + v_t*sin_phi + w*R;
+	speed[0] = v_r*cos_phi - v_t*sin_phi + w*R;
 	speed[2] = -v_r*cos_phi - v_t*sin_phi + w*R;
-	speed[3] = -v_r*cos_theta - v_t*sin_theta + w*R;
-	speed[1] = -v_r*cos_theta + v_t*sin_theta + w*R;
-/*		speed[0] = 0.176; //teste: para cada roda girar com período 1s
-		speed[2] = 0.176;
-		speed[3] = 0.176;
-		speed[1] = 0.176;*/
+	speed[3] = -v_r*cos_theta + v_t*sin_theta + w*R;
+	speed[1] = v_r*cos_theta + v_t*sin_theta + w*R;
+	//speed[] = 0.176; //teste: para cada roda girar com período 1s
 	//speed[] está em m/s. Cuidado para manter a mesma unidade qnd passar pros motores
 
 }
