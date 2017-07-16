@@ -87,9 +87,12 @@ IO_Pin_STM32 sw3(IO_Pin::IO_Pin_Mode_IN, GPIOE, GPIO_Pin_2, GPIO_PuPd_UP, GPIO_O
 
 adc sensorAdc;
 
+Pwm pwmDibre(GPIOB, GPIO_Pin_15, TIM12, GPIO_PinSource15, GPIO_AF_TIM12, 2, false);
+dibre drible(&pwmDibre);
+
 Switch Switch(sw1, sw2, sw3);
 
-Robo robo(&motor0, &motor1, &motor2, &motor3, &sensorAdc, &nrf24, &Switch , false);
+Robo robo(&motor0, &motor1, &motor2, &motor3, &drible, &sensorAdc, &nrf24, &Switch , false);
 
 INTERRUPT_STM32 timer_robot(TIM6_DAC_IRQn, 0x0C, 0x0C, ENABLE);
 CircularBuffer<uint8_t> _usbserialbuffer(0,2048);

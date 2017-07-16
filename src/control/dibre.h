@@ -10,8 +10,8 @@
 #define DIBRE_H_
 class dibre{
 public:
+	dibre(Pwm *pwm);
 	Pwm* Drible_Pwm;
-	dibre();
 	void Set_Vel(uint16_t value);
 };
 #endif /* DIBRE_H_ */

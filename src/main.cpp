@@ -80,7 +80,7 @@ pb_istream_t pb_istream_from_circularbuffer(CircularBuffer<uint8_t> *circularbuf
 }
 
 int main(void){
-		//LIS3DSH_CSN.Set();
+	//LIS3DSH_CSN.Set();
 
 	SysTick_Config(SystemCoreClock/1000);
 	usb.Init();
@@ -92,7 +92,6 @@ int main(void){
 	mina223.SelfTest();
 	mina220.ReadCurrent();
 	robo.motors[0]->mina22->ReadCurrent();
-
 	while(1){
 		robo._nrf24->InterruptCallback();
 		usb_device_class_cdc_vcp.GetData(_usbserialbuffer, 1024);
@@ -108,6 +107,11 @@ int main(void){
 			if(nrf24.RxSize()){
 				robo.interruptReceive();
 				robo.interruptAckPayload();
+				robo.last_packet_ms = GetLocalTime();
+				robo.controlbit = true;
+			}
+			if((GetLocalTime()-robo.last_packet_ms)>100){
+				robo.controlbit = false;
 			}
 		}
 	}

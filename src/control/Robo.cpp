@@ -13,9 +13,10 @@
 #define sin_theta 0.7313
 #define cos_theta -0.682
 
-Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, adc *sensorAdc, NRF24L01P *mynrf24, Switch *Switch, bool testmode):
+Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, dibre *drible, adc *sensorAdc, NRF24L01P *mynrf24, Switch *Switch, bool testmode):
 	_nrf24(mynrf24),
 	_testmode(testmode),
+	drible(drible),
 	printv(false)
 {
 	motors[0]=roboMotor0;
@@ -25,8 +26,6 @@ Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboM
 
 	roboAdc = sensorAdc;
 	roboAdc->ADC_Config();
-
-	drible = new dibre();
 
 	high_kick = new GPIO(GPIOD, GPIO_Pin_8);
 	chute_baixo = new GPIO(GPIOD, GPIO_Pin_10);
@@ -176,16 +175,11 @@ void Robo::interruptReceive(){
 		//usb_device_class_cdc_vcp.SendData((uint8_t*)buffer, rxsize);
 		pb_istream_t istream=pb_istream_from_buffer(buffer, rxsize);
 		status=pb_decode(&istream, grSim_Robot_Command_fields, &robotcmd);
-		last_packet_ms = GetLocalTime();
-		controlbit = true;
 	}
 	if(status){
 		if(robotcmd.id==GetId()){
 			processPacket();
 		}
-	}
-	if((GetLocalTime()-last_packet_ms)>100){
-		controlbit = false;
 	}
 }
 void Robo::interruptTestMode(){
@@ -200,13 +194,16 @@ void Robo::interruptTestMode(){
 	//robo.controlbit = true;
 }
 void Robo::processPacket(){
+	//robo.drible->Set_Vel(1000);
 	robo.set_speed(robotcmd.veltangent, robotcmd.velnormal, robotcmd.velangular);
 	if(robotcmd.kickspeedx!=0)
 	robo.ChuteBaixo();
 	if(robotcmd.kickspeedz!=0)
 	//robo.HighKick();
 	if(robotcmd.spinner)
-	robo.drible->Set_Vel(100);
+		robo.drible->Set_Vel(1000);
+	if(!(robotcmd.spinner))
+		robo.drible->Set_Vel(0);
 }
 
 //  5º dia: ainda estou na classe robo

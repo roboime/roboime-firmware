@@ -6,9 +6,9 @@
  */
 #include "Pwm.h"
 #include "dibre.h"
-dibre::dibre()
+dibre::dibre(Pwm *pwm):
+	Drible_Pwm(pwm)
 {
-	Drible_Pwm = new Pwm(GPIOB, GPIO_Pin_15, TIM12, GPIO_PinSource15, GPIO_AF_TIM12, 2, false);
 	//Pwm oi;
 	//Drible_Pwm = &oi;
 	//o new substitui os comandos acima e ainda torna variavel "global"
