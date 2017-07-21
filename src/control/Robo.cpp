@@ -209,6 +209,7 @@ void Robo::interruptReceive(){
 	if((GetLocalTime()-last_packet_ms)>100){
 		controlbit = false;
 	}
+	led_d.Off();
 }
 void Robo::interruptTestMode(){
 	cmdline.In(_usbserialbuffer);
@@ -234,7 +235,8 @@ void Robo::processPacket(){
 //  5º dia: ainda estou na classe robo
 
 void Robo::interruptTransmitter(){
-    bool status=0;
+    //led_b.On();// para testar transmissao e recepçao
+	bool status=0;
 	uint8_t buffer[32];
 	uint8_t size=_usbserialbuffer.Out(buffer, 32);//escreve em buffer o que recebeu
 	pb_istream_t istream = pb_istream_from_buffer(buffer,size);
@@ -245,7 +247,7 @@ void Robo::interruptTransmitter(){
 		pb_ostream_t ostream=pb_ostream_from_buffer(buffer, sizeof(buffer));
 		pb_encode(&ostream, grSim_Robot_Command_fields, &robotcmd);//escreve em ostream os dados de robotcmd
 		uint8_t size=ostream.bytes_written;
-		_nrf24->TxPackage_ESB(channel, address | robotid, 0, buffer, size);
+		_nrf24->TxPackage_ESB(channel, address | robotid, 1, buffer, size);
 		while(_nrf24->Busy()){
 			_nrf24->InterruptCallback();
 		}
@@ -253,6 +255,7 @@ void Robo::interruptTransmitter(){
 	else {
 		_usbserialbuffer.Clear();
 	}
+	//led_b.Off();
 }
 void Robo::interruptAckPayload(){
 	char ackBuffer[20];

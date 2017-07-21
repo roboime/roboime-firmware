@@ -187,6 +187,10 @@ void NRF24L01P::Init(){
 
 	write_register(REG_ADDR.DYNPD, REG.DYNPD.value);
 	write_register(REG_ADDR.FEATURE, REG.FEATURE.value);
+
+	REG.SETUP_RETR.ARC=0;
+	write_register(REG_ADDR.SETUP_RETR, REG.SETUP_RETR.value);
+
 	flush_rx();
 	flush_tx();
 }
