@@ -17,7 +17,7 @@
 #define Massa 3
 #define Raio 0.09*/
 
-Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, NRF24L01P *mynrf24, Switch *Switch, bool testmode):
+Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, NRF24L01P *mynrf24, Switch *Switch, adc *sensorAdc, bool testmode):
 	_nrf24(mynrf24),
 	_testmode(testmode),
 	printv(false)
@@ -27,8 +27,8 @@ Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboM
 	motors[2]=roboMotor2;
 	motors[3]=roboMotor3;
 
-	//roboAdc = sensorAdc;
-	//roboAdc->ADC_Config();
+	roboAdc = sensorAdc;
+	roboAdc->ADC_Config();
 
 	drible = new dibre();
 
@@ -76,7 +76,7 @@ void Robo::control_pos(){
 	}
 }
 void Robo::control_speed(){
-  //vBat = 4.3*roboAdc->adc_getConversion();
+  vBat = 4.3*roboAdc->adc_getConversion();
 //testa e corrige eventual deslizamento
   float v0= motors[0]->real_wheel_speed;
   float v1= motors[1]->real_wheel_speed;
@@ -85,7 +85,7 @@ void Robo::control_speed(){
 
   float M1 = 0.2*(v0-v3)+0.24495*(v1-v2);
   float M2 = -0.24495*(v0-v3)+0.3*(v1-v2);
-  vBat=7;
+  //vBat=7;
   if(vBat>6){
     if(M1<1 and M2<1){
     	for(int i=0; i<4; i++){

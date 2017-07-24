@@ -25,11 +25,6 @@ void adc::ADC_Config(){
   GPIO_Init(GPIOC, &GPIO_InitStructure);
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
   GPIO_Init(GPIOB, &GPIO_InitStructure);
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
-  GPIO_Init(GPIOC, &GPIO_InitStructure);
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
-  GPIO_Init(GPIOA, &GPIO_InitStructure);
 
   /* DMA2 Stream0 channel0 configuration **************************************/
   DMA_InitTypeDef DMA_InitStructure;
@@ -37,7 +32,7 @@ void adc::ADC_Config(){
   DMA_InitStructure.DMA_Memory0BaseAddr = (uint32_t)&ADCConvertedValue;
   DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&(ADC1->DR);
   DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralToMemory;
-  DMA_InitStructure.DMA_BufferSize = 4;
+  DMA_InitStructure.DMA_BufferSize = 2;
   DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
   DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
   DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
@@ -65,14 +60,12 @@ void adc::ADC_Config(){
   ADC_InitStructure.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_None;
   ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_T1_CC1;
   ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
-  ADC_InitStructure.ADC_NbrOfConversion = 4;
+  ADC_InitStructure.ADC_NbrOfConversion = 2;
   ADC_Init(ADC1, &ADC_InitStructure);
 
   /* ADC1 regular channels 10, 11 configuration */
   ADC_RegularChannelConfig(ADC1, ADC_Channel_10, 1, ADC_SampleTime_3Cycles);
-  ADC_RegularChannelConfig(ADC1, ADC_Channel_11, 2, ADC_SampleTime_3Cycles);
   ADC_RegularChannelConfig(ADC1, ADC_Channel_8, 3, ADC_SampleTime_3Cycles);
-  ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 4, ADC_SampleTime_3Cycles);
   /* Enable DMA request after last transfer (Single-ADC mode) */
   ADC_DMARequestAfterLastTransferCmd(ADC1, ENABLE);
   /* Enable ADC1 DMA */
