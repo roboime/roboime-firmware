@@ -40,7 +40,8 @@ public:
 	dibre *drible;
 	int pos[4];
 	float speed[4];
-	float real_wheel_speed[4];//armazenará as velocidades medidas (m/s) das RODAS
+	float speedr[4];
+	float real_wheel_speed[4];//armazenarï¿½ as velocidades medidas (m/s) das RODAS
     Motor *motors[4];
     adc *roboAdc;
     float vBat;

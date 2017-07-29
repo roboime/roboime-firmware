@@ -95,7 +95,7 @@ void Robo::control_speed(){
     	}
     }
     else {
-    	//nem o valor de alfa nem a massa interferem no espaço nulo.
+    	//nem o valor de alfa nem a massa interferem no espaï¿½o nulo.
     	speed[0]=v0*0.8+0.2*v2+0.245*(v1-v3);
     	speed[2]=v2*0.8+0.2*v0-0.245*(v1-v3);
     	speed[3]=v3*0.7+0.245*(v2-v0)+0.3*v1;
@@ -105,7 +105,7 @@ void Robo::control_speed(){
      	}
     }//*/
   }
-  else{//medida de proteção: se a bateria estiver fraca, o robô para
+  else{//medida de proteï¿½ï¿½o: se a bateria estiver fraca, o robï¿½ para
     for(int i=0; i<4; i++){
 	  motors[i]->SetDutyCycle(0);
     }
@@ -124,13 +124,16 @@ void Robo::get_wheel_speeds(float ptr[]){
 //grava em speed[] os valores em m/s da velocidade DAS RODAS
 void Robo::set_speed(float v_r, float v_t, float w){
 	float R = 0.09; //Raio do robo = 9cm
+	speedr[0]=v_r;
+	speedr[1]=v_t;
+	speedr[2]=w;
 
 	speed[0] = v_t*cos_phi - v_r*sin_phi + w*R;
 	speed[2] = -v_t*cos_phi - v_r*sin_phi + w*R;
 	speed[3] = -v_t*cos_theta + v_r*sin_theta + w*R;
 	speed[1] = v_t*cos_theta + v_r*sin_theta + w*R;
-	//speed[] = 0.176; //teste: para cada roda girar com período 1s
-	//speed[] está em m/s. Cuidado para manter a mesma unidade qnd passar pros motores
+	//speed[] = 0.176; //teste: para cada roda girar com perï¿½odo 1s
+	//speed[] estï¿½ em m/s. Cuidado para manter a mesma unidade qnd passar pros motores
 
 }
 
@@ -146,10 +149,19 @@ void Robo::set_motor_speed(uint8_t motnr, float vel) {
 		speed[motnr]=vel;
 	}
 }
+#include <compensa.h>
 
 void Robo::interrupt_control(){
 	get_wheel_speeds(robo.real_wheel_speed);//update real_wheel_speed com as velocidades medidas
 	if(controlbit&&(!stepbit)){
+		float speed_temp[4];
+		uint8_t correct[4];
+		compensa(robo.real_wheel_speed, robo.speedr, speed_temp, correct);
+		for(int i=0;i<4;i++){
+			if(correct[i]){
+				robo.speed[i]=speed_temp[i];
+			}
+		}
 		control_speed();
 	}
 	if(!controlbit){
@@ -232,16 +244,16 @@ void Robo::processPacket(){
 	robo.drible->Set_Vel(100);
 }
 
-//  5º dia: ainda estou na classe robo
+//  5ï¿½ dia: ainda estou na classe robo
 
 void Robo::interruptTransmitter(){
-    //led_b.On();// para testar transmissao e recepçao
+    //led_b.On();// para testar transmissao e recepï¿½ao
 	bool status=0;
 	uint8_t buffer[32];
 	uint8_t size=_usbserialbuffer.Out(buffer, 32);//escreve em buffer o que recebeu
 	pb_istream_t istream = pb_istream_from_buffer(buffer,size);
 	status=pb_decode(&istream, grSim_Robot_Command_fields, &robotcmd);//preenche robotcmd
-	if(status){//caso haja sucesso na decodificação
+	if(status){//caso haja sucesso na decodificaï¿½ï¿½o
 		uint8_t robotid=robotcmd.id;//extrai o  id do pacote
 		uint8_t buffer[32];
 		pb_ostream_t ostream=pb_ostream_from_buffer(buffer, sizeof(buffer));
