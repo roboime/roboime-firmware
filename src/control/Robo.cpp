@@ -154,10 +154,12 @@ void Robo::interrupt_control(){
 	if(controlbit&&(!stepbit)){
 		float speed_temp[4];
 		uint8_t correct[4];
-		compensa(robo.real_wheel_speed, robo.speedr, speed_temp, correct);
-		for(int i=0;i<4;i++){
-			if(correct[i]){
-				robo.speed[i]=speed_temp[i];
+		if(robo.real_wheel_speed[0]!=0.0 && robo.real_wheel_speed[0]!=0.0 && robo.real_wheel_speed[0]!=0.0 && robo.real_wheel_speed[0]!=0.0 ){
+			compensa(robo.real_wheel_speed, robo.speedr, speed_temp, correct);
+			for(int i=0;i<4;i++){
+				if(correct[i]){
+					robo.speed[i]=speed_temp[i];
+				}
 			}
 		}
 		control_speed();
