@@ -17,7 +17,7 @@
 #define Massa 3
 #define Raio 0.09*/
 
-Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, adc *sensorAdc, NRF24L01P *mynrf24, Switch *Switch, bool testmode):
+Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, NRF24L01P *mynrf24, Switch *Switch, adc *sensorAdc, bool testmode):
 	_nrf24(mynrf24),
 	_testmode(testmode),
 	printv(false)
@@ -37,7 +37,7 @@ Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboM
 
 	_id = Switch->id;
 
-	channel=100;
+	channel=92;
 	address=0xE7E7E7E700;
 	last_packet_ms = 0;
 }
@@ -55,8 +55,7 @@ void Robo::init(){
 }
 
 void Robo::HighKick(){
-	float sensorValue2 = roboAdc->readSensor(3);
-	if(sensorValue2>0.20){
+	if(GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_2)){
 		high_kick->Set();
 		for(int i=0;i<0xeee2;i++);
 		high_kick->Reset();
@@ -64,8 +63,7 @@ void Robo::HighKick(){
 }
 
 void Robo::ChuteBaixo(){
-	float sensorValue2 = roboAdc->readSensor(3);
-	if(sensorValue2>0.17){
+	if(GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_2)){
 		chute_baixo->Set();
 		for(int i=0;i<0xeee2;i++);
 		chute_baixo->Reset();
@@ -79,22 +77,22 @@ void Robo::control_pos(){
 }
 void Robo::control_speed(){
   vBat = 4.3*roboAdc->adc_getConversion();
-//testa e corrige eventual deslizamento
+/*//testa e corrige eventual deslizamento
   float v0= motors[0]->real_wheel_speed;
   float v1= motors[1]->real_wheel_speed;
   float v2= motors[2]->real_wheel_speed;
   float v3= motors[3]->real_wheel_speed;
 
   float M1 = 0.2*(v0-v3)+0.24495*(v1-v2);
-  float M2 = -0.24495*(v0-v3)+0.3*(v1-v2);
-
+  float M2 = -0.24495*(v0-v3)+0.3*(v1-v2);*/
+  //vBat=7;
   if(vBat>6){
-    if(M1<1 and M2<1){
+    //if(M1<1 and M2<1){
     	for(int i=0; i<4; i++){
     		motors[i]->Control_Speed(speed[i]); //manda a velocidade speed[i] pro motor[i] na unidade m/s
     	}
     }
-    else {
+  /*  else {
     	//nem o valor de alfa nem a massa interferem no espa�o nulo.
     	speed[0]=v0*0.8+0.2*v2+0.245*(v1-v3);
     	speed[2]=v2*0.8+0.2*v0-0.245*(v1-v3);
@@ -103,8 +101,8 @@ void Robo::control_speed(){
     	for(int i=0; i<4; i++){
      		motors[i]->Control_Speed(speed[i]); //manda a velocidade speed[i] pro motor[i] na unidade m/s
      	}
-    }//*/
-  }
+    }*/
+
   else{//medida de prote��o: se a bateria estiver fraca, o rob� para
     for(int i=0; i<4; i++){
 	  motors[i]->SetDutyCycle(0);
@@ -237,9 +235,9 @@ void Robo::interruptTestMode(){
 void Robo::processPacket(){
 	robo.set_speed(robotcmd.veltangent, robotcmd.velnormal, robotcmd.velangular);
 	if(robotcmd.kickspeedx!=0)
-	robo.ChuteBaixo();
+		robo.ChuteBaixo();
 	if(robotcmd.kickspeedz!=0)
-	//robo.HighKick();
+		robo.HighKick();
 	if(robotcmd.spinner)
 	robo.drible->Set_Vel(100);
 }
@@ -247,8 +245,7 @@ void Robo::processPacket(){
 //  5� dia: ainda estou na classe robo
 
 void Robo::interruptTransmitter(){
-    //led_b.On();// para testar transmissao e recep�ao
-	bool status=0;
+    bool status=0;
 	uint8_t buffer[32];
 	uint8_t size=_usbserialbuffer.Out(buffer, 32);//escreve em buffer o que recebeu
 	pb_istream_t istream = pb_istream_from_buffer(buffer,size);
@@ -259,7 +256,7 @@ void Robo::interruptTransmitter(){
 		pb_ostream_t ostream=pb_ostream_from_buffer(buffer, sizeof(buffer));
 		pb_encode(&ostream, grSim_Robot_Command_fields, &robotcmd);//escreve em ostream os dados de robotcmd
 		uint8_t size=ostream.bytes_written;
-		_nrf24->TxPackage_ESB(channel, address | robotid, 1, buffer, size);
+		_nrf24->TxPackage_ESB(channel, address | robotid, 0, buffer, size);
 		while(_nrf24->Busy()){
 			_nrf24->InterruptCallback();
 		}
@@ -267,7 +264,6 @@ void Robo::interruptTransmitter(){
 	else {
 		_usbserialbuffer.Clear();
 	}
-	//led_b.Off();
 }
 void Robo::interruptAckPayload(){
 	char ackBuffer[20];

@@ -30,7 +30,7 @@
 
 class Robo {
 public:
-	Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, adc *sensorAdc, NRF24L01P *mynrf24, Switch *Switch, bool testmode=1);
+	Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, NRF24L01P *mynrf24, Switch *Switch, adc *sensorAdc, bool testmode=1);
 	GPIO *high_kick;
 	GPIO *chute_baixo;
 	void HighKick();

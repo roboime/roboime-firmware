@@ -89,7 +89,7 @@ adc sensorAdc;
 
 Switch Switch(sw1, sw2, sw3);
 
-Robo robo(&motor0, &motor1, &motor2, &motor3, &sensorAdc, &nrf24, &Switch , false);
+Robo robo(&motor0, &motor1, &motor2, &motor3, &nrf24, &Switch, &sensorAdc, false);
 
 INTERRUPT_STM32 timer_robot(TIM6_DAC_IRQn, 0x0C, 0x0C, ENABLE);
 CircularBuffer<uint8_t> _usbserialbuffer(0,2048);
