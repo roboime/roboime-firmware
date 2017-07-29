@@ -93,12 +93,12 @@ int main(void){
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
 	GPIO_Init(GPIOA ,&GPIO_InitStructure);
 
-	mina220.SelfTest();
+	/*mina220.SelfTest();
 	mina22d.SelfTest();
 	mina221.SelfTest();
 	mina223.SelfTest();
 	mina220.ReadCurrent();
-	robo.motors[0]->mina22->ReadCurrent();
+	robo.motors[0]->mina22->ReadCurrent();*/
 
 	while(1){
 		if(GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_2))
@@ -113,6 +113,11 @@ int main(void){
 			delay_ms(2);
 		}
 		else {
+			//robo.set_speed(0,0,0);
+			//robo.motors[0]->Control_Pos(0);
+			//robo.motors[1]->Control_Pos(0);
+			//robo.motors[2]->Control_Pos(0);
+			//robo.motors[3]->Control_Pos(0);
 			if(_usbserialbuffer.Ocupied()){
 				robo.interruptTransmitter();
 			}
