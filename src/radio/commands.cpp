@@ -243,10 +243,10 @@ uint16_t cmd_chute(uint16_t argc, uint8_t *argv8[]){
 		size+=sprintf(buffer+size, "OK!\r\n");
 		switch(pot){
 		case 1:
-			robo.ChuteBaixo();
+			robo.ChuteBaixo((float) 100);
 			break;
 		case 2:
-			robo.HighKick();
+			robo.HighKick((float) 100);
 			break;
 		default:
 			break;

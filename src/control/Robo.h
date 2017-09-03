@@ -33,8 +33,8 @@ public:
 	Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, NRF24L01P *mynrf24, Switch *Switch, adc *sensorAdc, bool testmode=1);
 	GPIO *high_kick;
 	GPIO *chute_baixo;
-	void HighKick();
-	void ChuteBaixo();
+	void HighKick(float power);
+	void ChuteBaixo(float power);
 	void control_speed();
 	void control_pos();
 	dibre *drible;

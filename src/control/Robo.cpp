@@ -54,7 +54,7 @@ void Robo::init(){
 	_nrf24->StartRX_ESB(channel, address + GetId(), 32, 1);
 }
 
-void Robo::HighKick(){
+void Robo::HighKick(float power){
 	if(GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_2)){
 		high_kick->Set();
 		for(int i=0;i<0xeee2;i++);
@@ -62,10 +62,10 @@ void Robo::HighKick(){
 	}
 }
 
-void Robo::ChuteBaixo(){
+void Robo::ChuteBaixo(float power){
 	if(GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_2)){
 		chute_baixo->Set();
-		for(int i=0;i<0xeee2;i++);
+		delay_ticks((uint32_t) (power*611));
 		chute_baixo->Reset();
 	}
 }
@@ -222,9 +222,9 @@ void Robo::interruptTestMode(){
 void Robo::processPacket(){
 	robo.set_speed(robotcmd.veltangent, robotcmd.velnormal, robotcmd.velangular);
 	if(robotcmd.kickspeedx!=0)
-		robo.ChuteBaixo();
+		robo.ChuteBaixo(robotcmd.kickspeedx);
 	if(robotcmd.kickspeedz!=0)
-		robo.HighKick();
+		robo.HighKick(robotcmd.kickspeedz);
 	if(robotcmd.spinner)
 	robo.drible->Set_Vel(100);
 }
