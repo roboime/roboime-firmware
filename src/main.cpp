@@ -113,7 +113,7 @@ int main(void){
 			delay_ms(2);
 		}
 		else {
-			if(_usbserialbuffer.Ocupied()){
+			/*if(_usbserialbuffer.Ocupied()){
 				robo.interruptTransmitter();
 			}
 			if(nrf24.RxSize()){
@@ -124,7 +124,11 @@ int main(void){
 			}
 			if((GetLocalTime()-robo.last_packet_ms)>100){
 				robo.controlbit = false;
-			}
+			}*/
+			robo.set_speed(4, 0, 0);
+			delay_ms(4000);
+			robo.set_speed(-4, 0, 0);
+			delay_ms(4000);
 		}
 	}
 }
