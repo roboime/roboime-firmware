@@ -63,10 +63,13 @@ void Robo::HighKick(float power){
 }
 
 void Robo::ChuteBaixo(float power){
-	if(GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_2)){
-		chute_baixo->Set();
-		delay_ticks((uint32_t) (power*611));
-		chute_baixo->Reset();
+	if((GetLocalTime()-last_kick_time)>700){
+		if(GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_2)){
+			chute_baixo->Set();
+			delay_ticks((uint32_t) (power*611)); //611 = Gustavo's magic number
+			chute_baixo->Reset();
+			last_kick_time = GetLocalTime();
+		}
 	}
 }
 

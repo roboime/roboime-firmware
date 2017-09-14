@@ -71,6 +71,8 @@ public:
    	uint64_t address;
    	int16_t dutycycles[4];
 
+   	uint32_t last_kick_time=0;
+
     uint32_t last_packet_ms = 0;
     grSim_Robot_Command robotcmd;
     grSim_Robot_Command robotcmd_test;
