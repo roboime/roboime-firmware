@@ -79,12 +79,14 @@ pb_istream_t pb_istream_from_circularbuffer(CircularBuffer<uint8_t> *circularbuf
 	return stream;
 }
 
+uint32_t time;
+
 int main(void){
 	LIS3DSH_CSN.Set();
 
 	SysTick_Config(SystemCoreClock/1000);
-	usb.Init();
-	robo.init();
+	//usb.Init();
+	//robo.init();
 	GPIO_InitTypeDef GPIO_InitStructure;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
@@ -125,10 +127,18 @@ int main(void){
 			if((GetLocalTime()-robo.last_packet_ms)>100){
 				robo.controlbit = false;
 			}*/
-			robo.set_speed(4, 0, 0);
-			delay_ms(4000);
-			robo.set_speed(-4, 0, 0);
-			delay_ms(4000);
+			time = GetLocalTime();
+			robo.controlbit = true;
+			for(;;){
+				robo.set_speed(4, 0 ,0);
+				robo.interrupt_control();
+				if(GetLocalTime()-time>4000) break;
+			}
+			for(;;){
+				robo.set_speed(-4, 0 ,0);
+				robo.interrupt_control();
+				if(GetLocalTime()-time>4000) break;
+			}
 		}
 	}
 }
