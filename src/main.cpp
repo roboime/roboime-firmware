@@ -29,8 +29,15 @@
 #include "proto/pb_decode.h"
 #include "proto/pb_encode.h"
 #include "radio/commands.h"
-
 #include "Robo.h"
+
+extern "C"{
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+#include "timers.h"
+#include "semphr.h"
+}
 
 static __IO uint32_t TimingDelay;
 
@@ -80,7 +87,7 @@ pb_istream_t pb_istream_from_circularbuffer(CircularBuffer<uint8_t> *circularbuf
 }
 
 int main(void){
-	LIS3DSH_CSN.Set();
+	/*LIS3DSH_CSN.Set();
 
 	SysTick_Config(SystemCoreClock/1000);
 	usb.Init();
@@ -126,15 +133,15 @@ int main(void){
 				robo.controlbit = false;
 			}
 		}
-	}
+	}*/
 }
 
 extern uint32_t LocalTime;
-
+/*
 extern "C" void SysTick_Handler(void){
 	//	TimingDelay_Decrement();
 	LocalTime++;
-}
+}*/
 
 //void TimingDelay_Decrement(void){
 //	if(TimingDelay != 0x00){

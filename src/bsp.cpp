@@ -14,7 +14,7 @@ extern "C"{
 	#include "usb_dcd_int.h"
 	#include "usb_hcd_int.h"
 }
-
+/*
 LED led_a(new IO_Pin_STM32 (IO_Pin::IO_Pin_Mode_OUT, GPIOD, GPIO_Pin_12));
 LED led_b(new IO_Pin_STM32 (IO_Pin::IO_Pin_Mode_OUT, GPIOD, GPIO_Pin_13));
 LED led_c(new IO_Pin_STM32 (IO_Pin::IO_Pin_Mode_OUT, GPIOD, GPIO_Pin_14));
@@ -229,7 +229,7 @@ extern "C" void OTG_HS_WKUP_IRQHandler(void){
 }
 
 */
-
+/*
 INTERRUPT_STM32 usb_otg_fs_interrupt(OTG_FS_IRQn, 0x0D, 0x0D, ENABLE);
 
 extern USB_OTG_CORE_HANDLE USB_OTG_dev;
@@ -245,3 +245,4 @@ extern "C" void OTG_FS_WKUP_IRQHandler(void){
 	}
 	EXTI_ClearITPendingBit(EXTI_Line18);
 }
+*/
