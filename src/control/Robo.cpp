@@ -86,21 +86,26 @@ void Robo::control_speed(){
   float v2= motors[2]->real_wheel_speed;
   float v3= motors[3]->real_wheel_speed;
 
-  float M1 = 0.2*(v0-v3)+0.24495*(v1-v2);
-  float M2 = -0.24495*(v0-v3)+0.3*(v1-v2);
+  //float M1 = 0.2*(v0-v3)+0.24495*(v1-v2);
+  //float M2 = -0.24495*(v0-v3)+0.3*(v1-v2);
+  float proj=-0.5477*v0+0.4472*v1+0.5477*v2-0.4472*v3;
   //vBat=7;
-  if(vBat>6){
-    if(M1<1 and M2<1){
+  if(vBat>6.2){
+    if(proj<1 && proj>-1){
     	for(int i=0; i<4; i++){
     		motors[i]->Control_Speed(speed[i]); //manda a velocidade speed[i] pro motor[i] na unidade m/s
     	}
     }
     else {
     	//nem o valor de alfa nem a massa interferem no espaço nulo.
-    	speed[0]=v0*0.8+0.2*v2+0.245*(v1-v3);
+    	/*speed[0]=v0*0.8+0.2*v2+0.245*(v1-v3);
     	speed[2]=v2*0.8+0.2*v0-0.245*(v1-v3);
     	speed[3]=v3*0.7+0.245*(v2-v0)+0.3*v1;
-    	speed[1]=v1*0.7-0.245*(v2-v0)+0.3*v3;
+    	speed[1]=v1*0.7-0.245*(v2-v0)+0.3*v3;*/
+    	speed[0]=v0-(-0.5477*v0+0.4472*v1+0.5477*v2-0.4472*v3)*(-0.5477);
+    	speed[1]=v1-(-0.5477*v0+0.4472*v1+0.5477*v2-0.4472*v3)*(0.4472);
+    	speed[2]=v2-(-0.5477*v0+0.4472*v1+0.5477*v2-0.4472*v3)*(0.5477);
+    	speed[3]=v3-(-0.5477*v0+0.4472*v1+0.5477*v2-0.4472*v3)*(-0.4472);
     	for(int i=0; i<4; i++){
      		motors[i]->Control_Speed(speed[i]); //manda a velocidade speed[i] pro motor[i] na unidade m/s
      	}
@@ -124,7 +129,7 @@ void Robo::get_wheel_speeds(float ptr[]){
 //recebe as velocidades radial, tangente em m/s e w em rad/s
 //grava em speed[] os valores em m/s da velocidade DAS RODAS
 void Robo::set_speed(float v_r, float v_t, float w){
-	float R = 0.09; //Raio do robo = 9cm
+	float R = 0.075; //Raio do robo = 9cm
 
 	speed[0] = v_t*cos_phi - v_r*sin_phi + w*R;
 	speed[2] = -v_t*cos_phi - v_r*sin_phi + w*R;
