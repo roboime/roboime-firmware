@@ -87,7 +87,7 @@ pb_istream_t pb_istream_from_circularbuffer(CircularBuffer<uint8_t> *circularbuf
 }
 
 int main(void){
-	/*LIS3DSH_CSN.Set();
+	LIS3DSH_CSN.Set();
 
 	SysTick_Config(SystemCoreClock/1000);
 	usb.Init();
@@ -133,7 +133,7 @@ int main(void){
 				robo.controlbit = false;
 			}
 		}
-	}*/
+	}
 }
 
 extern uint32_t LocalTime;
@@ -170,4 +170,13 @@ extern "C" void EVAL_AUDIO_TransferComplete_CallBack(uint32_t pBuffer, uint32_t 
 extern "C" uint16_t EVAL_AUDIO_GetSampleCallBack(void){
 	/* TODO, implement your code here */
 	return -1;
+}
+
+extern "C" void vApplicationStackOverflowHook( TaskHandle_t xTask, char *pcTaskName ){
+
+	while(1);
+}
+extern "C" void vApplicationTickHook( void ){
+	//Aqui vai o código que iria no SysTickHandler
+
 }
