@@ -48,6 +48,8 @@ extern "C"{
 #include "proto/pb_decode.h"
 #include "proto/pb_encode.h"
 
+Robo robo(&motor0, &motor1, &motor2, &motor3);
+
 void vTaskLed1( void *pvParameters){
 	//const char *pcTaskName = "Task 1 is running \r\n";
 	//volatile uint32_t ul;

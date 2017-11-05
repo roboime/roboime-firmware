@@ -9,16 +9,16 @@ commandline.h:66:7:void CommandLine::In(CircularBuffer<unsigned char>&)	24	stati
 commandline.h:92:7:void CommandLine::Out(CircularBuffer<unsigned char>&)	24	static
 commandline.h:99:7:void CommandLine::Process()	64	static
 interrupt_stm32.h:7:2:INTERRUPT_STM32::INTERRUPT_STM32(uint8_t, uint8_t, uint8_t, uint8_t)	24	static
-main.cpp:51:6:void vTaskLed1(void*)	24	static
-main.cpp:66:6:void vTaskNRF24TX(void*)	96	static
-main.cpp:90:6:void vTaskNRF24RX(void*)	120	static
-main.cpp:124:6:void vTaskRobo(void*)	56	static
-main.cpp:145:6:void vTaskCmdLine(void*)	24	static
-main.cpp:159:5:int main()	16	static
-main.cpp:206:17:void vApplicationStackOverflowHook(TaskHandle_t, signed char*)	16	static
-main.cpp:212:17:void vApplicationIdleHook()	16	static
-main.cpp:217:17:void vApplicationTickHook()	4	static
-main.cpp:220:17:void vApplicationMallocFailedHook()	4	static
+main.cpp:53:6:void vTaskLed1(void*)	24	static
+main.cpp:68:6:void vTaskNRF24TX(void*)	96	static
+main.cpp:92:6:void vTaskNRF24RX(void*)	120	static
+main.cpp:126:6:void vTaskRobo(void*)	56	static
+main.cpp:147:6:void vTaskCmdLine(void*)	24	static
+main.cpp:161:5:int main()	16	static
+main.cpp:208:17:void vApplicationStackOverflowHook(TaskHandle_t, signed char*)	16	static
+main.cpp:214:17:void vApplicationIdleHook()	16	static
+main.cpp:219:17:void vApplicationTickHook()	4	static
+main.cpp:222:17:void vApplicationMallocFailedHook()	4	static
 circularbuffer.h:32:11:uint16_t CircularBuffer<T, accept_data_when_full>::In(const T*, uint16_t) [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	32	static
 circularbuffer.h:175:7:void CircularBuffer<T, accept_data_when_full>::Clear() [with T = unsigned char; unsigned char accept_data_when_full = 1u]	16	static
 circularbuffer.h:172:11:uint16_t CircularBuffer<T, accept_data_when_full>::Ocupied() [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	16	static
@@ -54,3 +54,5 @@ stl_algobase.h:389:5:_OI std::__copy_move_a(_II, _II, _OI) [with bool _IsMove = 
 stl_iterator_base_types.h:215:28:static std::_Iter_base<_Iterator, _HasBase>::iterator_type std::_Iter_base<_Iterator, _HasBase>::_S_base(_Iterator) [with _Iterator = unsigned char*; bool _HasBase = false; std::_Iter_base<_Iterator, _HasBase>::iterator_type = unsigned char*]	16	static
 stl_algobase.h:389:5:_OI std::__copy_move_a(_II, _II, _OI) [with bool _IsMove = false; _II = unsigned char*; _OI = unsigned char*]	32	static
 stl_algobase.h:373:9:static _Tp* std::__copy_move<_IsMove, true, std::random_access_iterator_tag>::__copy_m(const _Tp*, const _Tp*, _Tp*) [with _Tp = unsigned char; bool _IsMove = false]	32	static
+main.cpp:224:1:void __static_initialization_and_destruction_0(int, int)	24	static
+main.cpp:224:1:cpp)	8	static

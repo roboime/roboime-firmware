@@ -34,7 +34,12 @@ extern SPI_STM32 spi;
 extern USB_STM32 usb;
 extern USB_DEVICE_CLASS_CDC_VCP usb_device_class_cdc_vcp;
 
-extern Robo robo;
+//extern Robo robo;
+extern Motor motor0;
+extern Motor motor1;
+extern Motor motor2;
+extern Motor motor3;
+
 extern NRF24L01P nrf24;
 extern IO_Pin_STM32 LIS3DSH_CSN;
 extern CircularBuffer<uint8_t> _usbserialbuffer;
