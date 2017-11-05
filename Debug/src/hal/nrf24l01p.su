@@ -1,0 +1,60 @@
+gthr-default.h:229:1:int __gthread_key_delete(__gthread_key_t)	16	static
+nrf24l01p.h:21:7:virtual void NRF24L01P::ContinueRX(uint16_t)	16	static
+nrf24l01p.h:22:7:virtual void NRF24L01P::GeneratePoll()	16	static
+nrf24l01p.h:24:10:virtual uint8_t NRF24L01P::Busy()	16	static
+nrf24l01p.h:27:7:virtual void NRF24L01P::Calibrate(uint32_t)	16	static
+nrf24l01p.h:28:7:virtual void NRF24L01P::Recovery()	16	static
+modem.h:17:7:constexpr MODEM::MODEM()	16	static
+nrf24l01p.cpp:11:1:NRF24L01P::NRF24L01P(SPI&, IO_Pin&, IO_Pin&, IO_Pin&)	32	static
+nrf24l01p.cpp:29:9:uint8_t NRF24L01P::SelfTest()	16	static
+nrf24l01p.cpp:34:9:virtual uint8_t NRF24L01P::TxReady()	16	static
+nrf24l01p.cpp:39:6:virtual void NRF24L01P::TxPackage(uint8_t*, uint16_t, uint32_t, MODEM_POWER)	24	static
+nrf24l01p.cpp:54:10:virtual uint16_t NRF24L01P::RxSize()	16	static
+nrf24l01p.cpp:58:10:virtual uint16_t NRF24L01P::RxData(uint8_t*, uint16_t)	24	static
+nrf24l01p.cpp:62:6:virtual void NRF24L01P::SetRXFrequency(uint32_t)	16	static
+nrf24l01p.cpp:67:9:virtual uint8_t NRF24L01P::GetRSSI()	16	static
+nrf24l01p.cpp:71:9:uint8_t NRF24L01P::read(uint8_t, uint8_t*, uint8_t)	40	static
+nrf24l01p.cpp:83:9:uint8_t NRF24L01P::write(uint8_t, uint8_t*, uint8_t)	32	static
+nrf24l01p.cpp:94:9:uint8_t NRF24L01P::write(uint8_t)	16	static
+nrf24l01p.cpp:98:9:uint8_t NRF24L01P::write_register(uint8_t, uint8_t*, uint8_t)	24	static
+nrf24l01p.cpp:102:9:uint8_t NRF24L01P::write_register(uint8_t, uint8_t)	16	static
+nrf24l01p.cpp:106:9:uint8_t NRF24L01P::read_register(uint8_t, uint8_t*, uint8_t)	24	static
+nrf24l01p.cpp:110:9:uint8_t NRF24L01P::read_register(uint8_t)	24	static
+nrf24l01p.cpp:116:9:uint8_t NRF24L01P::read_register(uint8_t, uint8_t*)	24	static
+nrf24l01p.cpp:120:9:uint8_t NRF24L01P::read_rx_payload(uint8_t*, uint8_t)	24	static
+nrf24l01p.cpp:124:9:uint8_t NRF24L01P::write_tx_payload(uint8_t*, uint8_t)	24	static
+nrf24l01p.cpp:128:9:uint8_t NRF24L01P::write_tx_payload_no_ack(uint8_t*, uint8_t)	24	static
+nrf24l01p.cpp:132:9:uint8_t NRF24L01P::write_ack_payload(uint8_t*, uint8_t)	24	static
+nrf24l01p.cpp:136:9:uint8_t NRF24L01P::flush_tx()	16	static
+nrf24l01p.cpp:140:9:uint8_t NRF24L01P::flush_rx()	16	static
+nrf24l01p.cpp:144:9:uint8_t NRF24L01P::reuse_tx_pl()	16	static
+nrf24l01p.cpp:148:9:uint8_t NRF24L01P::read_rx_payload_width()	24	static
+nrf24l01p.cpp:154:9:uint8_t NRF24L01P::nop()	16	static
+nrf24l01p.cpp:158:6:void NRF24L01P::Init()	32	static
+nrf24l01p.cpp:206:6:void NRF24L01P::Config()	16	static
+nrf24l01p.cpp:221:9:uint8_t NRF24L01P::Scan(uint8_t*)	24	static
+nrf24l01p.cpp:244:6:virtual void NRF24L01P::CW(uint8_t)	16	static
+nrf24l01p.cpp:268:6:virtual void NRF24L01P::StartRX(uint16_t, uint32_t)	24	static
+nrf24l01p.cpp:275:9:uint8_t NRF24L01P::StartRX_ESB(uint8_t, uint64_t, uint16_t, uint8_t)	40	static
+nrf24l01p.cpp:320:9:uint8_t NRF24L01P::TxPackage_ESB(uint8_t, uint8_t*, uint16_t)	48	static
+nrf24l01p.cpp:324:9:uint8_t NRF24L01P::TxPackage_ESB(uint8_t, uint64_t, uint8_t, uint8_t*, uint16_t)	40	static
+nrf24l01p.cpp:364:6:void NRF24L01P::InterruptCallback()	56	static
+circularbuffer.h:7:2:CircularBuffer<T, accept_data_when_full>::CircularBuffer(T*, uint16_t, uint16_t) [with T = unsigned char; unsigned char accept_data_when_full = 0u; uint16_t = short unsigned int]	24	static
+circularbuffer.h:172:11:uint16_t CircularBuffer<T, accept_data_when_full>::Ocupied() [with T = unsigned char; unsigned char accept_data_when_full = 0u; uint16_t = short unsigned int]	16	static
+circularbuffer.h:107:11:uint16_t CircularBuffer<T, accept_data_when_full>::Out(T*, uint16_t) [with T = unsigned char; unsigned char accept_data_when_full = 0u; uint16_t = short unsigned int]	32	static
+circularbuffer.h:32:11:uint16_t CircularBuffer<T, accept_data_when_full>::In(const T*, uint16_t) [with T = unsigned char; unsigned char accept_data_when_full = 0u; uint16_t = short unsigned int]	32	static
+stl_algobase.h:460:5:_OI std::copy(_II, _II, _OI) [with _II = unsigned char*; _OI = unsigned char*]	32	static
+circularbuffer.h:175:7:void CircularBuffer<T, accept_data_when_full>::Clear() [with T = unsigned char; unsigned char accept_data_when_full = 0u]	16	static
+circularbuffer.h:169:11:uint16_t CircularBuffer<T, accept_data_when_full>::Free() [with T = unsigned char; unsigned char accept_data_when_full = 0u; uint16_t = short unsigned int]	16	static
+stl_algobase.h:460:5:_OI std::copy(_II, _II, _OI) [with _II = const unsigned char*; _OI = unsigned char*]	32	static
+stl_algobase.h:293:5:typename std::_Miter_base<_Iterator>::iterator_type std::__miter_base(_Iterator) [with _Iterator = unsigned char*; typename std::_Miter_base<_Iterator>::iterator_type = unsigned char*]	16	static
+stl_algobase.h:434:5:_OI std::__copy_move_a2(_II, _II, _OI) [with bool _IsMove = false; _II = unsigned char*; _OI = unsigned char*]	32	static
+stl_algobase.h:293:5:typename std::_Miter_base<_Iterator>::iterator_type std::__miter_base(_Iterator) [with _Iterator = const unsigned char*; typename std::_Miter_base<_Iterator>::iterator_type = const unsigned char*]	16	static
+stl_algobase.h:434:5:_OI std::__copy_move_a2(_II, _II, _OI) [with bool _IsMove = false; _II = const unsigned char*; _OI = unsigned char*]	32	static
+stl_iterator_base_types.h:215:28:static std::_Iter_base<_Iterator, _HasBase>::iterator_type std::_Iter_base<_Iterator, _HasBase>::_S_base(_Iterator) [with _Iterator = unsigned char*; bool _HasBase = false; std::_Iter_base<_Iterator, _HasBase>::iterator_type = unsigned char*]	16	static
+stl_algobase.h:282:5:typename std::_Niter_base<_Iterator>::iterator_type std::__niter_base(_Iterator) [with _Iterator = unsigned char*; typename std::_Niter_base<_Iterator>::iterator_type = unsigned char*]	16	static
+stl_algobase.h:389:5:_OI std::__copy_move_a(_II, _II, _OI) [with bool _IsMove = false; _II = unsigned char*; _OI = unsigned char*]	32	static
+stl_iterator_base_types.h:215:28:static std::_Iter_base<_Iterator, _HasBase>::iterator_type std::_Iter_base<_Iterator, _HasBase>::_S_base(_Iterator) [with _Iterator = const unsigned char*; bool _HasBase = false; std::_Iter_base<_Iterator, _HasBase>::iterator_type = const unsigned char*]	16	static
+stl_algobase.h:282:5:typename std::_Niter_base<_Iterator>::iterator_type std::__niter_base(_Iterator) [with _Iterator = const unsigned char*; typename std::_Niter_base<_Iterator>::iterator_type = const unsigned char*]	16	static
+stl_algobase.h:389:5:_OI std::__copy_move_a(_II, _II, _OI) [with bool _IsMove = false; _II = const unsigned char*; _OI = unsigned char*]	32	static
+stl_algobase.h:373:9:static _Tp* std::__copy_move<_IsMove, true, std::random_access_iterator_tag>::__copy_m(const _Tp*, const _Tp*, _Tp*) [with _Tp = unsigned char; bool _IsMove = false]	32	static

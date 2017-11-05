@@ -1,0 +1,69 @@
+gthr-default.h:229:1:int __gthread_key_delete(__gthread_key_t)	16	static
+usb_device_class.h:17:18:virtual uint8_t USB_DEVICE_CLASS::Init(USB*)	16	static
+usb_device_class.h:18:18:virtual uint8_t USB_DEVICE_CLASS::DeInit()	16	static
+usb_device_class.h:19:18:virtual uint8_t USB_DEVICE_CLASS::Setup(USB::USB_SETUP_REQUEST*)	16	static
+usb_device_class.h:20:18:virtual uint8_t USB_DEVICE_CLASS::EP0_TxSent()	16	static
+usb_device_class.h:21:18:virtual uint8_t USB_DEVICE_CLASS::EP0_RxReady()	16	static
+usb_device_class.h:22:18:virtual uint8_t USB_DEVICE_CLASS::DataIn(uint8_t)	16	static
+usb_device_class.h:23:18:virtual uint8_t USB_DEVICE_CLASS::DataOut(uint8_t, uint16_t)	16	static
+usb_device_class.h:24:18:virtual uint8_t USB_DEVICE_CLASS::SOF()	16	static
+usb_device_class.h:25:18:virtual uint8_t USB_DEVICE_CLASS::ISO_IN()	16	static
+usb_device_class.h:26:18:virtual uint8_t USB_DEVICE_CLASS::ISO_OUT()	16	static
+usb_device_class.h:27:19:virtual uint8_t* USB_DEVICE_CLASS::GetDescriptor()	16	static
+usb_device_class.h:28:19:virtual uint16_t USB_DEVICE_CLASS::GetDescriptorSize()	16	static
+usb_device_class.h:29:18:virtual uint8_t USB_DEVICE_CLASS::InterfaceRequest(USB::USB_SETUP_REQUEST*)	16	static
+usb_device_class.h:30:18:virtual uint8_t USB_DEVICE_CLASS::SetupCmd(uint16_t, uint8_t, uint8_t*, uint16_t&)	24	static
+interrupt_stm32.h:7:2:INTERRUPT_STM32::INTERRUPT_STM32(uint8_t, uint8_t, uint8_t, uint8_t)	24	static
+bsp.cpp:108:17:void TIM6_DAC_IRQHandler()	24	static
+bsp.cpp:118:17:void OTG_FS_IRQHandler()	8	static
+bsp.cpp:123:17:void OTG_FS_WKUP_IRQHandler()	8	static
+stl_list.h:593:7:std::__cxx11::list<_Tp, _Alloc>::list() [with _Tp = USB_DEVICE_CLASS*; _Alloc = std::allocator<USB_DEVICE_CLASS*>]	16	static
+circularbuffer.h:7:2:CircularBuffer<T, accept_data_when_full>::CircularBuffer(T*, uint16_t, uint16_t) [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	24	static
+stl_list.h:332:14:std::__cxx11::_List_base<USB_DEVICE_CLASS*, std::allocator<USB_DEVICE_CLASS*> >::_List_impl::~_List_impl()	16	static
+stl_list.h:417:7:std::__cxx11::_List_base<_Tp, _Alloc>::_List_base() [with _Tp = USB_DEVICE_CLASS*; _Alloc = std::allocator<USB_DEVICE_CLASS*>]	16	static
+stl_list.h:445:7:std::__cxx11::_List_base<_Tp, _Alloc>::~_List_base() [with _Tp = USB_DEVICE_CLASS*; _Alloc = std::allocator<USB_DEVICE_CLASS*>]	16	static
+stl_list.h:341:2:std::__cxx11::_List_base<_Tp, _Alloc>::_List_impl::_List_impl() [with _Tp = USB_DEVICE_CLASS*; _Alloc = std::allocator<USB_DEVICE_CLASS*>]	16	static
+allocator.h:121:7:std::allocator< <template-parameter-1-1> >::~allocator() [with _Tp = std::_List_node<USB_DEVICE_CLASS*>]	16	static
+stl_list.h:452:7:void std::__cxx11::_List_base<_Tp, _Alloc>::_M_init() [with _Tp = USB_DEVICE_CLASS*; _Alloc = std::allocator<USB_DEVICE_CLASS*>]	16	static
+list.tcc:65:5:void std::__cxx11::_List_base<_Tp, _Alloc>::_M_clear() [with _Tp = USB_DEVICE_CLASS*; _Alloc = std::allocator<USB_DEVICE_CLASS*>]	24	static
+allocator.h:113:7:std::allocator< <template-parameter-1-1> >::allocator() [with _Tp = std::_List_node<USB_DEVICE_CLASS*>]	16	static
+stl_list.h:113:9:) [with _Args = {}; _Tp = unsigned int]	16	static
+new_allocator.h:86:7:__gnu_cxx::new_allocator< <template-parameter-1-1> >::~new_allocator() [with _Tp = std::_List_node<USB_DEVICE_CLASS*>]	16	static
+stl_list.h:361:12:void std::__cxx11::_List_base<_Tp, _Alloc>::_M_set_size(std::size_t) [with _Tp = USB_DEVICE_CLASS*; _Alloc = std::allocator<USB_DEVICE_CLASS*>; std::size_t = unsigned int]	16	static
+stl_list.h:402:7:std::__cxx11::_List_base<_Tp, _Alloc>::_Node_alloc_type& std::__cxx11::_List_base<_Tp, _Alloc>::_M_get_Node_allocator() [with _Tp = USB_DEVICE_CLASS*; _Alloc = std::allocator<USB_DEVICE_CLASS*>; std::__cxx11::_List_base<_Tp, _Alloc>::_Node_alloc_type = std::allocator<std::_List_node<USB_DEVICE_CLASS*> >]	16	static
+new_allocator.h:124:9:void __gnu_cxx::new_allocator< <template-parameter-1-1> >::destroy(_Up*) [with _Up = std::_List_node<USB_DEVICE_CLASS*>; _Tp = std::_List_node<USB_DEVICE_CLASS*>]	16	static
+stl_list.h:395:7:void std::__cxx11::_List_base<_Tp, _Alloc>::_M_put_node(std::_List_node<_Tp>*) [with _Tp = USB_DEVICE_CLASS*; _Alloc = std::allocator<USB_DEVICE_CLASS*>]	16	static
+new_allocator.h:79:7:__gnu_cxx::new_allocator< <template-parameter-1-1> >::new_allocator() [with _Tp = std::_List_node<USB_DEVICE_CLASS*>]	16	static
+new_allocator.h:109:7:void __gnu_cxx::new_allocator< <template-parameter-1-1> >::deallocate(__gnu_cxx::new_allocator< <template-parameter-1-1> >::pointer, __gnu_cxx::new_allocator< <template-parameter-1-1> >::size_type) [with _Tp = std::_List_node<USB_DEVICE_CLASS*>; __gnu_cxx::new_allocator< <template-parameter-1-1> >::pointer = std::_List_node<USB_DEVICE_CLASS*>*; __gnu_cxx::new_allocator< <template-parameter-1-1> >::size_type = unsigned int]	24	static
+stl_list.h:507:11:std::__cxx11::list<USB_DEVICE_CLASS*>::~list()	16	static
+usb_device_class.h:12:7:USB_DEVICE_CLASS::~USB_DEVICE_CLASS()	16	static
+usb_device_class_cdc_vcp.h:9:7:USB_DEVICE_CLASS_CDC_VCP::~USB_DEVICE_CLASS_CDC_VCP()	16	static
+nrf24l01p.h:12:7:NRF24L01P::~NRF24L01P()	16	static
+bsp.cpp:130:1:void __static_initialization_and_destruction_0(int, int)	56	static
+stl_vector.h:423:7:std::vector<_Tp, _Alloc>::~vector() [with _Tp = unsigned char; _Alloc = std::allocator<unsigned char>]	24	static
+stl_vector.h:423:7:std::vector<_Tp, _Alloc>::~vector() [with _Tp = const char*; _Alloc = std::allocator<const char*>]	24	static
+circularbuffer.h:23:2:CircularBuffer<T, accept_data_when_full>::~CircularBuffer() [with T = unsigned char; unsigned char accept_data_when_full = 0u]	16	static
+circularbuffer.h:23:2:CircularBuffer<T, accept_data_when_full>::~CircularBuffer() [with T = unsigned char; unsigned char accept_data_when_full = 1u]	16	static
+stl_vector.h:79:14:std::_Vector_base<unsigned char, std::allocator<unsigned char> >::_Vector_impl::~_Vector_impl()	16	static
+stl_vector.h:159:7:std::_Vector_base<_Tp, _Alloc>::~_Vector_base() [with _Tp = unsigned char; _Alloc = std::allocator<unsigned char>]	16	static
+stl_vector.h:113:7:std::_Vector_base<_Tp, _Alloc>::_Tp_alloc_type& std::_Vector_base<_Tp, _Alloc>::_M_get_Tp_allocator() [with _Tp = unsigned char; _Alloc = std::allocator<unsigned char>; std::_Vector_base<_Tp, _Alloc>::_Tp_alloc_type = std::allocator<unsigned char>]	16	static
+stl_construct.h:148:5:void std::_Destroy(_ForwardIterator, _ForwardIterator, std::allocator<_Tp>&) [with _ForwardIterator = unsigned char*; _Tp = unsigned char]	24	static
+stl_vector.h:79:14:std::_Vector_base<const char*, std::allocator<const char*> >::_Vector_impl::~_Vector_impl()	16	static
+stl_vector.h:159:7:std::_Vector_base<_Tp, _Alloc>::~_Vector_base() [with _Tp = const char*; _Alloc = std::allocator<const char*>]	16	static
+stl_vector.h:113:7:std::_Vector_base<_Tp, _Alloc>::_Tp_alloc_type& std::_Vector_base<_Tp, _Alloc>::_M_get_Tp_allocator() [with _Tp = const char*; _Alloc = std::allocator<const char*>; std::_Vector_base<_Tp, _Alloc>::_Tp_alloc_type = std::allocator<const char*>]	16	static
+stl_construct.h:148:5:void std::_Destroy(_ForwardIterator, _ForwardIterator, std::allocator<_Tp>&) [with _ForwardIterator = const char**; _Tp = const char*]	24	static
+allocator.h:121:7:std::allocator< <template-parameter-1-1> >::~allocator() [with _Tp = unsigned char]	16	static
+stl_vector.h:174:7:void std::_Vector_base<_Tp, _Alloc>::_M_deallocate(std::_Vector_base<_Tp, _Alloc>::pointer, std::size_t) [with _Tp = unsigned char; _Alloc = std::allocator<unsigned char>; std::_Vector_base<_Tp, _Alloc>::pointer = unsigned char*; std::size_t = unsigned int]	24	static
+stl_construct.h:122:5:void std::_Destroy(_ForwardIterator, _ForwardIterator) [with _ForwardIterator = unsigned char*]	16	static
+allocator.h:121:7:std::allocator< <template-parameter-1-1> >::~allocator() [with _Tp = const char*]	16	static
+stl_vector.h:174:7:void std::_Vector_base<_Tp, _Alloc>::_M_deallocate(std::_Vector_base<_Tp, _Alloc>::pointer, std::size_t) [with _Tp = const char*; _Alloc = std::allocator<const char*>; std::_Vector_base<_Tp, _Alloc>::pointer = const char**; std::size_t = unsigned int]	24	static
+stl_construct.h:122:5:void std::_Destroy(_ForwardIterator, _ForwardIterator) [with _ForwardIterator = const char**]	16	static
+new_allocator.h:86:7:__gnu_cxx::new_allocator< <template-parameter-1-1> >::~new_allocator() [with _Tp = unsigned char]	16	static
+alloc_traits.h:516:7:static void std::allocator_traits<std::allocator<_Tp> >::deallocate(std::allocator_traits<std::allocator<_Tp> >::allocator_type&, std::allocator_traits<std::allocator<_Tp> >::pointer, std::allocator_traits<std::allocator<_Tp> >::size_type) [with _Tp = unsigned char; std::allocator_traits<std::allocator<_Tp> >::allocator_type = std::allocator<unsigned char>; std::allocator_traits<std::allocator<_Tp> >::pointer = unsigned char*; std::allocator_traits<std::allocator<_Tp> >::size_type = unsigned int]	24	static
+stl_construct.h:112:9:static void std::_Destroy_aux<true>::__destroy(_ForwardIterator, _ForwardIterator) [with _ForwardIterator = unsigned char*]	16	static
+new_allocator.h:86:7:__gnu_cxx::new_allocator< <template-parameter-1-1> >::~new_allocator() [with _Tp = const char*]	16	static
+alloc_traits.h:516:7:static void std::allocator_traits<std::allocator<_Tp> >::deallocate(std::allocator_traits<std::allocator<_Tp> >::allocator_type&, std::allocator_traits<std::allocator<_Tp> >::pointer, std::allocator_traits<std::allocator<_Tp> >::size_type) [with _Tp = const char*; std::allocator_traits<std::allocator<_Tp> >::allocator_type = std::allocator<const char*>; std::allocator_traits<std::allocator<_Tp> >::pointer = const char**; std::allocator_traits<std::allocator<_Tp> >::size_type = unsigned int]	24	static
+stl_construct.h:112:9:static void std::_Destroy_aux<true>::__destroy(_ForwardIterator, _ForwardIterator) [with _ForwardIterator = const char**]	16	static
+new_allocator.h:109:7:void __gnu_cxx::new_allocator< <template-parameter-1-1> >::deallocate(__gnu_cxx::new_allocator< <template-parameter-1-1> >::pointer, __gnu_cxx::new_allocator< <template-parameter-1-1> >::size_type) [with _Tp = unsigned char; __gnu_cxx::new_allocator< <template-parameter-1-1> >::pointer = unsigned char*; __gnu_cxx::new_allocator< <template-parameter-1-1> >::size_type = unsigned int]	24	static
+new_allocator.h:109:7:void __gnu_cxx::new_allocator< <template-parameter-1-1> >::deallocate(__gnu_cxx::new_allocator< <template-parameter-1-1> >::pointer, __gnu_cxx::new_allocator< <template-parameter-1-1> >::size_type) [with _Tp = const char*; __gnu_cxx::new_allocator< <template-parameter-1-1> >::pointer = const char**; __gnu_cxx::new_allocator< <template-parameter-1-1> >::size_type = unsigned int]	24	static
+bsp.cpp:130:1:cpp)	8	static

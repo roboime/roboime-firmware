@@ -1,0 +1,11 @@
+spi.h:7:7:constexpr SPI::SPI()	16	static
+spi_stm32.cpp:6:1:SPI_STM32::SPI_STM32(SPI_TypeDef*, IO_Pin&)	48	static
+spi.h:7:7:constexpr SPI::SPI(const SPI&)	16	static
+spi_stm32.h:8:7:constexpr SPI_STM32::SPI_STM32(const SPI_STM32&)	16	static
+spi_stm32.cpp:42:1:SPI_STM32::SPI_STM32(const SPI_STM32&, IO_Pin&)	24	static
+spi_stm32.cpp:48:9:virtual uint8_t SPI_STM32::WriteByte(uint8_t)	16	static
+spi_stm32.cpp:52:6:virtual void SPI_STM32::Assert()	16	static
+spi_stm32.cpp:56:6:virtual void SPI_STM32::Release()	16	static
+spi_stm32.cpp:60:9:virtual uint8_t SPI_STM32::WriteBuffer(uint8_t*, uint16_t)	32	static
+spi_stm32.cpp:86:9:virtual uint8_t SPI_STM32::SelfTest()	16	static
+spi_stm32.cpp:90:9:uint8_t SPI_STM32::Timeout()	16	static

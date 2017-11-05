@@ -1,0 +1,12 @@
+usbh_pl2303.c:41:20:USBH_PL2303_InterfaceInit	32	static
+usbh_pl2303.c:75:6:USBH_PL2303_InterfaceDeInit	16	static
+usbh_pl2303.c:95:20:USBH_PL2303_ClassRequest	24	static
+usbh_pl2303.c:101:13:pl2303_vendor_read	24	static
+usbh_pl2303.c:110:13:pl2303_vendor_write	24	static
+usbh_pl2303.c:120:10:pl2303_get_baudrate	128	static
+usbh_pl2303.c:130:13:pl2303_set_serial	24	static
+usbh_pl2303.c:155:9:USBH_PL2303_SendAvailable	8	static
+usbh_pl2303.c:162:10:USBH_PL2303_SendData	16	static
+usbh_pl2303.c:169:10:USBH_PL2303_GetData	24	static
+usbh_pl2303.c:184:10:USBH_PL2303_GetDataCount	8	static
+usbh_pl2303.c:191:20:USBH_PL2303_Handle	40	static

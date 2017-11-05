@@ -168,24 +168,24 @@ int main(void)
 		  NULL, 		//nao usa task parameter
 		  2,			//prioridade 1
 		  NULL);*/
-	//xTaskCreate(	vTaskNRF24TX, //ponteiro para a função que implementa a tarefa
-	//	  "Task NRF24TX", 	//nome da função. Para facilitar o debug.
-	//	  700, 		//stack depth
-	//	  (void*)&nrf24, 		//usa task parameter
-	//	  1,			//prioridade 2
-	//	  NULL);
+	/*xTaskCreate(	vTaskNRF24TX, //ponteiro para a função que implementa a tarefa
+		  "Task NRF24TX", 	//nome da função. Para facilitar o debug.
+		  700, 		//stack depth
+		  (void*)&nrf24, 		//usa task parameter
+		  1,			//prioridade 2
+		  NULL);*/
 	xTaskCreate(	vTaskNRF24RX, //ponteiro para a função que implementa a tarefa
 			"Task NRF24RX", 	//nome da função. Para facilitar o debug.
    	 	 700, 		//stack depth
    	 	 (void*)&nrf24, 		//nao usa task parameter
    	 	 2,			//prioridade 1
    	 	 NULL);
-	//xTaskCreate(	vTaskCmdLine, 	//ponteiro para a função que implementa a tarefa
-		//  "Task CmdLine", 			//nome da função. Para facilitar o debug.
-		  //700, 						//stack depth
-		  //NULL, 					//nao usa task parameter
-		  //1,						//prioridade 1
-		  //NULL);
+	/*xTaskCreate(	vTaskCmdLine, 	//ponteiro para a função que implementa a tarefa
+		  "Task CmdLine", 			//nome da função. Para facilitar o debug.
+		  700, 						//stack depth
+		  NULL, 					//nao usa task parameter
+		  1,						//prioridade 1
+		  NULL);*/
 	xTaskCreate(	vTaskMotor, 	//ponteiro para a função que implementa a tarefa
    		  "Task Motor", 			//nome da função. Para facilitar o debug.
    		  700, 						//stack depth
@@ -216,4 +216,3 @@ extern "C" void vApplicationTickHook( void ){
 extern "C" void vApplicationMallocFailedHook( void ){
 	for( ;; );
 }
-

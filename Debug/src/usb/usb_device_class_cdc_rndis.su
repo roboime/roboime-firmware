@@ -1,0 +1,117 @@
+new:129:14:void* operator new(std::size_t, void*)	16	static
+usb_device_class.h:19:18:virtual uint8_t USB_DEVICE_CLASS::Setup(USB::USB_SETUP_REQUEST*)	16	static
+usb_device_class.h:20:18:virtual uint8_t USB_DEVICE_CLASS::EP0_TxSent()	16	static
+usb_device_class.h:21:18:virtual uint8_t USB_DEVICE_CLASS::EP0_RxReady()	16	static
+usb_device_class.h:25:18:virtual uint8_t USB_DEVICE_CLASS::ISO_IN()	16	static
+usb_device_class.h:26:18:virtual uint8_t USB_DEVICE_CLASS::ISO_OUT()	16	static
+gthr-default.h:229:1:int __gthread_key_delete(__gthread_key_t)	16	static
+usb_device_class_cdc_rndis.cpp:16:1:USB_DEVICE_CLASS_CDC_RNDIS::USB_DEVICE_CLASS_CDC_RNDIS(uint8_t)	56	static
+usb_device_class_cdc_rndis.cpp:29:9:virtual uint8_t USB_DEVICE_CLASS_CDC_RNDIS::Init(USB*)	24	static
+usb_device_class_cdc_rndis.cpp:38:9:virtual uint8_t USB_DEVICE_CLASS_CDC_RNDIS::DeInit()	24	static
+usb_device_class_cdc_rndis.cpp:45:9:virtual uint8_t USB_DEVICE_CLASS_CDC_RNDIS::DataIn(uint8_t)	24	static
+usb_device_class_cdc_rndis.cpp:52:9:virtual uint8_t USB_DEVICE_CLASS_CDC_RNDIS::DataOut(uint8_t, uint16_t)	32	static
+usb_device_class_cdc_rndis.cpp:78:10:virtual uint16_t USB_DEVICE_CLASS_CDC_RNDIS::GetDescriptorSize()	16	static
+usb_device_class_cdc_rndis.cpp:82:10:virtual uint8_t* USB_DEVICE_CLASS_CDC_RNDIS::GetDescriptor()	16	static
+usb_device_class_cdc_rndis.cpp:167:9:virtual uint8_t USB_DEVICE_CLASS_CDC_RNDIS::SOF()	16	static
+usb_device_class_cdc_rndis.cpp:171:9:virtual uint8_t USB_DEVICE_CLASS_CDC_RNDIS::SetupCmd(uint16_t, uint8_t, uint8_t*, uint16_t&)	48	static
+usb_device_class_cdc_rndis.cpp:401:9:virtual uint8_t USB_DEVICE_CLASS_CDC_RNDIS::InterfaceRequest(USB::USB_SETUP_REQUEST*)	16	static
+usb_device_class_cdc_rndis.cpp:416:10:uint16_t USB_DEVICE_CLASS_CDC_RNDIS::GetData(CircularBuffer<unsigned char>&, uint16_t)	32	static
+usb_device_class_cdc_rndis.cpp:428:10:uint16_t USB_DEVICE_CLASS_CDC_RNDIS::GetData(uint8_t*, uint16_t)	32	static
+usb_device_class_cdc_rndis.cpp:439:10:uint16_t USB_DEVICE_CLASS_CDC_RNDIS::CanSendData()	16	static
+usb_device_class_cdc_rndis.cpp:446:10:uint16_t USB_DEVICE_CLASS_CDC_RNDIS::SendData(uint8_t*, uint16_t)	88	static
+stl_vector.h:779:7:std::vector<_Tp, _Alloc>::reference std::vector<_Tp, _Alloc>::operator[](std::vector<_Tp, _Alloc>::size_type) [with _Tp = unsigned char; _Alloc = std::allocator<unsigned char>; std::vector<_Tp, _Alloc>::reference = unsigned char&; std::vector<_Tp, _Alloc>::size_type = unsigned int]	16	static
+circularbuffer.h:7:2:CircularBuffer<T, accept_data_when_full>::CircularBuffer(T*, uint16_t, uint16_t) [with T = unsigned char; unsigned char accept_data_when_full = 0u; uint16_t = short unsigned int]	24	static
+circularbuffer.h:28:11:uint16_t CircularBuffer<T, accept_data_when_full>::In(const T&) [with T = unsigned char; unsigned char accept_data_when_full = 0u; uint16_t = short unsigned int]	16	static
+circularbuffer.h:175:7:void CircularBuffer<T, accept_data_when_full>::Clear() [with T = unsigned char; unsigned char accept_data_when_full = 0u]	16	static
+circularbuffer.h:32:11:uint16_t CircularBuffer<T, accept_data_when_full>::In(const T*, uint16_t) [with T = unsigned char; unsigned char accept_data_when_full = 0u; uint16_t = short unsigned int]	32	static
+circularbuffer.h:181:5:T* CircularBuffer<T, accept_data_when_full>::GetRearrangedBuffer() [with T = unsigned char; unsigned char accept_data_when_full = 0u]	56	dynamic
+circularbuffer.h:107:11:uint16_t CircularBuffer<T, accept_data_when_full>::Out(T*, uint16_t) [with T = unsigned char; unsigned char accept_data_when_full = 0u; uint16_t = short unsigned int]	32	static
+stl_list.h:946:7:std::__cxx11::list<_Tp, _Alloc>::size_type std::__cxx11::list<_Tp, _Alloc>::size() const [with _Tp = long unsigned int; _Alloc = std::allocator<long unsigned int>; std::__cxx11::list<_Tp, _Alloc>::size_type = unsigned int]	16	static
+stl_list.h:840:7:std::__cxx11::list<_Tp, _Alloc>::const_iterator std::__cxx11::list<_Tp, _Alloc>::begin() const [with _Tp = long unsigned int; _Alloc = std::allocator<long unsigned int>; std::__cxx11::list<_Tp, _Alloc>::const_iterator = std::_List_const_iterator<long unsigned int>]	24	static
+stl_list.h:858:7:std::__cxx11::list<_Tp, _Alloc>::const_iterator std::__cxx11::list<_Tp, _Alloc>::end() const [with _Tp = long unsigned int; _Alloc = std::allocator<long unsigned int>; std::__cxx11::list<_Tp, _Alloc>::const_iterator = std::_List_const_iterator<long unsigned int>]	24	static
+stl_algobase.h:460:5:_OI std::copy(_II, _II, _OI) [with _II = std::_List_const_iterator<long unsigned int>; _OI = long unsigned int*]	32	static
+stl_algobase.h:460:5:_OI std::copy(_II, _II, _OI) [with _II = const char*; _OI = char*]	32	static
+circularbuffer.h:172:11:uint16_t CircularBuffer<T, accept_data_when_full>::Ocupied() [with T = unsigned char; unsigned char accept_data_when_full = 0u; uint16_t = short unsigned int]	16	static
+allocator.h:113:7:std::allocator< <template-parameter-1-1> >::allocator() [with _Tp = long unsigned int]	16	static
+allocator.h:121:7:std::allocator< <template-parameter-1-1> >::~allocator() [with _Tp = long unsigned int]	16	static
+initializer_list:75:7:constexpr const _E* std::initializer_list<_E>::begin() const [with _E = long unsigned int; std::initializer_list<_E>::const_iterator = const long unsigned int*]	16	static
+initializer_list:71:7:constexpr std::initializer_list<_E>::size_type std::initializer_list<_E>::size() const [with _E = long unsigned int; std::initializer_list<_E>::size_type = unsigned int]	16	static
+initializer_list:79:7:constexpr const _E* std::initializer_list<_E>::end() const [with _E = long unsigned int; std::initializer_list<_E>::const_iterator = const long unsigned int*]	24	static
+stl_list.h:678:7:std::__cxx11::list<_Tp, _Alloc>::list(std::initializer_list<_Tp>, const allocator_type&) [with _Tp = long unsigned int; _Alloc = std::allocator<long unsigned int>; std::__cxx11::list<_Tp, _Alloc>::allocator_type = std::allocator<long unsigned int>]	40	static
+circularbuffer.h:97:11:uint16_t CircularBuffer<T, accept_data_when_full>::Out(CircularBuffer<T>&, uint16_t) [with T = unsigned char; unsigned char accept_data_when_full = 0u; uint16_t = short unsigned int]	48	dynamic
+circularbuffer.h:169:11:uint16_t CircularBuffer<T, accept_data_when_full>::Free() [with T = unsigned char; unsigned char accept_data_when_full = 0u; uint16_t = short unsigned int]	16	static
+stl_algobase.h:282:5:typename std::_Niter_base<_Iterator>::iterator_type std::__niter_base(_Iterator) [with _Iterator = long unsigned int*; typename std::_Niter_base<_Iterator>::iterator_type = long unsigned int*]	16	static
+stl_algobase.h:460:5:_OI std::copy(_II, _II, _OI) [with _II = const unsigned char*; _OI = unsigned char*]	32	static
+stl_algobase.h:460:5:_OI std::copy(_II, _II, _OI) [with _II = unsigned char*; _OI = unsigned char*]	32	static
+stl_list.h:373:14:std::size_t std::__cxx11::_List_base<_Tp, _Alloc>::_M_node_count() const [with _Tp = long unsigned int; _Alloc = std::allocator<long unsigned int>; std::size_t = unsigned int]	16	static
+stl_list.h:220:7:std::_List_const_iterator<_Tp>::_List_const_iterator(const std::__detail::_List_node_base*) [with _Tp = long unsigned int]	16	static
+stl_algobase.h:293:5:typename std::_Miter_base<_Iterator>::iterator_type std::__miter_base(_Iterator) [with _Iterator = std::_List_const_iterator<long unsigned int>; typename std::_Miter_base<_Iterator>::iterator_type = std::_List_const_iterator<long unsigned int>]	16	static
+stl_algobase.h:434:5:_OI std::__copy_move_a2(_II, _II, _OI) [with bool _IsMove = false; _II = std::_List_const_iterator<long unsigned int>; _OI = long unsigned int*]	32	static
+stl_algobase.h:293:5:typename std::_Miter_base<_Iterator>::iterator_type std::__miter_base(_Iterator) [with _Iterator = const char*; typename std::_Miter_base<_Iterator>::iterator_type = const char*]	16	static
+stl_algobase.h:434:5:_OI std::__copy_move_a2(_II, _II, _OI) [with bool _IsMove = false; _II = const char*; _OI = char*]	32	static
+new_allocator.h:79:7:__gnu_cxx::new_allocator<_Tp>::new_allocator() [with _Tp = long unsigned int]	16	static
+new_allocator.h:86:7:__gnu_cxx::new_allocator<_Tp>::~new_allocator() [with _Tp = long unsigned int]	16	static
+allocator.h:119:9:std::allocator< <template-parameter-1-1> >::allocator(const std::allocator<_Tp1>&) [with _Tp1 = long unsigned int; _Tp = std::_List_node<long unsigned int>]	16	static
+allocator.h:121:7:std::allocator< <template-parameter-1-1> >::~allocator() [with _Tp = std::_List_node<long unsigned int>]	16	static
+stl_list.h:332:14:std::__cxx11::_List_base<long unsigned int, std::allocator<long unsigned int> >::_List_impl::~_List_impl()	16	static
+stl_list.h:421:7:std::__cxx11::_List_base<_Tp, _Alloc>::_List_base(const _Node_alloc_type&) [with _Tp = long unsigned int; _Alloc = std::allocator<long unsigned int>; std::__cxx11::_List_base<_Tp, _Alloc>::_Node_alloc_type = std::allocator<std::_List_node<long unsigned int> >]	16	static
+stl_list.h:445:7:std::__cxx11::_List_base<_Tp, _Alloc>::~_List_base() [with _Tp = long unsigned int; _Alloc = std::allocator<long unsigned int>]	16	static
+stl_list.h:1687:9:void std::__cxx11::list<_Tp, _Alloc>::_M_initialize_dispatch(_InputIterator, _InputIterator, std::__false_type) [with _InputIterator = const long unsigned int*; _Tp = long unsigned int; _Alloc = std::allocator<long unsigned int>]	24	static
+circularbuffer.h:32:11:uint16_t CircularBuffer<T, accept_data_when_full>::In(const T*, uint16_t) [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	32	static
+stl_iterator_base_types.h:215:28:static std::_Iter_base<_Iterator, _HasBase>::iterator_type std::_Iter_base<_Iterator, _HasBase>::_S_base(_Iterator) [with _Iterator = long unsigned int*; bool _HasBase = false; std::_Iter_base<_Iterator, _HasBase>::iterator_type = long unsigned int*]	16	static
+stl_algobase.h:293:5:typename std::_Miter_base<_Iterator>::iterator_type std::__miter_base(_Iterator) [with _Iterator = const unsigned char*; typename std::_Miter_base<_Iterator>::iterator_type = const unsigned char*]	16	static
+stl_algobase.h:434:5:_OI std::__copy_move_a2(_II, _II, _OI) [with bool _IsMove = false; _II = const unsigned char*; _OI = unsigned char*]	32	static
+stl_algobase.h:293:5:typename std::_Miter_base<_Iterator>::iterator_type std::__miter_base(_Iterator) [with _Iterator = unsigned char*; typename std::_Miter_base<_Iterator>::iterator_type = unsigned char*]	16	static
+stl_algobase.h:434:5:_OI std::__copy_move_a2(_II, _II, _OI) [with bool _IsMove = false; _II = unsigned char*; _OI = unsigned char*]	32	static
+stl_iterator_base_types.h:215:28:static std::_Iter_base<_Iterator, _HasBase>::iterator_type std::_Iter_base<_Iterator, _HasBase>::_S_base(_Iterator) [with _Iterator = std::_List_const_iterator<long unsigned int>; bool _HasBase = false; std::_Iter_base<_Iterator, _HasBase>::iterator_type = std::_List_const_iterator<long unsigned int>]	16	static
+stl_algobase.h:282:5:typename std::_Niter_base<_Iterator>::iterator_type std::__niter_base(_Iterator) [with _Iterator = std::_List_const_iterator<long unsigned int>; typename std::_Niter_base<_Iterator>::iterator_type = std::_List_const_iterator<long unsigned int>]	16	static
+stl_algobase.h:389:5:_OI std::__copy_move_a(_II, _II, _OI) [with bool _IsMove = false; _II = std::_List_const_iterator<long unsigned int>; _OI = long unsigned int*]	32	static
+stl_iterator_base_types.h:215:28:static std::_Iter_base<_Iterator, _HasBase>::iterator_type std::_Iter_base<_Iterator, _HasBase>::_S_base(_Iterator) [with _Iterator = const char*; bool _HasBase = false; std::_Iter_base<_Iterator, _HasBase>::iterator_type = const char*]	16	static
+stl_algobase.h:282:5:typename std::_Niter_base<_Iterator>::iterator_type std::__niter_base(_Iterator) [with _Iterator = const char*; typename std::_Niter_base<_Iterator>::iterator_type = const char*]	16	static
+stl_algobase.h:282:5:typename std::_Niter_base<_Iterator>::iterator_type std::__niter_base(_Iterator) [with _Iterator = char*; typename std::_Niter_base<_Iterator>::iterator_type = char*]	16	static
+stl_algobase.h:389:5:_OI std::__copy_move_a(_II, _II, _OI) [with bool _IsMove = false; _II = const char*; _OI = char*]	32	static
+new_allocator.h:79:7:__gnu_cxx::new_allocator<_Tp>::new_allocator() [with _Tp = std::_List_node<long unsigned int>]	16	static
+new_allocator.h:86:7:__gnu_cxx::new_allocator<_Tp>::~new_allocator() [with _Tp = std::_List_node<long unsigned int>]	16	static
+stl_list.h:345:2:std::__cxx11::_List_base<_Tp, _Alloc>::_List_impl::_List_impl(const _Node_alloc_type&) [with _Tp = long unsigned int; _Alloc = std::allocator<long unsigned int>; std::__cxx11::_List_base<_Tp, _Alloc>::_Node_alloc_type = std::allocator<std::_List_node<long unsigned int> >]	16	static
+stl_list.h:452:7:void std::__cxx11::_List_base<_Tp, _Alloc>::_M_init() [with _Tp = long unsigned int; _Alloc = std::allocator<long unsigned int>]	16	static
+list.tcc:65:5:void std::__cxx11::_List_base<_Tp, _Alloc>::_M_clear() [with _Tp = long unsigned int; _Alloc = std::allocator<long unsigned int>]	24	static
+move.h:76:5:constexpr _Tp&& std::forward(typename std::remove_reference<_From>::type&) [with _Tp = const long unsigned int&; typename std::remove_reference<_From>::type = const long unsigned int]	16	static
+stl_list.h:1098:9:) [with _Args = {const long unsigned int&}; _Tp = long unsigned int; _Alloc = std::allocator<long unsigned int>]	24	static
+circularbuffer.h:169:11:uint16_t CircularBuffer<T, accept_data_when_full>::Free() [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	16	static
+circularbuffer.h:107:11:uint16_t CircularBuffer<T, accept_data_when_full>::Out(T*, uint16_t) [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	32	static
+stl_iterator_base_types.h:215:28:static std::_Iter_base<_Iterator, _HasBase>::iterator_type std::_Iter_base<_Iterator, _HasBase>::_S_base(_Iterator) [with _Iterator = const unsigned char*; bool _HasBase = false; std::_Iter_base<_Iterator, _HasBase>::iterator_type = const unsigned char*]	16	static
+stl_algobase.h:282:5:typename std::_Niter_base<_Iterator>::iterator_type std::__niter_base(_Iterator) [with _Iterator = const unsigned char*; typename std::_Niter_base<_Iterator>::iterator_type = const unsigned char*]	16	static
+stl_algobase.h:282:5:typename std::_Niter_base<_Iterator>::iterator_type std::__niter_base(_Iterator) [with _Iterator = unsigned char*; typename std::_Niter_base<_Iterator>::iterator_type = unsigned char*]	16	static
+stl_algobase.h:389:5:_OI std::__copy_move_a(_II, _II, _OI) [with bool _IsMove = false; _II = const unsigned char*; _OI = unsigned char*]	32	static
+stl_iterator_base_types.h:215:28:static std::_Iter_base<_Iterator, _HasBase>::iterator_type std::_Iter_base<_Iterator, _HasBase>::_S_base(_Iterator) [with _Iterator = unsigned char*; bool _HasBase = false; std::_Iter_base<_Iterator, _HasBase>::iterator_type = unsigned char*]	16	static
+stl_algobase.h:389:5:_OI std::__copy_move_a(_II, _II, _OI) [with bool _IsMove = false; _II = unsigned char*; _OI = unsigned char*]	32	static
+stl_algobase.h:307:9:static _OI std::__copy_move<<anonymous>, <anonymous>, <template-parameter-1-3> >::__copy_m(_II, _II, _OI) [with _II = std::_List_const_iterator<long unsigned int>; _OI = long unsigned int*; bool <anonymous> = false; bool <anonymous> = false; <template-parameter-1-3> = std::bidirectional_iterator_tag]	24	static
+stl_iterator_base_types.h:215:28:static std::_Iter_base<_Iterator, _HasBase>::iterator_type std::_Iter_base<_Iterator, _HasBase>::_S_base(_Iterator) [with _Iterator = char*; bool _HasBase = false; std::_Iter_base<_Iterator, _HasBase>::iterator_type = char*]	16	static
+stl_algobase.h:373:9:static _Tp* std::__copy_move<_IsMove, true, std::random_access_iterator_tag>::__copy_m(const _Tp*, const _Tp*, _Tp*) [with _Tp = char; bool _IsMove = false]	32	static
+allocator.h:115:7:std::allocator< <template-parameter-1-1> >::allocator(const std::allocator< <template-parameter-1-1> >&) [with _Tp = std::_List_node<long unsigned int>]	16	static
+stl_list.h:113:9:) [with _Args = {}; _Tp = unsigned int]	16	static
+stl_list.h:361:12:void std::__cxx11::_List_base<_Tp, _Alloc>::_M_set_size(std::size_t) [with _Tp = long unsigned int; _Alloc = std::allocator<long unsigned int>; std::size_t = unsigned int]	16	static
+stl_list.h:402:7:std::__cxx11::_List_base<_Tp, _Alloc>::_Node_alloc_type& std::__cxx11::_List_base<_Tp, _Alloc>::_M_get_Node_allocator() [with _Tp = long unsigned int; _Alloc = std::allocator<long unsigned int>; std::__cxx11::_List_base<_Tp, _Alloc>::_Node_alloc_type = std::allocator<std::_List_node<long unsigned int> >]	16	static
+new_allocator.h:124:9:void __gnu_cxx::new_allocator<_Tp>::destroy(_Up*) [with _Up = std::_List_node<long unsigned int>; _Tp = std::_List_node<long unsigned int>]	16	static
+stl_list.h:395:7:void std::__cxx11::_List_base<_Tp, _Alloc>::_M_put_node(std::_List_node<_Tp>*) [with _Tp = long unsigned int; _Alloc = std::allocator<long unsigned int>]	16	static
+stl_list.h:849:7:std::__cxx11::list<_Tp, _Alloc>::iterator std::__cxx11::list<_Tp, _Alloc>::end() [with _Tp = long unsigned int; _Alloc = std::allocator<long unsigned int>; std::__cxx11::list<_Tp, _Alloc>::iterator = std::_List_iterator<long unsigned int>]	24	static
+stl_list.h:1761:8:) [with _Args = {const long unsigned int&}; _Tp = long unsigned int; _Alloc = std::allocator<long unsigned int>; std::__cxx11::list<_Tp, _Alloc>::iterator = std::_List_iterator<long unsigned int>]	32	static
+circularbuffer.h:172:11:uint16_t CircularBuffer<T, accept_data_when_full>::Ocupied() [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	16	static
+circularbuffer.h:175:7:void CircularBuffer<T, accept_data_when_full>::Clear() [with T = unsigned char; unsigned char accept_data_when_full = 1u]	16	static
+stl_algobase.h:373:9:static _Tp* std::__copy_move<_IsMove, true, std::random_access_iterator_tag>::__copy_m(const _Tp*, const _Tp*, _Tp*) [with _Tp = unsigned char; bool _IsMove = false]	32	static
+stl_list.h:276:7:bool std::_List_const_iterator<_Tp>::operator!=(const _Self&) const [with _Tp = long unsigned int; std::_List_const_iterator<_Tp>::_Self = std::_List_const_iterator<long unsigned int>]	16	static
+stl_list.h:242:7:std::_List_const_iterator<_Tp>::_Self& std::_List_const_iterator<_Tp>::operator++() [with _Tp = long unsigned int; std::_List_const_iterator<_Tp>::_Self = std::_List_const_iterator<long unsigned int>]	16	static
+stl_list.h:234:7:const _Tp& std::_List_const_iterator<_Tp>::operator*() const [with _Tp = long unsigned int; std::_List_const_iterator<_Tp>::reference = const long unsigned int&]	16	static
+new_allocator.h:81:7:__gnu_cxx::new_allocator<_Tp>::new_allocator(const __gnu_cxx::new_allocator<_Tp>&) [with _Tp = std::_List_node<long unsigned int>]	16	static
+new_allocator.h:109:7:void __gnu_cxx::new_allocator<_Tp>::deallocate(__gnu_cxx::new_allocator<_Tp>::pointer, __gnu_cxx::new_allocator<_Tp>::size_type) [with _Tp = std::_List_node<long unsigned int>; __gnu_cxx::new_allocator<_Tp>::pointer = std::_List_node<long unsigned int>*; __gnu_cxx::new_allocator<_Tp>::size_type = unsigned int]	24	static
+stl_list.h:140:7:std::_List_iterator<_Tp>::_List_iterator(std::__detail::_List_node_base*) [with _Tp = long unsigned int]	16	static
+stl_list.h:569:9:) [with _Args = {const long unsigned int&}; _Tp = long unsigned int; _Alloc = std::allocator<long unsigned int>; std::__cxx11::list<_Tp, _Alloc>::_Node = std::_List_node<long unsigned int>]	32	static
+stl_list.h:363:12:void std::__cxx11::_List_base<_Tp, _Alloc>::_M_inc_size(std::size_t) [with _Tp = long unsigned int; _Alloc = std::allocator<long unsigned int>; std::size_t = unsigned int]	16	static
+stl_list.h:391:7:std::_List_node<_Tp>* std::__cxx11::_List_base<_Tp, _Alloc>::_M_get_node() [with _Tp = long unsigned int; _Alloc = std::allocator<long unsigned int>]	16	static
+new_allocator.h:119:9:) [with _Up = std::_List_node<long unsigned int>; _Args = {const long unsigned int&}; _Tp = std::_List_node<long unsigned int>]	32	static
+new_allocator.h:99:7:_Tp* __gnu_cxx::new_allocator<_Tp>::allocate(__gnu_cxx::new_allocator<_Tp>::size_type, const void*) [with _Tp = std::_List_node<long unsigned int>; __gnu_cxx::new_allocator<_Tp>::pointer = std::_List_node<long unsigned int>*; __gnu_cxx::new_allocator<_Tp>::size_type = unsigned int]	24	static
+stl_list.h:113:9:) [with _Args = {const long unsigned int&}; _Tp = long unsigned int]	16	static
+new_allocator.h:113:7:__gnu_cxx::new_allocator<_Tp>::size_type __gnu_cxx::new_allocator<_Tp>::max_size() const [with _Tp = std::_List_node<long unsigned int>; __gnu_cxx::new_allocator<_Tp>::size_type = unsigned int]	16	static
+stl_list.h:507:11:std::__cxx11::list<long unsigned int>::~list()	16	static
+usb_device_class_cdc_rndis.cpp:469:1:void __static_initialization_and_destruction_0(int, int)	32	static
+usb_device_class_cdc_rndis.cpp:469:1:cpp)	8	static

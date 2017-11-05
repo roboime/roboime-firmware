@@ -1,0 +1,14 @@
+i2c.h:9:2:I2C::I2C(IO_Pin&, IO_Pin&)	24	static
+i2c.h:14:18:virtual uint8_t I2C::GetSDAStatus()	16	static
+i2c.h:15:18:virtual uint8_t I2C::GetSCLStatus()	16	static
+i2c.h:16:18:virtual uint8_t I2C::SelfTest()	16	static
+i2c.h:17:18:virtual uint8_t I2C::WriteRegByte(uint8_t, uint8_t, uint8_t)	32	static
+i2c.h:20:18:virtual uint8_t I2C::ReadRegByte(uint8_t, uint8_t)	40	static
+i2c.h:25:19:virtual uint16_t I2C::ReadRegHalfWord(uint8_t, uint8_t)	40	static
+i2c_stm32.cpp:6:1:I2C_STM32::I2C_STM32(IO_Pin&, IO_Pin&, I2C_TypeDef*, uint32_t, uint32_t)	24	static
+i2c_stm32.cpp:15:6:void I2C_STM32::Config()	32	static
+i2c_stm32.cpp:53:9:virtual uint8_t I2C_STM32::WriteRegBuffer(uint8_t, uint8_t, uint8_t*, uint8_t)	32	static
+i2c_stm32.cpp:101:9:virtual uint8_t I2C_STM32::ReadRegBuffer(uint8_t, uint8_t, uint8_t*, uint8_t)	40	static
+i2c_stm32.cpp:176:9:uint8_t I2C_STM32::Timeout()	24	static
+i2c_stm32.cpp:185:9:virtual uint8_t I2C_STM32::WriteReg16Buffer(uint8_t, uint16_t, uint8_t*, uint16_t)	32	static
+i2c_stm32.cpp:241:9:virtual uint8_t I2C_STM32::ReadReg16Buffer(uint8_t, uint16_t, uint8_t*, uint16_t)	40	static

@@ -1,0 +1,6 @@
+usbh_hcs.c:102:9:USBH_Open_Channel	16	static
+usbh_hcs.c:140:9:USBH_Modify_Channel	16	static
+usbh_hcs.c:174:9:USBH_Alloc_Channel	24	static
+usbh_hcs.c:193:9:USBH_Free_Channel	16	static
+usbh_hcs.c:209:9:USBH_DeAllocate_AllChannel	24	static
+usbh_hcs.c:226:17:USBH_GetFreeChannel	24	static

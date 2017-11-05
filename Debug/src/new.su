@@ -1,0 +1,4 @@
+new.cpp:9:7:void* operator new(size_t)	24	static
+new.cpp:33:6:void operator delete(void*)	16	static
+new.cpp:46:7:void* operator new [](size_t)	24	static
+new.cpp:67:6:void operator delete [](void*)	16	static

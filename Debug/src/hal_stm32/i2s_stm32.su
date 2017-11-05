@@ -1,0 +1,6 @@
+i2s.h:8:2:I2S::I2S(uint32_t, uint16_t)	24	static
+i2s_stm32.cpp:4:1:I2S_STM32::I2S_STM32(SPI_TypeDef*, uint32_t, uint16_t, DMA_Stream_TypeDef*)	104	static
+i2s_stm32.cpp:104:10:virtual int16_t* I2S_STM32::GetBuffer()	16	static
+i2s_stm32.cpp:110:6:virtual void I2S_STM32::Start()	16	static
+i2s_stm32.cpp:114:6:virtual void I2S_STM32::Stop()	16	static
+i2s_stm32.cpp:118:9:uint8_t I2S_STM32::GetIRQChannel()	16	static

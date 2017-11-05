@@ -1,0 +1,56 @@
+core_cm4.h:1535:22:void NVIC_SetPriority(IRQn_Type, uint32_t)	16	static
+core_cm4.h:1662:26:uint32_t SysTick_Config(uint32_t)	16	static
+gthr-default.h:229:1:int __gthread_key_delete(__gthread_key_t)	16	static
+commandline.h:42:7:void CommandLine::ShowPrompt()	16	static
+commandline.h:46:7:void CommandLine::ShowCRLF()	16	static
+commandline.h:50:7:void CommandLine::CmdCancel()	16	static
+commandline.h:55:7:void CommandLine::CmdBackspace()	24	static
+commandline.h:66:7:void CommandLine::In(CircularBuffer<unsigned char>&)	24	static
+commandline.h:92:7:void CommandLine::Out(CircularBuffer<unsigned char>&)	24	static
+commandline.h:99:7:void CommandLine::Process()	64	static
+interrupt_stm32.h:7:2:INTERRUPT_STM32::INTERRUPT_STM32(uint8_t, uint8_t, uint8_t, uint8_t)	24	static
+main.cpp:51:6:void vTaskLed1(void*)	24	static
+main.cpp:66:6:void vTaskNRF24TX(void*)	96	static
+main.cpp:90:6:void vTaskNRF24RX(void*)	120	static
+main.cpp:124:6:void vTaskMotor(void*)	56	static
+main.cpp:141:6:void vTaskCmdLine(void*)	24	static
+main.cpp:155:5:int main()	16	static
+main.cpp:202:17:void vApplicationStackOverflowHook(TaskHandle_t, signed char*)	16	static
+main.cpp:208:17:void vApplicationIdleHook()	16	static
+main.cpp:213:17:void vApplicationTickHook()	4	static
+main.cpp:216:17:void vApplicationMallocFailedHook()	4	static
+circularbuffer.h:32:11:uint16_t CircularBuffer<T, accept_data_when_full>::In(const T*, uint16_t) [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	32	static
+circularbuffer.h:175:7:void CircularBuffer<T, accept_data_when_full>::Clear() [with T = unsigned char; unsigned char accept_data_when_full = 1u]	16	static
+circularbuffer.h:172:11:uint16_t CircularBuffer<T, accept_data_when_full>::Ocupied() [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	16	static
+circularbuffer.h:137:11:uint16_t CircularBuffer<T, accept_data_when_full>::OutEnd(T*, uint16_t) [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	32	static
+circularbuffer.h:28:11:uint16_t CircularBuffer<T, accept_data_when_full>::In(const T&) [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	16	static
+circularbuffer.h:131:4:T CircularBuffer<T, accept_data_when_full>::Out() [with T = unsigned char; unsigned char accept_data_when_full = 1u]	24	static
+circularbuffer.h:169:11:uint16_t CircularBuffer<T, accept_data_when_full>::Free() [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	16	static
+circularbuffer.h:97:11:uint16_t CircularBuffer<T, accept_data_when_full>::Out(CircularBuffer<T>&, uint16_t) [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	48	dynamic
+circularbuffer.h:107:11:uint16_t CircularBuffer<T, accept_data_when_full>::Out(T*, uint16_t) [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	32	static
+circularbuffer.h:181:5:T* CircularBuffer<T, accept_data_when_full>::GetRearrangedBuffer() [with T = unsigned char; unsigned char accept_data_when_full = 1u]	56	dynamic
+stl_list.h:831:7:std::__cxx11::list<_Tp, _Alloc>::iterator std::__cxx11::list<_Tp, _Alloc>::begin() [with _Tp = const char*; _Alloc = std::allocator<const char*>; std::__cxx11::list<_Tp, _Alloc>::iterator = std::_List_iterator<const char*>]	24	static
+stl_list.h:831:7:std::__cxx11::list<_Tp, _Alloc>::iterator std::__cxx11::list<_Tp, _Alloc>::begin() [with _Tp = short unsigned int (*)(short unsigned int, unsigned char**); _Alloc = std::allocator<short unsigned int (*)(short unsigned int, unsigned char**)>; std::__cxx11::list<_Tp, _Alloc>::iterator = std::_List_iterator<short unsigned int (*)(short unsigned int, unsigned char**)>]	24	static
+stl_list.h:849:7:std::__cxx11::list<_Tp, _Alloc>::iterator std::__cxx11::list<_Tp, _Alloc>::end() [with _Tp = const char*; _Alloc = std::allocator<const char*>; std::__cxx11::list<_Tp, _Alloc>::iterator = std::_List_iterator<const char*>]	24	static
+stl_list.h:191:7:bool std::_List_iterator<_Tp>::operator!=(const _Self&) const [with _Tp = const char*; std::_List_iterator<_Tp>::_Self = std::_List_iterator<const char*>]	16	static
+stl_list.h:849:7:std::__cxx11::list<_Tp, _Alloc>::iterator std::__cxx11::list<_Tp, _Alloc>::end() [with _Tp = short unsigned int (*)(short unsigned int, unsigned char**); _Alloc = std::allocator<short unsigned int (*)(short unsigned int, unsigned char**)>; std::__cxx11::list<_Tp, _Alloc>::iterator = std::_List_iterator<short unsigned int (*)(short unsigned int, unsigned char**)>]	24	static
+stl_list.h:191:7:bool std::_List_iterator<_Tp>::operator!=(const _Self&) const [with _Tp = short unsigned int (*)(short unsigned int, unsigned char**); std::_List_iterator<_Tp>::_Self = std::_List_iterator<short unsigned int (*)(short unsigned int, unsigned char**)>]	16	static
+stl_list.h:164:7:std::_List_iterator<_Tp>::_Self std::_List_iterator<_Tp>::operator++(int) [with _Tp = const char*; std::_List_iterator<_Tp>::_Self = std::_List_iterator<const char*>]	24	static
+stl_list.h:164:7:std::_List_iterator<_Tp>::_Self std::_List_iterator<_Tp>::operator++(int) [with _Tp = short unsigned int (*)(short unsigned int, unsigned char**); std::_List_iterator<_Tp>::_Self = std::_List_iterator<short unsigned int (*)(short unsigned int, unsigned char**)>]	24	static
+stl_list.h:149:7:_Tp& std::_List_iterator<_Tp>::operator*() const [with _Tp = const char*; std::_List_iterator<_Tp>::reference = const char*&]	16	static
+stl_list.h:149:7:_Tp& std::_List_iterator<_Tp>::operator*() const [with _Tp = short unsigned int (*)(short unsigned int, unsigned char**); std::_List_iterator<_Tp>::reference = short unsigned int (*&)(short unsigned int, unsigned char**)]	16	static
+stl_algobase.h:460:5:_OI std::copy(_II, _II, _OI) [with _II = const unsigned char*; _OI = unsigned char*]	32	static
+stl_algobase.h:460:5:_OI std::copy(_II, _II, _OI) [with _II = unsigned char*; _OI = unsigned char*]	32	static
+stl_list.h:140:7:std::_List_iterator<_Tp>::_List_iterator(std::__detail::_List_node_base*) [with _Tp = const char*]	16	static
+stl_list.h:140:7:std::_List_iterator<_Tp>::_List_iterator(std::__detail::_List_node_base*) [with _Tp = short unsigned int (*)(short unsigned int, unsigned char**)]	16	static
+stl_algobase.h:293:5:typename std::_Miter_base<_Iterator>::iterator_type std::__miter_base(_Iterator) [with _Iterator = const unsigned char*; typename std::_Miter_base<_Iterator>::iterator_type = const unsigned char*]	16	static
+stl_algobase.h:434:5:_OI std::__copy_move_a2(_II, _II, _OI) [with bool _IsMove = false; _II = const unsigned char*; _OI = unsigned char*]	32	static
+stl_algobase.h:293:5:typename std::_Miter_base<_Iterator>::iterator_type std::__miter_base(_Iterator) [with _Iterator = unsigned char*; typename std::_Miter_base<_Iterator>::iterator_type = unsigned char*]	16	static
+stl_algobase.h:434:5:_OI std::__copy_move_a2(_II, _II, _OI) [with bool _IsMove = false; _II = unsigned char*; _OI = unsigned char*]	32	static
+stl_iterator_base_types.h:215:28:static std::_Iter_base<_Iterator, _HasBase>::iterator_type std::_Iter_base<_Iterator, _HasBase>::_S_base(_Iterator) [with _Iterator = const unsigned char*; bool _HasBase = false; std::_Iter_base<_Iterator, _HasBase>::iterator_type = const unsigned char*]	16	static
+stl_algobase.h:282:5:typename std::_Niter_base<_Iterator>::iterator_type std::__niter_base(_Iterator) [with _Iterator = const unsigned char*; typename std::_Niter_base<_Iterator>::iterator_type = const unsigned char*]	16	static
+stl_algobase.h:282:5:typename std::_Niter_base<_Iterator>::iterator_type std::__niter_base(_Iterator) [with _Iterator = unsigned char*; typename std::_Niter_base<_Iterator>::iterator_type = unsigned char*]	16	static
+stl_algobase.h:389:5:_OI std::__copy_move_a(_II, _II, _OI) [with bool _IsMove = false; _II = const unsigned char*; _OI = unsigned char*]	32	static
+stl_iterator_base_types.h:215:28:static std::_Iter_base<_Iterator, _HasBase>::iterator_type std::_Iter_base<_Iterator, _HasBase>::_S_base(_Iterator) [with _Iterator = unsigned char*; bool _HasBase = false; std::_Iter_base<_Iterator, _HasBase>::iterator_type = unsigned char*]	16	static
+stl_algobase.h:389:5:_OI std::__copy_move_a(_II, _II, _OI) [with bool _IsMove = false; _II = unsigned char*; _OI = unsigned char*]	32	static
+stl_algobase.h:373:9:static _Tp* std::__copy_move<_IsMove, true, std::random_access_iterator_tag>::__copy_m(const _Tp*, const _Tp*, _Tp*) [with _Tp = unsigned char; bool _IsMove = false]	32	static

@@ -1,0 +1,7 @@
+Motor.cpp:19:1:Motor::Motor(Pwm*, GPIO*, Pwm*, GPIO*, Encoder*, INA220*)	24	static
+Motor.cpp:33:6:void Motor::Control_Pos(float)	24	static
+Motor.cpp:46:6:void Motor::Control_Speed(float)	56	static
+Motor.cpp:80:6:void Motor::SetDutyCycle(int16_t)	16	static
+Motor.cpp:110:9:int16_t Motor::Pos_Calc_Answer(uint32_t, uint32_t)	56	static
+Motor.cpp:133:6:static void Motor::SetPID(float, float, float)	24	static
+Motor.cpp:139:6:static void Motor::GetPID(float*)	16	static

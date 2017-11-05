@@ -1,0 +1,14 @@
+configuration.cpp:3:1:RadioNet::RadioNet(uint32_t, uint32_t, MODEM_POWER, MODEM_WAVEFORM)	24	static
+initializer_list:71:7:constexpr std::initializer_list<_E>::size_type std::initializer_list<_E>::size() const [with _E = RadioNet*; std::initializer_list<_E>::size_type = unsigned int]	16	static
+initializer_list:75:7:constexpr const _E* std::initializer_list<_E>::begin() const [with _E = RadioNet*; std::initializer_list<_E>::const_iterator = RadioNet* const*]	16	static
+initializer_list:79:7:constexpr const _E* std::initializer_list<_E>::end() const [with _E = RadioNet*; std::initializer_list<_E>::const_iterator = RadioNet* const*]	24	static
+configuration.cpp:10:1:Configuration::Configuration(std::initializer_list<RadioNet*>)	40	static
+stl_algobase.h:460:5:_OI std::copy(_II, _II, _OI) [with _II = RadioNet* const*; _OI = RadioNet**]	32	static
+stl_algobase.h:293:5:typename std::_Miter_base<_Iterator>::iterator_type std::__miter_base(_Iterator) [with _Iterator = RadioNet* const*; typename std::_Miter_base<_Iterator>::iterator_type = RadioNet* const*]	16	static
+stl_algobase.h:434:5:_OI std::__copy_move_a2(_II, _II, _OI) [with bool _IsMove = false; _II = RadioNet* const*; _OI = RadioNet**]	32	static
+stl_iterator_base_types.h:215:28:static std::_Iter_base<_Iterator, _HasBase>::iterator_type std::_Iter_base<_Iterator, _HasBase>::_S_base(_Iterator) [with _Iterator = RadioNet* const*; bool _HasBase = false; std::_Iter_base<_Iterator, _HasBase>::iterator_type = RadioNet* const*]	16	static
+stl_algobase.h:282:5:typename std::_Niter_base<_Iterator>::iterator_type std::__niter_base(_Iterator) [with _Iterator = RadioNet* const*; typename std::_Niter_base<_Iterator>::iterator_type = RadioNet* const*]	16	static
+stl_algobase.h:282:5:typename std::_Niter_base<_Iterator>::iterator_type std::__niter_base(_Iterator) [with _Iterator = RadioNet**; typename std::_Niter_base<_Iterator>::iterator_type = RadioNet**]	16	static
+stl_algobase.h:389:5:_OI std::__copy_move_a(_II, _II, _OI) [with bool _IsMove = false; _II = RadioNet* const*; _OI = RadioNet**]	32	static
+stl_iterator_base_types.h:215:28:static std::_Iter_base<_Iterator, _HasBase>::iterator_type std::_Iter_base<_Iterator, _HasBase>::_S_base(_Iterator) [with _Iterator = RadioNet**; bool _HasBase = false; std::_Iter_base<_Iterator, _HasBase>::iterator_type = RadioNet**]	16	static
+stl_algobase.h:373:9:static _Tp* std::__copy_move<_IsMove, true, std::random_access_iterator_tag>::__copy_m(const _Tp*, const _Tp*, _Tp*) [with _Tp = RadioNet*; bool _IsMove = false]	32	static

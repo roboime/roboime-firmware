@@ -1,0 +1,11 @@
+adc.h:11:2:ADC::ADC(uint32_t, uint16_t)	24	static
+adc.h:16:10:ADC::~ADC()	16	static
+adc.h:16:10:virtual ADC::~ADC()	16	static
+adc_stm32.cpp:6:1:ADC_STM32::ADC_STM32(uint32_t, uint16_t, ADC_TypeDef*, uint8_t, uint8_t)	56	static
+adc_stm32.cpp:25:6:void ADC_STM32::Init(ADC_TypeDef*, uint8_t, uint8_t, ADC_InitTypeDef*)	120	static
+adc_stm32.cpp:108:11:virtual uint16_t* ADC_STM32::GetBuffer()	16	static
+adc_stm32.cpp:114:6:virtual void ADC_STM32::Start()	16	static
+adc_stm32.cpp:118:6:virtual void ADC_STM32::Stop()	16	static
+adc_stm32.cpp:122:9:uint8_t ADC_STM32::GetIRQChannel()	16	static
+adc_stm32.cpp:126:1:ADC_STM32::~ADC_STM32()	16	static
+adc_stm32.cpp:126:1:virtual ADC_STM32::~ADC_STM32()	16	static

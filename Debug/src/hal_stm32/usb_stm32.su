@@ -1,0 +1,79 @@
+gthr-default.h:229:1:int __gthread_key_delete(__gthread_key_t)	16	static
+usb_device_class.h:32:10:uint8_t USB_DEVICE_CLASS::InterfaceBelongs(uint8_t)	24	static
+usb_device_class.h:36:17:static uint8_t USB_DEVICE_CLASS::GetNumInterfaces()	4	static
+usb.h:6:7:constexpr USB::USB()	16	static
+usb_stm32.cpp:28:1:USB_STM32::USB_STM32(uint16_t, uint16_t, const char*, const char*, const char*)	24	static
+usb_stm32.cpp:44:6:void USB_STM32::Init()	24	static
+usb_stm32.cpp:48:6:virtual void USB_STM32::EP_Open(uint8_t, uint16_t, USB::USB_ENDPOINT_TYPE)	16	static
+usb_stm32.cpp:52:6:virtual void USB_STM32::EP_Close(uint8_t)	16	static
+usb_stm32.cpp:56:6:virtual void USB_STM32::EP_Flush(uint8_t)	16	static
+usb_stm32.cpp:60:6:virtual void USB_STM32::EP_PrepareRx(uint8_t, uint8_t*, uint16_t)	24	static
+usb_stm32.cpp:64:6:virtual void USB_STM32::EP_Tx(uint8_t, uint8_t*, uint16_t)	24	static
+usb_stm32.cpp:68:6:virtual void USB_STM32::CtlPrepareRx(uint8_t*, uint16_t)	24	static
+usb_stm32.cpp:72:6:virtual void USB_STM32::CtlSendData(uint8_t*, uint16_t)	24	static
+usb_stm32.cpp:76:6:virtual void USB_STM32::CtlError(USB::USB_SETUP_REQUEST*)	16	static
+usb_stm32.cpp:81:10:static uint8_t* USB_STM32::USBD_STM32_DeviceDescriptor(uint8_t, uint16_t*)	16	static
+usb_stm32.cpp:107:10:static uint8_t* USB_STM32::USBD_STM32_LangIDStrDescriptor(uint8_t, uint16_t*)	16	static
+usb_stm32.cpp:113:10:static uint8_t* USB_STM32::USBD_STM32_ManufacturerStrDescriptor(uint8_t, uint16_t*)	16	static
+usb_stm32.cpp:118:10:static uint8_t* USB_STM32::USBD_STM32_ProductStrDescriptor(uint8_t, uint16_t*)	16	static
+usb_stm32.cpp:123:10:static uint8_t* USB_STM32::USBD_STM32_SerialStrDescriptor(uint8_t, uint16_t*)	16	static
+usb_stm32.cpp:128:10:static uint8_t* USB_STM32::USBD_STM32_ConfigStrDescriptor(uint8_t, uint16_t*)	16	static
+usb_stm32.cpp:134:10:static uint8_t* USB_STM32::USBD_STM32_InterfaceStrDescriptor(uint8_t, uint16_t*)	16	static
+usb_stm32.cpp:175:9:static uint8_t USB_STM32::usbd_stm32_Setup(void*, USB_SETUP_REQ*)	48	static
+usb_stm32.cpp:221:9:static uint8_t USB_STM32::usbd_stm32_Init(void*, uint8_t)	32	static
+usb_stm32.cpp:231:9:static uint8_t USB_STM32::usbd_stm32_DeInit(void*, uint8_t)	32	static
+usb_stm32.cpp:241:9:static uint8_t USB_STM32::usbd_stm32_DataOut(void*, uint8_t)	40	static
+usb_stm32.cpp:252:9:static uint8_t USB_STM32::usbd_stm32_DataIn(void*, uint8_t)	32	static
+usb_stm32.cpp:262:9:static uint8_t USB_STM32::usbd_stm32_IsoINIncomplete(void*)	32	static
+usb_stm32.cpp:272:9:static uint8_t USB_STM32::usbd_stm32_IsoOUTIncomplete(void*)	32	static
+usb_stm32.cpp:282:9:static uint8_t USB_STM32::usbd_stm32_SOF(void*)	32	static
+usb_stm32.cpp:292:9:static uint8_t USB_STM32::usbd_stm32_EP0_TxSent(void*)	32	static
+usb_stm32.cpp:304:9:static uint8_t USB_STM32::usbd_stm32_EP0_RxReady(void*)	48	static
+usb_stm32.cpp:318:10:static uint8_t* USB_STM32::usbd_stm32_GetConfigDescriptor(uint8_t, uint16_t*)	40	static
+usb_stm32.cpp:373:10:static uint8_t* USB_STM32::usbd_stm32_GetOtherConfigDescriptor(uint8_t, uint16_t*)	16	static
+usb_stm32.cpp:377:10:static uint8_t* USB_STM32::usbd_stm32_GetUsrStrDescriptor(uint8_t, uint8_t, uint16_t*)	32	static
+usb_stm32.cpp:392:6:static void USB_STM32::usbd_usr_stm32_Init()	4	static
+usb_stm32.cpp:395:6:static void USB_STM32::usbd_usr_stm32_DeviceReset(uint8_t)	16	static
+usb_stm32.cpp:398:6:static void USB_STM32::usbd_usr_stm32_DeviceConfigured()	4	static
+usb_stm32.cpp:401:6:static void USB_STM32::usbd_usr_stm32_DeviceSuspended()	4	static
+usb_stm32.cpp:404:6:static void USB_STM32::usbd_usr_stm32_DeviceResumed()	4	static
+usb_stm32.cpp:407:6:static void USB_STM32::usbd_usr_stm32_DeviceConnected()	4	static
+usb_stm32.cpp:410:6:static void USB_STM32::usbd_usr_stm32_DeviceDisconnected()	4	static
+usb_stm32.cpp:429:17:void USB_OTG_BSP_Init(USB_OTG_CORE_HANDLE*)	16	static
+usb_stm32.cpp:430:17:void USB_OTG_BSP_uDelay(uint32_t)	24	static
+usb_stm32.cpp:442:17:void USB_OTG_BSP_mDelay(uint32_t)	16	static
+usb_stm32.cpp:445:17:void USB_OTG_BSP_EnableInterrupt(USB_OTG_CORE_HANDLE*)	16	static
+usb_stm32.cpp:447:6:void USB_OTG_BSP_ConfigVBUS(USB_OTG_CORE_HANDLE*)	16	static
+usb_stm32.cpp:448:6:void USB_OTG_BSP_DriveVBUS(USB_OTG_CORE_HANDLE*, uint8_t)	16	static
+stl_vector.h:654:7:std::vector<_Tp, _Alloc>::size_type std::vector<_Tp, _Alloc>::size() const [with _Tp = unsigned char; _Alloc = std::allocator<unsigned char>; std::vector<_Tp, _Alloc>::size_type = unsigned int]	16	static
+stl_vector.h:779:7:std::vector<_Tp, _Alloc>::reference std::vector<_Tp, _Alloc>::operator[](std::vector<_Tp, _Alloc>::size_type) [with _Tp = unsigned char; _Alloc = std::allocator<unsigned char>; std::vector<_Tp, _Alloc>::reference = unsigned char&; std::vector<_Tp, _Alloc>::size_type = unsigned int]	16	static
+circularbuffer.h:7:2:CircularBuffer<T, accept_data_when_full>::CircularBuffer(T*, uint16_t, uint16_t) [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	24	static
+stl_list.h:831:7:std::__cxx11::list<_Tp, _Alloc>::iterator std::__cxx11::list<_Tp, _Alloc>::begin() [with _Tp = USB_DEVICE_CLASS*; _Alloc = std::allocator<USB_DEVICE_CLASS*>; std::__cxx11::list<_Tp, _Alloc>::iterator = std::_List_iterator<USB_DEVICE_CLASS*>]	24	static
+stl_list.h:849:7:std::__cxx11::list<_Tp, _Alloc>::iterator std::__cxx11::list<_Tp, _Alloc>::end() [with _Tp = USB_DEVICE_CLASS*; _Alloc = std::allocator<USB_DEVICE_CLASS*>; std::__cxx11::list<_Tp, _Alloc>::iterator = std::_List_iterator<USB_DEVICE_CLASS*>]	24	static
+stl_list.h:191:7:bool std::_List_iterator<_Tp>::operator!=(const _Self&) const [with _Tp = USB_DEVICE_CLASS*; std::_List_iterator<_Tp>::_Self = std::_List_iterator<USB_DEVICE_CLASS*>]	16	static
+stl_list.h:164:7:std::_List_iterator<_Tp>::_Self std::_List_iterator<_Tp>::operator++(int) [with _Tp = USB_DEVICE_CLASS*; std::_List_iterator<_Tp>::_Self = std::_List_iterator<USB_DEVICE_CLASS*>]	24	static
+stl_list.h:149:7:_Tp& std::_List_iterator<_Tp>::operator*() const [with _Tp = USB_DEVICE_CLASS*; std::_List_iterator<_Tp>::reference = USB_DEVICE_CLASS*&]	16	static
+circularbuffer.h:175:7:void CircularBuffer<T, accept_data_when_full>::Clear() [with T = unsigned char; unsigned char accept_data_when_full = 1u]	16	static
+circularbuffer.h:32:11:uint16_t CircularBuffer<T, accept_data_when_full>::In(const T*, uint16_t) [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	32	static
+circularbuffer.h:165:5:T& CircularBuffer<T, accept_data_when_full>::operator[](uint16_t) [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	16	static
+circularbuffer.h:172:11:uint16_t CircularBuffer<T, accept_data_when_full>::Ocupied() [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	16	static
+circularbuffer.h:181:5:T* CircularBuffer<T, accept_data_when_full>::GetRearrangedBuffer() [with T = unsigned char; unsigned char accept_data_when_full = 1u]	56	dynamic
+stl_list.h:140:7:std::_List_iterator<_Tp>::_List_iterator(std::__detail::_List_node_base*) [with _Tp = USB_DEVICE_CLASS*]	16	static
+circularbuffer.h:169:11:uint16_t CircularBuffer<T, accept_data_when_full>::Free() [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	16	static
+circularbuffer.h:107:11:uint16_t CircularBuffer<T, accept_data_when_full>::Out(T*, uint16_t) [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	32	static
+stl_algobase.h:460:5:_OI std::copy(_II, _II, _OI) [with _II = const unsigned char*; _OI = unsigned char*]	32	static
+stl_algobase.h:460:5:_OI std::copy(_II, _II, _OI) [with _II = unsigned char*; _OI = unsigned char*]	32	static
+stl_algobase.h:293:5:typename std::_Miter_base<_Iterator>::iterator_type std::__miter_base(_Iterator) [with _Iterator = const unsigned char*; typename std::_Miter_base<_Iterator>::iterator_type = const unsigned char*]	16	static
+stl_algobase.h:434:5:_OI std::__copy_move_a2(_II, _II, _OI) [with bool _IsMove = false; _II = const unsigned char*; _OI = unsigned char*]	32	static
+stl_algobase.h:293:5:typename std::_Miter_base<_Iterator>::iterator_type std::__miter_base(_Iterator) [with _Iterator = unsigned char*; typename std::_Miter_base<_Iterator>::iterator_type = unsigned char*]	16	static
+stl_algobase.h:434:5:_OI std::__copy_move_a2(_II, _II, _OI) [with bool _IsMove = false; _II = unsigned char*; _OI = unsigned char*]	32	static
+stl_iterator_base_types.h:215:28:static std::_Iter_base<_Iterator, _HasBase>::iterator_type std::_Iter_base<_Iterator, _HasBase>::_S_base(_Iterator) [with _Iterator = const unsigned char*; bool _HasBase = false; std::_Iter_base<_Iterator, _HasBase>::iterator_type = const unsigned char*]	16	static
+stl_algobase.h:282:5:typename std::_Niter_base<_Iterator>::iterator_type std::__niter_base(_Iterator) [with _Iterator = const unsigned char*; typename std::_Niter_base<_Iterator>::iterator_type = const unsigned char*]	16	static
+stl_algobase.h:282:5:typename std::_Niter_base<_Iterator>::iterator_type std::__niter_base(_Iterator) [with _Iterator = unsigned char*; typename std::_Niter_base<_Iterator>::iterator_type = unsigned char*]	16	static
+stl_algobase.h:389:5:_OI std::__copy_move_a(_II, _II, _OI) [with bool _IsMove = false; _II = const unsigned char*; _OI = unsigned char*]	32	static
+stl_iterator_base_types.h:215:28:static std::_Iter_base<_Iterator, _HasBase>::iterator_type std::_Iter_base<_Iterator, _HasBase>::_S_base(_Iterator) [with _Iterator = unsigned char*; bool _HasBase = false; std::_Iter_base<_Iterator, _HasBase>::iterator_type = unsigned char*]	16	static
+stl_algobase.h:389:5:_OI std::__copy_move_a(_II, _II, _OI) [with bool _IsMove = false; _II = unsigned char*; _OI = unsigned char*]	32	static
+stl_algobase.h:373:9:static _Tp* std::__copy_move<_IsMove, true, std::random_access_iterator_tag>::__copy_m(const _Tp*, const _Tp*, _Tp*) [with _Tp = unsigned char; bool _IsMove = false]	32	static
+usb_stm32.cpp:448:70:void __static_initialization_and_destruction_0(int, int)	16	static
+circularbuffer.h:23:2:CircularBuffer<T, accept_data_when_full>::~CircularBuffer() [with T = unsigned char; unsigned char accept_data_when_full = 1u]	16	static
+usb_stm32.cpp:448:70:cpp)	8	static

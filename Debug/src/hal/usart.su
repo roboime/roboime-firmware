@@ -1,0 +1,3 @@
+usart.cpp:3:9:virtual uint8_t USART::ReadBuffer(uint8_t*, uint16_t)	32	static
+usart.cpp:13:6:virtual void USART::WriteBuffer(uint8_t*, uint16_t)	24	static
+usart.cpp:19:6:virtual void USART::WriteString(const char*)	16	static

@@ -1,0 +1,39 @@
+usb_device_class.h:19:18:virtual uint8_t USB_DEVICE_CLASS::Setup(USB::USB_SETUP_REQUEST*)	16	static
+usb_device_class.h:20:18:virtual uint8_t USB_DEVICE_CLASS::EP0_TxSent()	16	static
+usb_device_class.h:21:18:virtual uint8_t USB_DEVICE_CLASS::EP0_RxReady()	16	static
+usb_device_class.h:25:18:virtual uint8_t USB_DEVICE_CLASS::ISO_IN()	16	static
+usb_device_class.h:26:18:virtual uint8_t USB_DEVICE_CLASS::ISO_OUT()	16	static
+usb_device_class.h:30:18:virtual uint8_t USB_DEVICE_CLASS::SetupCmd(uint16_t, uint8_t, uint8_t*, uint16_t&)	24	static
+gthr-default.h:229:1:int __gthread_key_delete(__gthread_key_t)	16	static
+usb_device_class_audio.cpp:3:1:USB_DEVICE_CLASS_AUDIO::USB_DEVICE_CLASS_AUDIO(uint8_t)	48	static
+usb_device_class_audio.cpp:12:9:virtual uint8_t USB_DEVICE_CLASS_AUDIO::Init(USB*)	24	static
+usb_device_class_audio.cpp:20:9:virtual uint8_t USB_DEVICE_CLASS_AUDIO::DeInit()	24	static
+usb_device_class_audio.cpp:26:9:virtual uint8_t USB_DEVICE_CLASS_AUDIO::InterfaceRequest(USB::USB_SETUP_REQUEST*)	24	static
+usb_device_class_audio.cpp:43:9:virtual uint8_t USB_DEVICE_CLASS_AUDIO::DataIn(uint8_t)	32	static
+usb_device_class_audio.cpp:58:9:virtual uint8_t USB_DEVICE_CLASS_AUDIO::DataOut(uint8_t, uint16_t)	24	static
+usb_device_class_audio.cpp:66:9:virtual uint8_t USB_DEVICE_CLASS_AUDIO::SOF()	32	static
+usb_device_class_audio.cpp:79:10:virtual uint16_t USB_DEVICE_CLASS_AUDIO::GetDescriptorSize()	16	static
+usb_device_class_audio.cpp:83:10:virtual uint8_t* USB_DEVICE_CLASS_AUDIO::GetDescriptor()	16	static
+usb_device_class_audio.cpp:101:6:void USB_DEVICE_CLASS_AUDIO::SendAudio(int16_t*, uint16_t)	64	dynamic
+usb_device_class_audio.cpp:108:10:uint16_t USB_DEVICE_CLASS_AUDIO::GetAudio(int16_t*, uint16_t)	24	static
+usb_device_class_audio.cpp:114:10:uint16_t USB_DEVICE_CLASS_AUDIO::GetAudioAvailable()	16	static
+stl_vector.h:779:7:std::vector<_Tp, _Alloc>::reference std::vector<_Tp, _Alloc>::operator[](std::vector<_Tp, _Alloc>::size_type) [with _Tp = unsigned char; _Alloc = std::allocator<unsigned char>; std::vector<_Tp, _Alloc>::reference = unsigned char&; std::vector<_Tp, _Alloc>::size_type = unsigned int]	16	static
+circularbuffer.h:7:2:CircularBuffer<T, accept_data_when_full>::CircularBuffer(T*, uint16_t, uint16_t) [with T = short int; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	24	static
+circularbuffer.h:175:7:void CircularBuffer<T, accept_data_when_full>::Clear() [with T = short int; unsigned char accept_data_when_full = 1u]	16	static
+circularbuffer.h:107:11:uint16_t CircularBuffer<T, accept_data_when_full>::Out(T*, uint16_t) [with T = short int; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	32	static
+circularbuffer.h:32:11:uint16_t CircularBuffer<T, accept_data_when_full>::In(const T*, uint16_t) [with T = short int; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	32	static
+circularbuffer.h:172:11:uint16_t CircularBuffer<T, accept_data_when_full>::Ocupied() [with T = short int; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	16	static
+stl_algobase.h:460:5:_OI std::copy(_II, _II, _OI) [with _II = short int*; _OI = short int*]	32	static
+circularbuffer.h:169:11:uint16_t CircularBuffer<T, accept_data_when_full>::Free() [with T = short int; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	16	static
+stl_algobase.h:460:5:_OI std::copy(_II, _II, _OI) [with _II = const short int*; _OI = short int*]	32	static
+stl_algobase.h:293:5:typename std::_Miter_base<_Iterator>::iterator_type std::__miter_base(_Iterator) [with _Iterator = short int*; typename std::_Miter_base<_Iterator>::iterator_type = short int*]	16	static
+stl_algobase.h:434:5:_OI std::__copy_move_a2(_II, _II, _OI) [with bool _IsMove = false; _II = short int*; _OI = short int*]	32	static
+stl_algobase.h:293:5:typename std::_Miter_base<_Iterator>::iterator_type std::__miter_base(_Iterator) [with _Iterator = const short int*; typename std::_Miter_base<_Iterator>::iterator_type = const short int*]	16	static
+stl_algobase.h:434:5:_OI std::__copy_move_a2(_II, _II, _OI) [with bool _IsMove = false; _II = const short int*; _OI = short int*]	32	static
+stl_iterator_base_types.h:215:28:static std::_Iter_base<_Iterator, _HasBase>::iterator_type std::_Iter_base<_Iterator, _HasBase>::_S_base(_Iterator) [with _Iterator = short int*; bool _HasBase = false; std::_Iter_base<_Iterator, _HasBase>::iterator_type = short int*]	16	static
+stl_algobase.h:282:5:typename std::_Niter_base<_Iterator>::iterator_type std::__niter_base(_Iterator) [with _Iterator = short int*; typename std::_Niter_base<_Iterator>::iterator_type = short int*]	16	static
+stl_algobase.h:389:5:_OI std::__copy_move_a(_II, _II, _OI) [with bool _IsMove = false; _II = short int*; _OI = short int*]	32	static
+stl_iterator_base_types.h:215:28:static std::_Iter_base<_Iterator, _HasBase>::iterator_type std::_Iter_base<_Iterator, _HasBase>::_S_base(_Iterator) [with _Iterator = const short int*; bool _HasBase = false; std::_Iter_base<_Iterator, _HasBase>::iterator_type = const short int*]	16	static
+stl_algobase.h:282:5:typename std::_Niter_base<_Iterator>::iterator_type std::__niter_base(_Iterator) [with _Iterator = const short int*; typename std::_Niter_base<_Iterator>::iterator_type = const short int*]	16	static
+stl_algobase.h:389:5:_OI std::__copy_move_a(_II, _II, _OI) [with bool _IsMove = false; _II = const short int*; _OI = short int*]	32	static
+stl_algobase.h:373:9:static _Tp* std::__copy_move<_IsMove, true, std::random_access_iterator_tag>::__copy_m(const _Tp*, const _Tp*, _Tp*) [with _Tp = short int; bool _IsMove = false]	32	static

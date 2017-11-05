@@ -1,0 +1,5 @@
+ina220.cpp:3:1:INA220::INA220(I2C&, uint8_t)	24	static
+ina220.cpp:7:7:float INA220::ReadBusVoltage()	24	static
+ina220.cpp:15:7:float INA220::ReadCurrent()	24	static
+ina220.cpp:23:7:float INA220::ReadPower()	24	static
+ina220.cpp:31:9:uint8_t INA220::SelfTest()	40	static
