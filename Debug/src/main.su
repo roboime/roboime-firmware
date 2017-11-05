@@ -12,13 +12,13 @@ interrupt_stm32.h:7:2:INTERRUPT_STM32::INTERRUPT_STM32(uint8_t, uint8_t, uint8_t
 main.cpp:51:6:void vTaskLed1(void*)	24	static
 main.cpp:66:6:void vTaskNRF24TX(void*)	96	static
 main.cpp:90:6:void vTaskNRF24RX(void*)	120	static
-main.cpp:124:6:void vTaskMotor(void*)	56	static
-main.cpp:141:6:void vTaskCmdLine(void*)	24	static
-main.cpp:155:5:int main()	16	static
-main.cpp:202:17:void vApplicationStackOverflowHook(TaskHandle_t, signed char*)	16	static
-main.cpp:208:17:void vApplicationIdleHook()	16	static
-main.cpp:213:17:void vApplicationTickHook()	4	static
-main.cpp:216:17:void vApplicationMallocFailedHook()	4	static
+main.cpp:124:6:void vTaskRobo(void*)	56	static
+main.cpp:145:6:void vTaskCmdLine(void*)	24	static
+main.cpp:159:5:int main()	16	static
+main.cpp:206:17:void vApplicationStackOverflowHook(TaskHandle_t, signed char*)	16	static
+main.cpp:212:17:void vApplicationIdleHook()	16	static
+main.cpp:217:17:void vApplicationTickHook()	4	static
+main.cpp:220:17:void vApplicationMallocFailedHook()	4	static
 circularbuffer.h:32:11:uint16_t CircularBuffer<T, accept_data_when_full>::In(const T*, uint16_t) [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	32	static
 circularbuffer.h:175:7:void CircularBuffer<T, accept_data_when_full>::Clear() [with T = unsigned char; unsigned char accept_data_when_full = 1u]	16	static
 circularbuffer.h:172:11:uint16_t CircularBuffer<T, accept_data_when_full>::Ocupied() [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	16	static

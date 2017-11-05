@@ -35,6 +35,12 @@
 									<listOptionValue builtIn="false" value="../Libraries/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../Libraries/Device/STM32F4xx/Include"/>
 									<listOptionValue builtIn="false" value="../Libraries/STM32F4xx_StdPeriph_Driver/inc"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/Libraries/STM32_USB_Device_Library/Core/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/Libraries/STM32_USB_HOST_Library/Core/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/Libraries/STM32_USB_OTG_Driver/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/inc/usb}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/src/control}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.interwork.1464022394" name="Mix ARM/Thumb" superClass="com.atollic.truestudio.common_options.target.interwork" useByScannerDiscovery="false"/>
 								<inputType id="com.atollic.truestudio.as.input.1850448870" name="Input" superClass="com.atollic.truestudio.as.input"/>
@@ -50,14 +56,14 @@
 									<listOptionValue builtIn="false" value="../Libraries/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../Libraries/Device/STM32F4xx/Include"/>
 									<listOptionValue builtIn="false" value="../Libraries/STM32F4xx_StdPeriph_Driver/inc"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RoboFreeRTOS_SSL/FreeRTOSv9.0.0/FreeRTOS/Source/include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RoboFreeRTOS_SSL/FreeRTOSv9.0.0/FreeRTOS/Source/portable/GCC/ARM_CM4F}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RoboFreeRTOS_SSL/inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RoboFreeRTOS_SSL/Libraries/STM32_USB_Device_Library/Core/inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RoboFreeRTOS_SSL/Libraries/STM32_USB_HOST_Library/Core/inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RoboFreeRTOS_SSL/Libraries/STM32_USB_OTG_Driver/inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RoboFreeRTOS_SSL/inc/usb}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RoboFreeRTOS_SSL/src/control}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/FreeRTOSv9.0.0/FreeRTOS/Source/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/FreeRTOSv9.0.0/FreeRTOS/Source/portable/GCC/ARM_CM4F}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/Libraries/STM32_USB_Device_Library/Core/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/Libraries/STM32_USB_HOST_Library/Core/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/Libraries/STM32_USB_OTG_Driver/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/inc/usb}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/src/control}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.1845505286" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.978596358" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32F407VG" valueType="enumerated"/>
@@ -91,14 +97,14 @@
 									<listOptionValue builtIn="false" value="../Libraries/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../Libraries/Device/STM32F4xx/Include"/>
 									<listOptionValue builtIn="false" value="../Libraries/STM32F4xx_StdPeriph_Driver/inc"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RoboFreeRTOS_SSL/FreeRTOSv9.0.0/FreeRTOS/Source/include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RoboFreeRTOS_SSL/FreeRTOSv9.0.0/FreeRTOS/Source/portable/GCC/ARM_CM4F}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RoboFreeRTOS_SSL/inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RoboFreeRTOS_SSL/Libraries/STM32_USB_Device_Library/Core/inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RoboFreeRTOS_SSL/Libraries/STM32_USB_HOST_Library/Core/inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RoboFreeRTOS_SSL/Libraries/STM32_USB_OTG_Driver/inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RoboFreeRTOS_SSL/inc/usb}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RoboFreeRTOS_SSL/src/control}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/FreeRTOSv9.0.0/FreeRTOS/Source/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/FreeRTOSv9.0.0/FreeRTOS/Source/portable/GCC/ARM_CM4F}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/Libraries/STM32_USB_Device_Library/Core/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/Libraries/STM32_USB_HOST_Library/Core/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/Libraries/STM32_USB_OTG_Driver/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/inc/usb}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/src/control}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.1830847089" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.559580638" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32F407VG" valueType="enumerated"/>
@@ -135,7 +141,7 @@
 					<sourceEntries>
 						<entry excluding="FreeRTOS/Source/portable/GCC/MemMang/heap_1.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="FreeRTOSv9.0.0"/>
 						<entry excluding="STM32_USB_OTG_Driver/src/usb_otg.c|STM32_USB_OTG_Driver/src/usb_bsp_template.c|STM32_USB_HOST_Library/Class|STM32_USB_Device_Library/Class" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Libraries"/>
-						<entry excluding="utils/tiny_printf.c|utils/fec.cpp|utils/crc.cpp|radio/scpi.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="bspFoo.cpp|utils/tiny_printf.c|utils/fec.cpp|utils/crc.cpp|radio/scpi.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -175,6 +181,12 @@
 									<listOptionValue builtIn="false" value="../Libraries/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../Libraries/Device/STM32F4xx/Include"/>
 									<listOptionValue builtIn="false" value="../Libraries/STM32F4xx_StdPeriph_Driver/inc"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/Libraries/STM32_USB_Device_Library/Core/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/Libraries/STM32_USB_HOST_Library/Core/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/Libraries/STM32_USB_OTG_Driver/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/inc/usb}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/src/control}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.interwork.2056510231" name="Mix ARM/Thumb" superClass="com.atollic.truestudio.common_options.target.interwork"/>
 								<inputType id="com.atollic.truestudio.as.input.170585923" name="Input" superClass="com.atollic.truestudio.as.input"/>
@@ -190,6 +202,12 @@
 									<listOptionValue builtIn="false" value="../Libraries/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../Libraries/Device/STM32F4xx/Include"/>
 									<listOptionValue builtIn="false" value="../Libraries/STM32F4xx_StdPeriph_Driver/inc"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/Libraries/STM32_USB_Device_Library/Core/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/Libraries/STM32_USB_HOST_Library/Core/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/Libraries/STM32_USB_OTG_Driver/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/inc/usb}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/src/control}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.1221015281" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.442062483" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32F407VG" valueType="enumerated"/>
@@ -223,6 +241,12 @@
 									<listOptionValue builtIn="false" value="../Libraries/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../Libraries/Device/STM32F4xx/Include"/>
 									<listOptionValue builtIn="false" value="../Libraries/STM32F4xx_StdPeriph_Driver/inc"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/Libraries/STM32_USB_Device_Library/Core/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/Libraries/STM32_USB_HOST_Library/Core/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/Libraries/STM32_USB_OTG_Driver/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/inc/usb}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/roboime-firmware/src/control}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.1671591263" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.299561088" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32F407VG" valueType="enumerated"/>
@@ -257,7 +281,7 @@
 					</folderInfo>
 					<sourceEntries>
 						<entry excluding="STM32_USB_OTG_Driver/src/usb_otg.c|STM32_USB_OTG_Driver/src/usb_bsp_template.c|STM32_USB_HOST_Library/Class|STM32_USB_Device_Library/Class" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Libraries"/>
-						<entry excluding="utils/tiny_printf.c|utils/fec.cpp|utils/crc.cpp|radio/scpi.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="bspFoo.cpp|utils/tiny_printf.c|utils/fec.cpp|utils/crc.cpp|radio/scpi.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -279,6 +303,12 @@
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="com.atollic.truestudio.configuration.release.679867862;com.atollic.truestudio.configuration.release.679867862.;com.atollic.truestudio.exe.release.toolchain.gcc.1858532695;com.atollic.truestudio.gcc.input.1421823696">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.atollic.truestudio.mbs.ARMToolsPerProjectProfileC"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.atollic.truestudio.configuration.release.679867862;com.atollic.truestudio.configuration.release.679867862.;com.atollic.truestudio.exe.release.toolchain.gpp.405450692;com.atollic.truestudio.gpp.input.2084010509">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.atollic.truestudio.mbs.ARMToolsPerProjectProfileCPP"/>
+		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="com.atollic.truestudio.exe.debug.1895209226;com.atollic.truestudio.exe.debug.1895209226.;com.atollic.truestudio.exe.debug.toolchain.gpp.1103258152;com.atollic.truestudio.gpp.input.719902125">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.atollic.truestudio.mbs.ARMToolsPerProjectProfileCPP"/>
 		</scannerConfigBuildInfo>

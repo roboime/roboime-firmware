@@ -121,20 +121,24 @@ void vTaskNRF24RX( void *pvParameters){
 	}
 }
 
-void vTaskMotor( void *pvParameters){
-	Motor *_motor=(Motor*)pvParameters;
+void vTaskRobo( void *pvParameters){
+	Robo* robo=(Robo*)pvParameters;
 	int delay = pdMS_TO_TICKS(100);
 	INTERRUPT_STM32 timer_robot(TIM6_DAC_IRQn, 0x0C, 0x0C, ENABLE);
-	grSim_Robot_Command* robotcmd_rec;
+	grSim_Robot_Command* robotcmd;
 	float motor_speeds[4];
 	for(;;){
 		if(uxQueueMessagesWaiting(fila_vel)){
-			xQueueReceive(fila_vel, &robotcmd_rec, portMAX_DELAY);
-			motor_speeds[0]=robotcmd_rec->veltangent;
-			delete robotcmd_rec;
+			xQueueReceive(fila_vel, &robotcmd, portMAX_DELAY);
+			robo->set_speed(robotcmd->veltangent, robotcmd->velnormal, robotcmd->velangular);
+			/*if(robotcmd.kickspeedx!=0)
+				robo.ChuteBaixo(robotcmd.kickspeedx);
+			if(robotcmd.kickspeedz!=0)
+				robo.HighKick(robotcmd.kickspeedz);*/
+			delete robotcmd;
 		}
 		ulTaskNotifyTake( pdTRUE, delay);
-		_motor->Control_Speed(motor_speeds[0]);
+		robo->control_speed();
 	}
 }
 
@@ -186,10 +190,10 @@ int main(void)
 		  NULL, 					//nao usa task parameter
 		  1,						//prioridade 1
 		  NULL);*/
-	xTaskCreate(	vTaskMotor, 	//ponteiro para a função que implementa a tarefa
+	xTaskCreate(	vTaskRobo, 	//ponteiro para a função que implementa a tarefa
    		  "Task Motor", 			//nome da função. Para facilitar o debug.
    		  700, 						//stack depth
-  		  (void*)&motor0, 		//usa task parameter
+  		  (void*)&robo, 		//usa task parameter
  		  1,						//prioridade 1
 		  &t1 );
 	vTaskStartScheduler();
