@@ -48,21 +48,6 @@ extern "C"{
 #include "proto/pb_decode.h"
 #include "proto/pb_encode.h"
 
-void vTaskLed1( void *pvParameters){
-	//const char *pcTaskName = "Task 1 is running \r\n";
-	//volatile uint32_t ul;
-
-	//configASSERT( ( ( uint32_t ) pvParameters ) == 1 );
-	//a tarefa tem implementada nela um loop infinito.
-	for(;;){
-		int delay;
-		delay = pdMS_TO_TICKS(1000);
-		vTaskDelay(delay);
-		//GPIOD->ODR ^= GPIO_Pin_13;
-		led_laranja.Toggle();
-	}
-}
-
 void vTaskNRF24TX( void *pvParameters){
 	NRF24L01P *_nrf24=(NRF24L01P*)pvParameters;
 	_nrf24->Init();
@@ -70,7 +55,7 @@ void vTaskNRF24TX( void *pvParameters){
 	uint8_t channel;
 	uint64_t address;
 	channel=92;
-	address=0xE7E7E7E7E7;
+	address=0xE7E7E7E700;
 
 	for(;;){
 		int delay;
@@ -80,63 +65,23 @@ void vTaskNRF24TX( void *pvParameters){
 		uint8_t buffer[32];
 		uint8_t received_length;
 		received_length = usb_device_class_cdc_vcp.GetData(buffer, 32);
-		_nrf24->TxPackage_ESB(channel, address, 0, (uint8_t*) buffer, received_length);
-		while(_nrf24->Busy()){
-			_nrf24->InterruptCallback();
-		}
-	}
-}
-
-void vTaskNRF24RX( void *pvParameters){
-	NRF24L01P *_nrf24=(NRF24L01P*)pvParameters;
-	_nrf24->Init();
-	_nrf24->Config();
-	uint8_t channel;
-	uint64_t address;
-
-	channel=92;
-	address=0xE7E7E7E7E7;
-	_nrf24->StartRX_ESB(channel, address, 32, 1);
-
-	for(;;){
-		int delay = pdMS_TO_TICKS(100);
-		vTaskDelay(delay);
-		_nrf24->InterruptCallback();
-
-		if(_nrf24->RxSize()){
-			_nrf24->StartRX_ESB(channel, address, 32, 1);
-			uint8_t rxsize=_nrf24->RxSize();
-			if(rxsize>32) rxsize=32;
-			uint8_t buffer[32];
-			_nrf24->RxData(buffer, rxsize);
-			led_azul.Toggle();
-			grSim_Robot_Command* robotcmd = new grSim_Robot_Command;
-			pb_istream_t istream=pb_istream_from_buffer(buffer, rxsize);
-			int status=pb_decode(&istream, grSim_Robot_Command_fields, robotcmd);
-			if(status){
-				xQueueSendToBack(fila_vel, &robotcmd, portMAX_DELAY);
+		pb_istream_t istream=pb_istream_from_buffer(buffer, received_length);
+		grSim_Robot_Command robotcmd;
+		uint8_t status=pb_decode(&istream, grSim_Robot_Command_fields, &robotcmd);
+		if(status){
+			uint8_t robotid=robotcmd.id;
+			uint8_t SendBuffer[32];
+			pb_ostream_t ostream=pb_ostream_from_buffer(SendBuffer, sizeof(SendBuffer));
+			pb_encode(&ostream, grSim_Robot_Command_fields, &robotcmd);//escreve em ostream os dados de robotcmd
+			uint8_t size=ostream.bytes_written;
+			_nrf24->TxPackage_ESB(channel, address | robotid, 0, (uint8_t*) SendBuffer, size);
+			while(_nrf24->Busy()){
+				_nrf24->InterruptCallback();
 			}
 		}
-
 	}
 }
 
-void vTaskMotor( void *pvParameters){
-	Motor *_motor=(Motor*)pvParameters;
-	int delay = pdMS_TO_TICKS(100);
-	INTERRUPT_STM32 timer_robot(TIM6_DAC_IRQn, 0x0C, 0x0C, ENABLE);
-	grSim_Robot_Command* robotcmd_rec;
-	float motor_speeds[4];
-	for(;;){
-		if(uxQueueMessagesWaiting(fila_vel)){
-			xQueueReceive(fila_vel, &robotcmd_rec, portMAX_DELAY);
-			motor_speeds[0]=robotcmd_rec->veltangent;
-			delete robotcmd_rec;
-		}
-		ulTaskNotifyTake( pdTRUE, delay);
-		_motor->Control_Speed(motor_speeds[0]);
-	}
-}
 
 void vTaskCmdLine( void *pvParameters){
 	for(;;){
@@ -162,36 +107,18 @@ int main(void)
 
 	SysTick_Config(SystemCoreClock/1000);
 
-	/*xTaskCreate(	vTaskLed1, //ponteiro para a função que implementa a tarefa
-		  "Task Led1", 	//nome da função. Para facilitar o debug.
-		  150, 		//stack depth
-		  NULL, 		//nao usa task parameter
-		  2,			//prioridade 1
-		  NULL);*/
-	//xTaskCreate(	vTaskNRF24TX, //ponteiro para a função que implementa a tarefa
-	//	  "Task NRF24TX", 	//nome da função. Para facilitar o debug.
-	//	  700, 		//stack depth
-	//	  (void*)&nrf24, 		//usa task parameter
-	//	  1,			//prioridade 2
-	//	  NULL);
-	xTaskCreate(	vTaskNRF24RX, //ponteiro para a função que implementa a tarefa
-			"Task NRF24RX", 	//nome da função. Para facilitar o debug.
-   	 	 700, 		//stack depth
-   	 	 (void*)&nrf24, 		//nao usa task parameter
-   	 	 2,			//prioridade 1
-   	 	 NULL);
+	xTaskCreate(	vTaskNRF24TX, //ponteiro para a função que implementa a tarefa
+		  "Task NRF24TX", 	//nome da função. Para facilitar o debug.
+		  700, 		//stack depth
+		  (void*)&nrf24, 		//usa task parameter
+		  1,			//prioridade 2
+		  NULL);
 	//xTaskCreate(	vTaskCmdLine, 	//ponteiro para a função que implementa a tarefa
 		//  "Task CmdLine", 			//nome da função. Para facilitar o debug.
 		  //700, 						//stack depth
 		  //NULL, 					//nao usa task parameter
 		  //1,						//prioridade 1
 		  //NULL);
-	xTaskCreate(	vTaskMotor, 	//ponteiro para a função que implementa a tarefa
-   		  "Task Motor", 			//nome da função. Para facilitar o debug.
-   		  700, 						//stack depth
-  		  (void*)&motor0, 		//usa task parameter
- 		  1,						//prioridade 1
-		  &t1 );
 	vTaskStartScheduler();
 	while (1)
 	{
