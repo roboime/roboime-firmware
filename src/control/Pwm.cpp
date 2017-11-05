@@ -5,7 +5,7 @@
  *      Author: lenovoi7
  */
 
-#include "Pwm.h"
+#include "control/Pwm.h"
 Pwm::Pwm(GPIO_TypeDef* Port, uint32_t Pin, TIM_TypeDef * Tim, uint8_t Af_Pin, uint8_t Af, uint8_t Channel, bool nState)
 {
 	if(Port == GPIOA)

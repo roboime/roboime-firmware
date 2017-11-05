@@ -8,20 +8,18 @@
 #define ROBO_H_
 
 #include <cstring>
-#include "stm32f4xx.h"
-#include "GPIO.h"
-#include "Motor.h"
-#include "control/switch.h"
-#include <radio/bsp.h>
-
 #include <utils/time_functions.h>
-
+#include "control/GPIO.h"
+#include "control/Motor.h"
+#include "control/switch.h"
+#include "control/adc.h"
 
 class Robo {
 public:
-	Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, Switch *_Switch);
+	Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, Switch *_Switch, adc *sensorAdc);
 	GPIO *high_kick;
 	GPIO *chute_baixo;
+    adc *roboAdc;
 	void HighKick(float power);
 	void ChuteBaixo(float power);
 	void control_speed();
@@ -33,6 +31,7 @@ public:
     void set_speed(float v_r, float v_t, float w);
     void set_speed(float v[]);
     void set_motor_speed(uint8_t motnr, float vel);
+    uint8_t GetId(){return _id;}
 
    	uint32_t last_kick_time=0;
 protected:

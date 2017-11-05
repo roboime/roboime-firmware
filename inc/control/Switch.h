@@ -8,10 +8,7 @@
 #ifndef SRC_CONTROL_SWITCH_H_
 #define SRC_CONTROL_SWITCH_H_
 
-#include "stm32f4xx.h"
-#include <radio/bsp.h>
-
-#include <utils/time_functions.h>
+#include <hal_stm32/io_pin_stm32.h>
 
 class Switch{
 public:

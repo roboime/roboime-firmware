@@ -4,7 +4,7 @@
  *  Created on: Mar 12, 2016
  *      Author: lenovoi7
  */
-#include "Motor.h"
+#include "control/Motor.h"
 
 /*
  * Usou-se ziegler-nichols frequency response method

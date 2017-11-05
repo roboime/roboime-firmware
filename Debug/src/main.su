@@ -9,17 +9,16 @@ commandline.h:66:7:void CommandLine::In(CircularBuffer<unsigned char>&)	24	stati
 commandline.h:92:7:void CommandLine::Out(CircularBuffer<unsigned char>&)	24	static
 commandline.h:99:7:void CommandLine::Process()	64	static
 interrupt_stm32.h:7:2:INTERRUPT_STM32::INTERRUPT_STM32(uint8_t, uint8_t, uint8_t, uint8_t)	24	static
-io_pin.h:5:7:constexpr IO_Pin::IO_Pin(const IO_Pin&)	16	static
-io_pin_stm32.h:6:7:constexpr IO_Pin_STM32::IO_Pin_STM32(const IO_Pin_STM32&)	16	static
-main.cpp:51:6:void vTaskLed1(void*)	24	static
-main.cpp:66:6:void vTaskNRF24RX(void*)	120	static
-main.cpp:100:6:void vTaskRobo(void*)	56	static
-main.cpp:121:6:void vTaskCmdLine(void*)	24	static
-main.cpp:135:5:int main()	16	static
-main.cpp:182:17:void vApplicationStackOverflowHook(TaskHandle_t, signed char*)	16	static
-main.cpp:188:17:void vApplicationIdleHook()	16	static
-main.cpp:193:17:void vApplicationTickHook()	4	static
-main.cpp:196:17:void vApplicationMallocFailedHook()	4	static
+Robo.h:34:13:uint8_t Robo::GetId()	16	static
+main.cpp:42:6:void vTaskLed1(void*)	24	static
+main.cpp:57:6:void vTaskNRF24RX(void*)	120	static
+main.cpp:91:6:void vTaskRobo(void*)	56	static
+main.cpp:112:6:void vTaskCmdLine(void*)	24	static
+main.cpp:126:5:int main()	16	static
+main.cpp:173:17:void vApplicationStackOverflowHook(TaskHandle_t, signed char*)	16	static
+main.cpp:179:17:void vApplicationIdleHook()	16	static
+main.cpp:184:17:void vApplicationTickHook()	4	static
+main.cpp:187:17:void vApplicationMallocFailedHook()	4	static
 circularbuffer.h:32:11:uint16_t CircularBuffer<T, accept_data_when_full>::In(const T*, uint16_t) [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	32	static
 circularbuffer.h:175:7:void CircularBuffer<T, accept_data_when_full>::Clear() [with T = unsigned char; unsigned char accept_data_when_full = 1u]	16	static
 circularbuffer.h:172:11:uint16_t CircularBuffer<T, accept_data_when_full>::Ocupied() [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	16	static
@@ -55,5 +54,3 @@ stl_algobase.h:389:5:_OI std::__copy_move_a(_II, _II, _OI) [with bool _IsMove = 
 stl_iterator_base_types.h:215:28:static std::_Iter_base<_Iterator, _HasBase>::iterator_type std::_Iter_base<_Iterator, _HasBase>::_S_base(_Iterator) [with _Iterator = unsigned char*; bool _HasBase = false; std::_Iter_base<_Iterator, _HasBase>::iterator_type = unsigned char*]	16	static
 stl_algobase.h:389:5:_OI std::__copy_move_a(_II, _II, _OI) [with bool _IsMove = false; _II = unsigned char*; _OI = unsigned char*]	32	static
 stl_algobase.h:373:9:static _Tp* std::__copy_move<_IsMove, true, std::random_access_iterator_tag>::__copy_m(const _Tp*, const _Tp*, _Tp*) [with _Tp = unsigned char; bool _IsMove = false]	32	static
-main.cpp:198:1:void __static_initialization_and_destruction_0(int, int)	88	static
-main.cpp:198:1:cpp)	8	static

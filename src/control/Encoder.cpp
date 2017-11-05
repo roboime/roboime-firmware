@@ -5,7 +5,7 @@
  *      Author: lenovoi7
  */
 
-#include <Encoder.h>
+#include <control/Encoder.h>
 
 Encoder::Encoder( GPIO_TypeDef* Port1, GPIO_TypeDef* Port2,
 	uint32_t Pin1, uint32_t Pin2,

@@ -5,7 +5,7 @@
  *      Author: lenovoi7
  */
 
-#include "GPIO.h"
+#include "control/GPIO.h"
 GPIO::GPIO(GPIO_TypeDef* Port, uint16_t Pin) {
 	if(Port == GPIOA)
 		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);

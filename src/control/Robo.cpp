@@ -5,7 +5,7 @@
  *      Author: lenovoi7
  */
 
-#include "Robo.h"
+#include "control/Robo.h"
 
 #define sin_phi 0.50
 #define cos_phi 0.866
@@ -16,7 +16,7 @@
 #define Massa 3
 #define Raio 0.09*/
 
-Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, Switch *_Switch)
+Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, Switch *_Switch, adc *sensorAdc)
 {
 	motors[0]=roboMotor0;
 	motors[1]=roboMotor1;
@@ -24,6 +24,8 @@ Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboM
 	motors[3]=roboMotor3;
 
 	_id = _Switch->id;
+	roboAdc = sensorAdc;
+	roboAdc->ADC_Config();
 
 	high_kick = new GPIO(GPIOD, GPIO_Pin_8);
 	chute_baixo = new GPIO(GPIOD, GPIO_Pin_10);
@@ -54,7 +56,7 @@ void Robo::control_pos(){
 	}
 }
 void Robo::control_speed(){
-  //vBat = 4.3*roboAdc->adc_getConversion();
+  vBat = 4.3*roboAdc->adc_getConversion();
 //testa e corrige eventual deslizamento
 	  float v0= motors[0]->real_wheel_speed;
 	  float v1= motors[1]->real_wheel_speed;
@@ -64,11 +66,12 @@ void Robo::control_speed(){
   //float M2 = -0.24495*(v0-v3)+0.3*(v1-v2);
   //float proj=-0.5477*v0+0.4472*v1+0.5477*v2-0.4472*v3;
   //vBat=7;
-  //if(vBat>6.2){
+  if(vBat>6.2){
     //if(proj<1 && proj>-1){
     	for(int i=0; i<4; i++){
     		motors[i]->Control_Speed(speed[i]); //manda a velocidade speed[i] pro motor[i] na unidade m/s
     	}
+  }
     //}
     /*else {
     	//nem o valor de alfa nem a massa interferem no espaço nulo.

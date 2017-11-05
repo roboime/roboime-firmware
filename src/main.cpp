@@ -36,17 +36,8 @@ SOFTWARE.
 #include "radio/commands.h"
 #include "hal_stm32/interrupt_stm32.h"
 
-#include "Robo.h"
-
-static __IO uint32_t TimingDelay;
-
-void TimingDelay_Decrement(void);
-void Delay_ms(uint32_t time_ms);
-
 #include "radio/bsp.h"
 
-Switch mySwitch(sw1, sw2, sw3);
-Robo EuRobo(&motor0, &motor1, &motor2, &motor3, &mySwitch);
 
 void vTaskLed1( void *pvParameters){
 	//const char *pcTaskName = "Task 1 is running \r\n";
@@ -72,7 +63,7 @@ void vTaskNRF24RX( void *pvParameters){
 
 	channel=92;
 	address=0xE7E7E7E700;
-	_nrf24->StartRX_ESB(channel, address | mySwitch.id, 32, 1);
+	_nrf24->StartRX_ESB(channel, address | EuRobo.GetId(), 32, 1);
 
 	for(;;){
 		int delay = pdMS_TO_TICKS(100);
@@ -80,7 +71,7 @@ void vTaskNRF24RX( void *pvParameters){
 		_nrf24->InterruptCallback();
 
 		if(_nrf24->RxSize()){
-			_nrf24->StartRX_ESB(channel, address | mySwitch.id, 32, 1);
+			_nrf24->StartRX_ESB(channel, address | EuRobo.GetId(), 32, 1);
 			uint8_t rxsize=_nrf24->RxSize();
 			if(rxsize>32) rxsize=32;
 			uint8_t buffer[32];

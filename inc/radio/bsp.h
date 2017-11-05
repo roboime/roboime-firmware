@@ -39,9 +39,14 @@
 #include <hal_stm32/flash_memory_stm32.h>
 #include <radio/scpi.h>
 #include <hal/nrf24l01p.h>
-#include <control/motor.h>
-#include <control/switch.h>
 
+#include "control/adc.h"
+#include "control/Encoder.h"
+#include "control/GPIO.h"
+#include "control/Motor.h"
+#include "control/Pwm.h"
+#include "control/Robo.h"
+#include "control/Switch.h"
 
 extern "C"{
 #include "FreeRTOS.h"
@@ -63,14 +68,7 @@ extern SPI_STM32 spi;
 extern USB_STM32 usb;
 extern USB_DEVICE_CLASS_CDC_VCP usb_device_class_cdc_vcp;
 
-//extern Robo robo;
-extern Motor motor0;
-extern Motor motor1;
-extern Motor motor2;
-extern Motor motor3;
-extern IO_Pin_STM32 sw1;
-extern IO_Pin_STM32 sw2;
-extern IO_Pin_STM32 sw3;
+extern Robo EuRobo;
 
 
 extern NRF24L01P nrf24;
