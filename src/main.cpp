@@ -27,28 +27,26 @@ SOFTWARE.
 ******************************************************************************
 */
 
+
 /* Includes */
 #include "stm32f4xx.h"
-
-extern "C"{
-#include "FreeRTOS.h"
-#include "task.h"
-#include "queue.h"
-#include "timers.h"
-#include "semphr.h"
-}
-
-#include "radio/bsp.h"
-#include "radio/commands.h"
-
-#include <hal_stm32/interrupt_stm32.h>
-//#include "Robo.h"
-#include "motor.h"
 #include "proto/grSim_Commands.pb.h"
 #include "proto/pb_decode.h"
 #include "proto/pb_encode.h"
+#include "radio/commands.h"
+#include "hal_stm32/interrupt_stm32.h"
 
-Robo robo(&motor0, &motor1, &motor2, &motor3);
+#include "Robo.h"
+
+static __IO uint32_t TimingDelay;
+
+void TimingDelay_Decrement(void);
+void Delay_ms(uint32_t time_ms);
+
+#include "radio/bsp.h"
+
+Switch mySwitch(sw1, sw2, sw3);
+Robo EuRobo(&motor0, &motor1, &motor2, &motor3, &mySwitch);
 
 void vTaskLed1( void *pvParameters){
 	//const char *pcTaskName = "Task 1 is running \r\n";
@@ -65,30 +63,6 @@ void vTaskLed1( void *pvParameters){
 	}
 }
 
-void vTaskNRF24TX( void *pvParameters){
-	NRF24L01P *_nrf24=(NRF24L01P*)pvParameters;
-	_nrf24->Init();
-	_nrf24->Config();
-	uint8_t channel;
-	uint64_t address;
-	channel=92;
-	address=0xE7E7E7E7E7;
-
-	for(;;){
-		int delay;
-		delay = pdMS_TO_TICKS(100);
-		vTaskDelay(delay);
-
-		uint8_t buffer[32];
-		uint8_t received_length;
-		received_length = usb_device_class_cdc_vcp.GetData(buffer, 32);
-		_nrf24->TxPackage_ESB(channel, address, 0, (uint8_t*) buffer, received_length);
-		while(_nrf24->Busy()){
-			_nrf24->InterruptCallback();
-		}
-	}
-}
-
 void vTaskNRF24RX( void *pvParameters){
 	NRF24L01P *_nrf24=(NRF24L01P*)pvParameters;
 	_nrf24->Init();
@@ -97,8 +71,8 @@ void vTaskNRF24RX( void *pvParameters){
 	uint64_t address;
 
 	channel=92;
-	address=0xE7E7E7E7E7;
-	_nrf24->StartRX_ESB(channel, address, 32, 1);
+	address=0xE7E7E7E700;
+	_nrf24->StartRX_ESB(channel, address | mySwitch.id, 32, 1);
 
 	for(;;){
 		int delay = pdMS_TO_TICKS(100);
@@ -106,7 +80,7 @@ void vTaskNRF24RX( void *pvParameters){
 		_nrf24->InterruptCallback();
 
 		if(_nrf24->RxSize()){
-			_nrf24->StartRX_ESB(channel, address, 32, 1);
+			_nrf24->StartRX_ESB(channel, address | mySwitch.id, 32, 1);
 			uint8_t rxsize=_nrf24->RxSize();
 			if(rxsize>32) rxsize=32;
 			uint8_t buffer[32];
@@ -124,7 +98,7 @@ void vTaskNRF24RX( void *pvParameters){
 }
 
 void vTaskRobo( void *pvParameters){
-	Robo* robo=(Robo*)pvParameters;
+	Robo* _EuRobo=(Robo*)pvParameters;
 	int delay = pdMS_TO_TICKS(100);
 	INTERRUPT_STM32 timer_robot(TIM6_DAC_IRQn, 0x0C, 0x0C, ENABLE);
 	grSim_Robot_Command* robotcmd;
@@ -132,7 +106,7 @@ void vTaskRobo( void *pvParameters){
 	for(;;){
 		if(uxQueueMessagesWaiting(fila_vel)){
 			xQueueReceive(fila_vel, &robotcmd, portMAX_DELAY);
-			robo->set_speed(robotcmd->veltangent, robotcmd->velnormal, robotcmd->velangular);
+			_EuRobo->set_speed(robotcmd->veltangent, robotcmd->velnormal, robotcmd->velangular);
 			/*if(robotcmd.kickspeedx!=0)
 				robo.ChuteBaixo(robotcmd.kickspeedx);
 			if(robotcmd.kickspeedz!=0)
@@ -140,7 +114,7 @@ void vTaskRobo( void *pvParameters){
 			delete robotcmd;
 		}
 		ulTaskNotifyTake( pdTRUE, delay);
-		robo->control_speed();
+		_EuRobo->control_speed();
 	}
 }
 
@@ -195,7 +169,7 @@ int main(void)
 	xTaskCreate(	vTaskRobo, 	//ponteiro para a função que implementa a tarefa
    		  "Task Motor", 			//nome da função. Para facilitar o debug.
    		  700, 						//stack depth
-  		  (void*)&robo, 		//usa task parameter
+  		  (void*)&EuRobo, 		//usa task parameter
  		  1,						//prioridade 1
 		  &t1 );
 	vTaskStartScheduler();

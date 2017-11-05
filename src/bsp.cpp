@@ -9,7 +9,7 @@
 //#include <control/Switch.h>
 #include "TimerTime.h"
 #include "proto/grSim_Commands.pb.h"
-#include "Robo.h"
+#include "control/switch.h"
 
 
 extern "C"{
@@ -86,6 +86,10 @@ GPIO blgpio3(GPIOB, GPIO_Pin_11);
 Encoder encoder3(GPIOB, GPIOB, GPIO_Pin_6, GPIO_Pin_7, TIM4, GPIO_PinSource6, GPIO_PinSource7, GPIO_AF_TIM4);
 INA220 mina223(i2c_a, 0x8A);
 Motor motor3(&ahpwm3, &algpio3, &bhpwm3, &blgpio3, &encoder3, &mina223);
+
+IO_Pin_STM32 sw1(IO_Pin::IO_Pin_Mode_IN, GPIOD, GPIO_Pin_6, GPIO_PuPd_UP, GPIO_OType_PP);
+IO_Pin_STM32 sw2(IO_Pin::IO_Pin_Mode_IN, GPIOD, GPIO_Pin_7, GPIO_PuPd_UP, GPIO_OType_PP);
+IO_Pin_STM32 sw3(IO_Pin::IO_Pin_Mode_IN, GPIOE, GPIO_Pin_2, GPIO_PuPd_UP, GPIO_OType_PP);
 
 //*///------------------------/////////
 

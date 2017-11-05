@@ -16,12 +16,14 @@
 #define Massa 3
 #define Raio 0.09*/
 
-Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3)
+Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, Switch *_Switch)
 {
 	motors[0]=roboMotor0;
 	motors[1]=roboMotor1;
 	motors[2]=roboMotor2;
 	motors[3]=roboMotor3;
+
+	_id = _Switch->id;
 
 	high_kick = new GPIO(GPIOD, GPIO_Pin_8);
 	chute_baixo = new GPIO(GPIOD, GPIO_Pin_10);
@@ -70,7 +72,7 @@ void Robo::control_speed(){
     //}
     /*else {
     	//nem o valor de alfa nem a massa interferem no espaço nulo.
-    	/*speed[0]=v0*0.8+0.2*v2+0.245*(v1-v3);
+    	speed[0]=v0*0.8+0.2*v2+0.245*(v1-v3);
     	speed[2]=v2*0.8+0.2*v0-0.245*(v1-v3);
     	speed[3]=v3*0.7+0.245*(v2-v0)+0.3*v1;
     	speed[1]=v1*0.7-0.245*(v2-v0)+0.3*v3;*/
