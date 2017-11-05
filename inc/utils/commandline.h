@@ -27,7 +27,7 @@ public:
 		_argc(0),
 		_cmdbuffer(0,512),
 		_respbuffer(0,512),
-		_echo(0)
+		_echo(1)
 	{
 		auto i = c.begin();
 		auto j = d.begin();

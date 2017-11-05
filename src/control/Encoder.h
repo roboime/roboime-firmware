@@ -6,7 +6,7 @@
  */
 
 #include "stm32f4xx.h"
-#include "stm32f4_discovery.h"
+
 
 #ifndef ENCONDER_H_
 #define ENCONDER_H_

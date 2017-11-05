@@ -5,7 +5,6 @@
  *      Author: lenovoi7
  */
 #include "stm32f4xx.h"
-#include "stm32f4_discovery.h"
 #include "TimerTime.h"
 
 Timer_Time::Timer_Time(){

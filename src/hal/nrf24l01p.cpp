@@ -2,6 +2,12 @@
 #include <hal/nrf24l01p.h>
 #include <utils/time_functions.h>
 
+#include "FreeRTOS.h"
+#include "task.h"
+#include "timers.h"
+#include "StackMacros.h"
+#include "projdefs.h"
+
 NRF24L01P::NRF24L01P(SPI &spi, IO_Pin &SS_PIN, IO_Pin &CE_PIN, IO_Pin &NIRQ_PIN):
 	MODEM(),
 	_spi(&spi),
@@ -152,7 +158,8 @@ uint8_t NRF24L01P::nop() {
 void NRF24L01P::Init(){
 	_CE_PIN->Reset();
 	_SS_PIN->Set();
-	delay_ms(5);
+
+	vTaskDelay(pdMS_TO_TICKS(5));
 	REG=REG_DEFAULT;
 
 	uint8_t config=read_register(REG_ADDR.CONFIG);
@@ -371,22 +378,23 @@ void NRF24L01P::InterruptCallback(){
 			REG.STATUS.value=nop();
 			_retransmit_irq_count++;
 			_busy=0;
-			led_c.On();
-			led_c_time=GetLocalTime();
+			//MUDAR OS NOMES DOS OBJETOS DOS LEDS
+			//led_c.On();
+			//led_c_time=GetLocalTime();
 		}
 		if(REG.STATUS.RX_DR||(!REG.FIFO_STATUS.RX_EMPTY)){
 			_receive_irq_count++;
 			uint8_t payloadsize=read_rx_payload_width();
 			if(payloadsize>32) {
 				flush_rx();
-				led_c.On();
-				led_c_time=GetLocalTime();
+				//led_c.On();
+				//led_c_time=GetLocalTime();
 			} else {
 				uint8_t buffer[32];
 				read_rx_payload(buffer, payloadsize);
 				_rxbuffer.In(buffer, payloadsize);
-				led_d.On();
-				led_d_time=GetLocalTime();
+				//led_d.On();
+				//led_d_time=GetLocalTime();
 			}
 			if(REG.STATUS.RX_DR){
 				REG.STATUS.value=0;
@@ -405,20 +413,20 @@ void NRF24L01P::InterruptCallback(){
 			}
 			REG.STATUS.value=nop();
 			_busy=0;
-			led_a.On();
-			led_a_time=GetLocalTime();
+			//led_a.On();
+			//led_a_time=GetLocalTime();
 		}
 		if(REG.STATUS.TX_FULL||REG.FIFO_STATUS.TX_FULL){
 			nrf24.flush_tx();
 			REG.STATUS.value=nop();
 			_busy=0;
-			led_b.On();
-			led_b_time=GetLocalTime();
+			//led_b.On();
+			//led_b_time=GetLocalTime();
 		}
-		if(led_a_time && (GetLocalTime()-led_a_time)>50) {led_a.Off(); led_a_time=0;}
-		if(led_b_time && (GetLocalTime()-led_b_time)>50) {led_b.Off(); led_b_time=0;}
-		if(led_c_time && (GetLocalTime()-led_c_time)>50) {led_c.Off(); led_c_time=0;}
-		if(led_d_time && (GetLocalTime()-led_d_time)>50) {led_d.Off(); led_d_time=0;}
+		//if(led_a_time && (GetLocalTime()-led_a_time)>50) {led_a.Off(); led_a_time=0;}
+		//if(led_b_time && (GetLocalTime()-led_b_time)>50) {led_b.Off(); led_b_time=0;}
+		//if(led_c_time && (GetLocalTime()-led_c_time)>50) {led_c.Off(); led_c_time=0;}
+		//if(led_d_time && (GetLocalTime()-led_d_time)>50) {led_d.Off(); led_d_time=0;}
 //	}
 }
 

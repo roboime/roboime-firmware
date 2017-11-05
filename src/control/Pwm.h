@@ -5,7 +5,6 @@
  *      Author: lenovoi7
  */
 #include "stm32f4xx.h"
-#include "stm32f4_discovery.h"
 
 #ifndef PWM_H_
 #define PWM_H_

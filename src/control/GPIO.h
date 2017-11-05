@@ -5,7 +5,6 @@
  *      Author: lenovoi7
  */
 #include "stm32f4xx.h"
-#include "stm32f4_discovery.h"
 
 #ifndef GPIO_H_
 #define GPIO_H_

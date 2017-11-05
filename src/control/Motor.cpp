@@ -21,7 +21,6 @@ Motor::Motor(Pwm *A_High,
 		Pwm *B_High,
 		GPIO *B_Low,
 		Encoder *Enc,
-		Timer_Time2 *MTimer,
 		INA220 *ina220)
 {
 	Motor_A_High = A_High;
@@ -29,8 +28,6 @@ Motor::Motor(Pwm *A_High,
 	Motor_B_High = B_High;
 	Motor_B_Low = B_Low;
 	Motor_Enc = Enc;
-	Motor_Time = MTimer;
-	last_vel_answer = 0;
 	mina22 = ina220;
 }
 void Motor::Control_Pos(float  hold_position){
@@ -44,11 +41,6 @@ void Motor::Control_Pos(float  hold_position){
 	return;
 };
 
-//retorna o deslocamento do eixo do motor, unidade: divisões de encoder
-int16_t Motor::Get_Desloc(){
-	return Motor_Enc->get_position()-last_position;
-}
-
 //será chamada pelo handler da interrupção gerada pelo TIM6(a cada 1 ms)
 //hold_speed é a velocidade da RODA em m/s
 void Motor::Control_Speed(float hold_speed){
@@ -57,8 +49,6 @@ void Motor::Control_Speed(float hold_speed){
 	Motor_Enc->set_position(20000);
 
 	int16_t distance=position-20000;
-
-	//last_position=position;
 
 	float speed=(float)distance*CONVERSION; //converte da unidade da roda para m/s (vel do centro da roda)
 	                                     //talvez seja melhor converter de m/s pra unidade da roda
@@ -79,39 +69,14 @@ void Motor::Control_Speed(float hold_speed){
 
 	float out=cp*error + ci * ierror + cd * derror;
 
+	int16_t dutycycle = (int16_t)out;
 
-	dutycycle=out;
 	if(dutycycle>1000) dutycycle=1000;
 	if(dutycycle<-1000) dutycycle=-1000;
 	SetDutyCycle(dutycycle);
 
 };
 
-void Motor::Calc_Speed(){
-	//position é medida em divisões de encoder (ou 1/400 de volta)
-	int16_t position = (int16_t)Motor_Enc->get_position();
-	Motor_Enc->set_position(20000);
-
-	int16_t distance=position-20000;
-
-	//last_position=position;
-
-	float speed=(float)distance*CONVERSION; //converte da unidade da roda para m/s (vel do centro da roda)
-	                                     //talvez seja melhor converter de m/s pra unidade da roda
-	real_wheel_speed=speed;
-};
-/*
-void Motor::Control_Speed(int16_t hold_speed){
-	int16_t speed;
-	int16_t vel_answer;
-	uint32_t position = Motor_Enc->get_position();
-	Motor_Enc->set_position((uint32_t) 20000);
-	speed = last_speed_pos -(int16_t)position-20000+hold_speed;
-	Control_Pos((uint32_t)(20000+speed));
-	last_speed_pos = speed;
-	return;
-};
-*/
 void Motor::SetDutyCycle(int16_t answer)
 {
 	if (answer > 0)
@@ -163,38 +128,6 @@ int16_t Motor::Pos_Calc_Answer(uint32_t position, uint32_t hold_position)
 	if (integral > 600/0.18) integral = 600/0.18;
 	return (int16_t) -((error)*0.81+(integral)*0.18 - derivative*2.25);
 	//Kp = 0.81, Ki = 0.36, Kd = 2.25
-}
-
-//Falta definir o que é o valor speed, que deve ter sinal
-int16_t Motor::Spe_Calc_Answer(int32_t speed, int32_t hold_speed){
-	if(hold_speed>1000)
-		hold_speed=1000;
-	if(hold_speed<-1000)
-		hold_speed=-1000;
-	hold_speed = hold_speed*10;
-	double vel_answer;
-	float error;
-	float derivative;
-	float integral;
-	error=speed-hold_speed;
-	derivative = error - Speed_Last_Error[0];
-	for(int i = 9; i>0; i--){
-		Speed_Last_Error[i] = Speed_Last_Error[i-1];
-	}
-	Speed_Last_Error[0] = error;
-	for(int i=0; i<10; i++){
-		integral = integral + Speed_Last_Error[i];
-	}
-	vel_answer=last_vel_answer + error*0.004 + derivative*0;
-	//Kp=0,004, Ki=0, Kd=0
-	if(vel_answer > 1000){
-		vel_answer = 1000;
-	}
-	if(vel_answer < -1000){
-		vel_answer = -1000;
-	}
-	last_vel_answer = vel_answer;
-	return (int16_t) vel_answer;
 }
 
 void Motor::SetPID(float p, float i, float d) {
