@@ -106,6 +106,8 @@ QueueHandle_t fila_vel = xQueueCreate(12, sizeof(grSim_Robot_Command*));
 QueueHandle_t fila_pck = xQueueCreate(12, sizeof(grSim_Robot_Command*));
 
 TaskHandle_t t1; //handler para vTaskMotor
+TaskHandle_t t2;
+
 //SemaphoreHandle_t xBinarySemaphore = xSemaphoreCreateBinary();
 
 Timer_Time robo_irq_timer;

@@ -12,6 +12,7 @@ initializer_list:79:7:constexpr const _E* std::initializer_list<_E>::end() const
 commandline.h:26:2:CommandLine::CommandLine(std::initializer_list<const char*>, std::initializer_list<short unsigned int (*)(short unsigned int, unsigned char**)>)	40	static
 commands.cpp:5:10:uint16_t cmd_idn(uint16_t, uint8_t**)	40	static
 commands.cpp:18:10:uint16_t cmd_motv(uint16_t, uint8_t**)	56	static
+commands.cpp:46:10:uint16_t cmd_ctl(uint16_t, uint8_t**)	40	static
 circularbuffer.h:7:2:CircularBuffer<T, accept_data_when_full>::CircularBuffer(T*, uint16_t, uint16_t) [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	24	static
 circularbuffer.h:23:2:CircularBuffer<T, accept_data_when_full>::~CircularBuffer() [with T = unsigned char; unsigned char accept_data_when_full = 1u]	16	static
 stl_list.h:593:7:std::__cxx11::list<_Tp, _Alloc>::list() [with _Tp = const char*; _Alloc = std::allocator<const char*>]	16	static
@@ -86,5 +87,5 @@ stl_list.h:113:9:) [with _Args = {short unsigned int (*)(short unsigned int, uns
 new_allocator.h:113:7:__gnu_cxx::new_allocator< <template-parameter-1-1> >::size_type __gnu_cxx::new_allocator< <template-parameter-1-1> >::max_size() const [with _Tp = std::_List_node<const char*>; __gnu_cxx::new_allocator< <template-parameter-1-1> >::size_type = unsigned int]	16	static
 new_allocator.h:113:7:__gnu_cxx::new_allocator< <template-parameter-1-1> >::size_type __gnu_cxx::new_allocator< <template-parameter-1-1> >::max_size() const [with _Tp = std::_List_node<short unsigned int (*)(short unsigned int, unsigned char**)>; __gnu_cxx::new_allocator< <template-parameter-1-1> >::size_type = unsigned int]	16	static
 commandline.h:9:7:CommandLine::~CommandLine()	16	static
-commands.cpp:39:26:void __static_initialization_and_destruction_0(int, int)	40	static
-commands.cpp:39:26:cpp)	8	static
+commands.cpp:62:35:void __static_initialization_and_destruction_0(int, int)	40	static
+commands.cpp:62:35:cpp)	8	static

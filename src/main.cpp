@@ -45,10 +45,51 @@ void vTaskLed1( void *pvParameters){
 
 	//configASSERT( ( ( uint32_t ) pvParameters ) == 1 );
 	//a tarefa tem implementada nela um loop infinito.
+
 	for(;;){
 		int delay;
-		delay = pdMS_TO_TICKS(1000);
-		vTaskDelay(delay);
+		delay = pdMS_TO_TICKS(200);
+		int nMotor=ulTaskNotifyTake( pdTRUE, portMAX_DELAY);
+		if(nMotor==5){
+			for(int i=0; i<4; i++){
+				int j;
+				float velRodas[]={0, 0, 0, 0};
+				for(j=0; j<10; j++){
+					velRodas[i] = (float)j/2.8;
+					EuRobo.set_speed(velRodas);
+					vTaskDelay(delay);
+				}
+				for(j=10; j>-10; j--){
+					velRodas[i] = (float)j/2.8;
+					EuRobo.set_speed(velRodas);
+					vTaskDelay(delay);
+				}
+				for(j=-10; j<1; j++){
+					velRodas[i] = (float)j/2.8;
+					EuRobo.set_speed(velRodas);
+					vTaskDelay(delay);
+				}
+			}
+		}
+		else{
+			int j;
+			float velRodas[]={0, 0, 0, 0};
+			for(j=0; j<10; j++){
+				velRodas[nMotor] = (float)j/2.8;
+				EuRobo.set_speed(velRodas);
+				vTaskDelay(delay);
+			}
+			for(j=10; j>-10; j--){
+				velRodas[nMotor] = (float)j/2.8;
+				EuRobo.set_speed(velRodas);
+				vTaskDelay(delay);
+			}
+			for(j=-10; j<1; j++){
+				velRodas[nMotor] = (float)j/2.8;
+				EuRobo.set_speed(velRodas);
+				vTaskDelay(delay);
+			}
+		}
 		//GPIOD->ODR ^= GPIO_Pin_13;
 		led_laranja.Toggle();
 	}
@@ -97,7 +138,9 @@ void vTaskRobo( void *pvParameters){
 	for(;;){
 		if(uxQueueMessagesWaiting(fila_vel)){
 			xQueueReceive(fila_vel, &robotcmd, portMAX_DELAY);
+			float arrayVel[] = {robotcmd->wheel1, robotcmd->wheel2, robotcmd->wheel3, robotcmd->wheel4};
 			_EuRobo->set_speed(robotcmd->veltangent, robotcmd->velnormal, robotcmd->velangular);
+			_EuRobo->set_speed(arrayVel);
 			/*if(robotcmd.kickspeedx!=0)
 				robo.ChuteBaixo(robotcmd.kickspeedx);
 			if(robotcmd.kickspeedz!=0)
@@ -105,7 +148,9 @@ void vTaskRobo( void *pvParameters){
 			delete robotcmd;
 		}
 		ulTaskNotifyTake( pdTRUE, delay);
-		_EuRobo->control_speed();
+		if(_EuRobo->bitcontrol){
+			_EuRobo->control_speed();
+		}
 	}
 }
 
@@ -133,30 +178,30 @@ int main(void)
 
 	SysTick_Config(SystemCoreClock/1000);
 
-	/*xTaskCreate(	vTaskLed1, //ponteiro para a função que implementa a tarefa
+	xTaskCreate(	vTaskLed1, //ponteiro para a função que implementa a tarefa
 		  "Task Led1", 	//nome da função. Para facilitar o debug.
 		  150, 		//stack depth
 		  NULL, 		//nao usa task parameter
 		  2,			//prioridade 1
-		  NULL);*/
+		  &t2);
 	/*xTaskCreate(	vTaskNRF24TX, //ponteiro para a função que implementa a tarefa
 		  "Task NRF24TX", 	//nome da função. Para facilitar o debug.
 		  700, 		//stack depth
 		  (void*)&nrf24, 		//usa task parameter
 		  1,			//prioridade 2
 		  NULL);*/
-	xTaskCreate(	vTaskNRF24RX, //ponteiro para a função que implementa a tarefa
+	/*xTaskCreate(	vTaskNRF24RX, //ponteiro para a função que implementa a tarefa
 			"Task NRF24RX", 	//nome da função. Para facilitar o debug.
    	 	 700, 		//stack depth
    	 	 (void*)&nrf24, 		//nao usa task parameter
    	 	 2,			//prioridade 1
-   	 	 NULL);
-	/*xTaskCreate(	vTaskCmdLine, 	//ponteiro para a função que implementa a tarefa
+   	 	 NULL);*/
+	xTaskCreate(	vTaskCmdLine, 	//ponteiro para a função que implementa a tarefa
 		  "Task CmdLine", 			//nome da função. Para facilitar o debug.
 		  700, 						//stack depth
 		  NULL, 					//nao usa task parameter
-		  1,						//prioridade 1
-		  NULL);*/
+		  2,						//prioridade 1
+		  NULL);
 	xTaskCreate(	vTaskRobo, 	//ponteiro para a função que implementa a tarefa
    		  "Task Motor", 			//nome da função. Para facilitar o debug.
    		  700, 						//stack depth

@@ -10,15 +10,15 @@ commandline.h:92:7:void CommandLine::Out(CircularBuffer<unsigned char>&)	24	stat
 commandline.h:99:7:void CommandLine::Process()	64	static
 interrupt_stm32.h:7:2:INTERRUPT_STM32::INTERRUPT_STM32(uint8_t, uint8_t, uint8_t, uint8_t)	24	static
 Robo.h:34:13:uint8_t Robo::GetId()	16	static
-main.cpp:42:6:void vTaskLed1(void*)	24	static
-main.cpp:57:6:void vTaskNRF24RX(void*)	120	static
-main.cpp:91:6:void vTaskRobo(void*)	56	static
-main.cpp:112:6:void vTaskCmdLine(void*)	24	static
-main.cpp:126:5:int main()	16	static
-main.cpp:173:17:void vApplicationStackOverflowHook(TaskHandle_t, signed char*)	16	static
-main.cpp:179:17:void vApplicationIdleHook()	16	static
-main.cpp:184:17:void vApplicationTickHook()	4	static
-main.cpp:187:17:void vApplicationMallocFailedHook()	4	static
+main.cpp:42:6:void vTaskLed1(void*)	80	static
+main.cpp:98:6:void vTaskNRF24RX(void*)	120	static
+main.cpp:132:6:void vTaskRobo(void*)	72	static
+main.cpp:157:6:void vTaskCmdLine(void*)	24	static
+main.cpp:171:5:int main()	16	static
+main.cpp:218:17:void vApplicationStackOverflowHook(TaskHandle_t, signed char*)	16	static
+main.cpp:224:17:void vApplicationIdleHook()	16	static
+main.cpp:229:17:void vApplicationTickHook()	4	static
+main.cpp:232:17:void vApplicationMallocFailedHook()	4	static
 circularbuffer.h:32:11:uint16_t CircularBuffer<T, accept_data_when_full>::In(const T*, uint16_t) [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	32	static
 circularbuffer.h:175:7:void CircularBuffer<T, accept_data_when_full>::Clear() [with T = unsigned char; unsigned char accept_data_when_full = 1u]	16	static
 circularbuffer.h:172:11:uint16_t CircularBuffer<T, accept_data_when_full>::Ocupied() [with T = unsigned char; unsigned char accept_data_when_full = 1u; uint16_t = short unsigned int]	16	static

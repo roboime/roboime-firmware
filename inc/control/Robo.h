@@ -34,6 +34,7 @@ public:
     uint8_t GetId(){return _id;}
 
    	uint32_t last_kick_time=0;
+   	bool bitcontrol;
 protected:
     uint8_t _id;
 };

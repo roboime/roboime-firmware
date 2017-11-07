@@ -75,4 +75,5 @@ extern NRF24L01P nrf24;
 extern IO_Pin_STM32 LIS3DSH_CSN;
 extern CircularBuffer<uint8_t> _usbserialbuffer;
 extern TaskHandle_t t1;
+extern TaskHandle_t t2;
 extern QueueHandle_t fila_vel;

@@ -66,12 +66,12 @@ void Robo::control_speed(){
   //float M2 = -0.24495*(v0-v3)+0.3*(v1-v2);
   //float proj=-0.5477*v0+0.4472*v1+0.5477*v2-0.4472*v3;
   //vBat=7;
-  if(vBat>6.2){
+  //if(vBat>6.2){
     //if(proj<1 && proj>-1){
     	for(int i=0; i<4; i++){
     		motors[i]->Control_Speed(speed[i]); //manda a velocidade speed[i] pro motor[i] na unidade m/s
     	}
-  }
+  //}
     //}
     /*else {
     	//nem o valor de alfa nem a massa interferem no espaço nulo.
