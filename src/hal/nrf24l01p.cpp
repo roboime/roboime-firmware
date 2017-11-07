@@ -337,7 +337,6 @@ uint8_t NRF24L01P::TxPackage_ESB(uint8_t channel, uint64_t address, uint8_t no_a
 		write_register(REG_ADDR.RX_ADDR_P0, REG.RX_ADDR_P0.value, 5);
 	}
 // Erro quando transmite para outro robo
-
 	if(no_ack){
 		write_tx_payload_no_ack(data, size);
 	} else {
@@ -378,6 +377,9 @@ void NRF24L01P::InterruptCallback(){
 				led_c_time=GetLocalTime();
 			} else {
 				uint8_t buffer[32];
+				char ackBuffer[20];
+				int ackSize=sprintf(ackBuffer, "turn it on!");
+				write_ack_payload((uint8_t *) ackBuffer, ackSize);
 				read_rx_payload(buffer, payloadsize);
 				_rxbuffer.In(buffer, payloadsize);
 				led_d.On();
@@ -466,9 +468,9 @@ const NRF24L01P::NRF24_REG NRF24L01P::REG_DEFAULT={
 		.RF_SETUP={{
 				.Obsolete=0,
 				.RF_PWR=0b11,
-				.RF_DR_HIGH=1,
+				.RF_DR_HIGH=0,
 				.PLL_LOCK=0,
-				.RF_DR_LOW=0,
+				.RF_DR_LOW=1,
 				.Reserved=0,
 				.CONT_WAVE=0,
 		}},
@@ -543,17 +545,17 @@ const NRF24L01P::NRF24_REG NRF24L01P::REG_DEFAULT={
 				.Reserved=0,
 		}},
 		.DYNPD={{
-				.DPL_P0=0,
-				.DPL_P1=0,
-				.DPL_P2=0,
-				.DPL_P3=0,
-				.DPL_P4=0,
-				.DPL_P5=0,
+				.DPL_P0=1,
+				.DPL_P1=1,
+				.DPL_P2=1,
+				.DPL_P3=1,
+				.DPL_P4=1,
+				.DPL_P5=1,
 				.Reserved=0,
 		}},
 		.FEATURE={{
-				.EN_DYN_ACK=0,
-				.EN_ACK_PAY=0,
+				.EN_DYN_ACK=1,
+				.EN_ACK_PAY=1,
 				.EN_DPL=0,
 				.Reserved=0,
 		}},
