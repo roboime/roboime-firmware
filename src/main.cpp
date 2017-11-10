@@ -100,7 +100,14 @@ int main(void){
 	mina220.ReadCurrent();
 	robo.motors[0]->mina22->ReadCurrent();
 
+	uint32_t lasttime=0;
+
 	while(1){
+		//if((GetLocalTime()-lasttime)>100){
+		//	lasttime=GetLocalTime();
+		//	led_a.Toggle();
+		//}
+		//robo.controlbit = true;
 		if(GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_2))
 			led_c.On();
 		else
@@ -134,6 +141,7 @@ extern uint32_t LocalTime;
 extern "C" void SysTick_Handler(void){
 	//	TimingDelay_Decrement();
 	LocalTime++;
+
 }
 
 //void TimingDelay_Decrement(void){

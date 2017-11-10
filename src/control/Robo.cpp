@@ -32,7 +32,7 @@ Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboM
 
 	drible = new dibre();
 
-	high_kick = new GPIO(GPIOD, GPIO_Pin_8);
+	//high_kick = new GPIO(GPIOD, GPIO_Pin_8);
 	chute_baixo = new GPIO(GPIOD, GPIO_Pin_10);
 
 	_id = Switch->id;
@@ -55,11 +55,11 @@ void Robo::init(){
 }
 
 void Robo::HighKick(float power){
-	if(GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_2)){
-		high_kick->Set();
-		for(int i=0;i<0xeee2;i++);
-		high_kick->Reset();
-	}
+	//if(GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_2)){
+	//	high_kick->Set();
+	//	for(int i=0;i<0xeee2;i++);
+	//	high_kick->Reset();
+	//}
 }
 
 void Robo::ChuteBaixo(float power){
@@ -91,20 +91,20 @@ void Robo::control_speed(){
   float proj=-0.5477*v0+0.4472*v1+0.5477*v2-0.4472*v3;
   //vBat=7;
   if(vBat>6.2){
-    if(proj<1 && proj>-1){
+    //if(proj<1 && proj>-1){
     	for(int i=0; i<4; i++){
     		motors[i]->Control_Speed(speed[i]); //manda a velocidade speed[i] pro motor[i] na unidade m/s
     	}
-    }
-    else {
+    //}
+    /*else {
     	//nem o valor de alfa nem a massa interferem no espaço nulo.
     	/*speed[0]=v0*0.8+0.2*v2+0.245*(v1-v3);
     	speed[2]=v2*0.8+0.2*v0-0.245*(v1-v3);
     	speed[3]=v3*0.7+0.245*(v2-v0)+0.3*v1;
     	speed[1]=v1*0.7-0.245*(v2-v0)+0.3*v3;*/
-    	speed[0]=v0-(-0.5477*v0+0.4472*v1+0.5477*v2-0.4472*v3)*(-0.5477);
-    	speed[1]=v1-(-0.5477*v0+0.4472*v1+0.5477*v2-0.4472*v3)*(0.4472);
-    	speed[2]=v2-(-0.5477*v0+0.4472*v1+0.5477*v2-0.4472*v3)*(0.5477);
+    	//speed[0]=v0-(-0.5477*v0+0.4472*v1+0.5477*v2-0.4472*v3)*(-0.5477);
+    	//speed[1]=v1-(-0.5477*v0+0.4472*v1+0.5477*v2-0.4472*v3)*(0.4472);
+    	/*speed[2]=v2-(-0.5477*v0+0.4472*v1+0.5477*v2-0.4472*v3)*(0.5477);
     	speed[3]=v3-(-0.5477*v0+0.4472*v1+0.5477*v2-0.4472*v3)*(-0.4472);
     	for(int i=0; i<4; i++){
      		motors[i]->Control_Speed(speed[i]); //manda a velocidade speed[i] pro motor[i] na unidade m/s
@@ -115,7 +115,7 @@ void Robo::control_speed(){
     for(int i=0; i<4; i++){
 	  motors[i]->SetDutyCycle(0);
     }
-  }
+ }
 }
 
 //armazena as velocidades lineares dos centros das RODAS em ptr
@@ -234,7 +234,9 @@ void Robo::processPacket(){
 	if(robotcmd.kickspeedz!=0)
 		robo.HighKick(robotcmd.kickspeedz);
 	if(robotcmd.spinner)
-	robo.drible->Set_Vel(100);
+		robo.drible->Set_Vel(660);
+	else
+		robo.drible->Set_Vel(0);
 }
 
 //  5º dia: ainda estou na classe robo
