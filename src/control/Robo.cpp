@@ -7,6 +7,7 @@
 
 #include "Robo.h"
 #include "pins.h"
+#include <compensa.h>
 
 #define sin_phi 0.50
 #define cos_phi 0.866
@@ -46,12 +47,12 @@ void Robo::init(){
 	_nrf24->Init();
 	_nrf24->Config();
 
-	_nrf24->StartRX_ESB(channel, address + GetId(), 32, 1);
-	_nrf24->TxPackage_ESB(channel, address + GetId(), 0,(uint8_t*) "TESTE", 5);
+	_nrf24->StartRX_ESB(channel, address + GetId(), 32, 0);
+	_nrf24->TxPackage_ESB(channel, address + GetId(), 1,(uint8_t*) "TESTE", 5);
 	while(_nrf24->Busy()){
 		_nrf24->InterruptCallback();
 	}
-	_nrf24->StartRX_ESB(channel, address + GetId(), 32, 1);
+	_nrf24->StartRX_ESB(channel, address + GetId(), 32, 0);
 }
 
 void Robo::HighKick(float power){
@@ -78,7 +79,7 @@ void Robo::control_pos(){
 		motors[i]->Control_Pos(pos[i]);
 	}
 }
-void Robo::control_speed(){
+void Robo::control_speed(float speedLocal[4]){
   vBat = 4.3*roboAdc->adc_getConversion();
 //testa e corrige eventual deslizamento
   float v0= motors[0]->real_wheel_speed;
@@ -93,7 +94,7 @@ void Robo::control_speed(){
   if(vBat>6.2){
     //if(proj<1 && proj>-1){
     	for(int i=0; i<4; i++){
-    		motors[i]->Control_Speed(speed[i]); //manda a velocidade speed[i] pro motor[i] na unidade m/s
+    		motors[i]->Control_Speed(speedLocal[i]); //manda a velocidade speed[i] pro motor[i] na unidade m/s
     	}
     //}
     /*else {
@@ -131,6 +132,10 @@ void Robo::get_wheel_speeds(float ptr[]){
 void Robo::set_speed(float v_r, float v_t, float w){
 	float R = 0.075; //Raio do robo = 9cm
 
+	speedr[0]=v_r;
+	speedr[1]=v_t;
+	speedr[2]=w;
+
 	speed[0] = v_t*cos_phi - v_r*sin_phi + w*R;
 	speed[2] = -v_t*cos_phi - v_r*sin_phi + w*R;
 	speed[3] = -v_t*cos_theta + v_r*sin_theta + w*R;
@@ -147,6 +152,12 @@ void Robo::set_speed(float v[]){
 	speed[3] = v[3];
 }
 
+void Robo::setPWM(int16_t answer[]){
+    for(int i=0; i<4; i++){
+	  motors[i]->SetDutyCycle(answer[i]);
+    }
+}
+
 void Robo::set_motor_speed(uint8_t motnr, float vel) {
 	if(motnr<4){
 		speed[motnr]=vel;
@@ -156,7 +167,18 @@ void Robo::set_motor_speed(uint8_t motnr, float vel) {
 void Robo::interrupt_control(){
 	get_wheel_speeds(robo.real_wheel_speed);//update real_wheel_speed com as velocidades medidas
 	if(controlbit&&(!stepbit)){
-		control_speed();
+		float speed_temp[4];
+		uint8_t correct[4];
+//		if(robo.real_wheel_speed[0]!=0.0 && robo.real_wheel_speed[1]!=0.0 && robo.real_wheel_speed[2]!=0.0 && robo.real_wheel_speed[3]!=0.0 ){
+		if(robotcmd.kickspeedz>50){
+			compensa(robo.real_wheel_speed, robo.speedr, speed_temp, correct);
+			for(int i=0;i<4;i++){
+				if(correct[i]){
+					speed[i]=speed_temp[i];
+				}
+			}
+		}
+		control_speed(speed);
 	}
 	if(!controlbit){
 		for(int j=0; j<4; j++){
@@ -196,7 +218,7 @@ void Robo::interrupt_control(){
 void Robo::interruptReceive(){
     bool status=0;
 	if(_nrf24->RxSize()){
-		_nrf24->StartRX_ESB(channel, address + robo.GetId(), 32, 1);
+		_nrf24->StartRX_ESB(channel, address + robo.GetId(), 32, 0);
 		uint8_t rxsize=_nrf24->RxSize();
 		if(rxsize>32) rxsize=32;
 		uint8_t buffer[32];
@@ -231,8 +253,8 @@ void Robo::processPacket(){
 	robo.set_speed(robotcmd.veltangent, robotcmd.velnormal, robotcmd.velangular);
 	if(robotcmd.kickspeedx!=0)
 		robo.ChuteBaixo(robotcmd.kickspeedx);
-	if(robotcmd.kickspeedz!=0)
-		robo.HighKick(robotcmd.kickspeedz);
+	//if(robotcmd.kickspeedz!=0)
+		//robo.HighKick(robotcmd.kickspeedz);
 	if(robotcmd.spinner)
 		robo.drible->Set_Vel(660);
 	else
@@ -253,7 +275,7 @@ void Robo::interruptTransmitter(){
 		pb_ostream_t ostream=pb_ostream_from_buffer(buffer, sizeof(buffer));
 		pb_encode(&ostream, grSim_Robot_Command_fields, &robotcmd);//escreve em ostream os dados de robotcmd
 		uint8_t size=ostream.bytes_written;
-		_nrf24->TxPackage_ESB(channel, address | robotid, 0, buffer, size);
+		_nrf24->TxPackage_ESB(channel, address | robotid, 1, buffer, size);
 		while(_nrf24->Busy()){
 			_nrf24->InterruptCallback();
 		}

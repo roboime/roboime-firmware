@@ -35,11 +35,12 @@ public:
 	GPIO *chute_baixo;
 	void HighKick(float power);
 	void ChuteBaixo(float power);
-	void control_speed();
+	void control_speed(float speedLocal[4]);
 	void control_pos();
 	dibre *drible;
 	int pos[4];
 	float speed[4];
+	float speedr[4];
 	float real_wheel_speed[4];//armazenará as velocidades medidas (m/s) das RODAS
     Motor *motors[4];
     adc *roboAdc;
@@ -50,6 +51,7 @@ public:
     void get_wheel_speeds(float ptr[]);//armazena as velocidades lineares dos centros das RODAS em ptr
     void set_speed(float v_r, float v_t, float w);
     void set_speed(float v[]);
+    void setPWM(int16_t answer[]);
     void set_motor_speed(uint8_t motnr, float vel);
     bool _testmode;
     bool InTestMode(){return _testmode;};

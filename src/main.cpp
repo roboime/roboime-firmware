@@ -85,53 +85,17 @@ int main(void){
 	SysTick_Config(SystemCoreClock/1000);
 	usb.Init();
 	robo.init();
-	GPIO_InitTypeDef GPIO_InitStructure;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
-	GPIO_Init(GPIOA ,&GPIO_InitStructure);
-
-	mina220.SelfTest();
-	mina22d.SelfTest();
-	mina221.SelfTest();
-	mina223.SelfTest();
-	mina220.ReadCurrent();
-	robo.motors[0]->mina22->ReadCurrent();
-
-	uint32_t lasttime=0;
-
+	//float vel[][16] = {{-2, -2, -2, -2, -2, -2, -2, -2, 2, 2, 2, 2, 2, 2, 2, 2}, {-2, -2, -2, -2, 2, 2, 2, 2, -2, -2, -2, -2, 2, 2, 2, 2}, {-2, -2, 2, 2, -2, -2, 2, 2, -2, -2, 2, 2, -2, -2, 2, 2}, {-2, 2, -2, 2, -2, 2, -2, 2, -2, 2, -2, 2, -2, 2, -2, 2}};
+	int16_t answer[][4] = {{-1, -1, -1, -1}, {1, -1, -1, -1}, {-1, 1, -1, -1}, {1, 1, -1, -1}, {-1, -1, 1, -1}, {1, -1, 1, -1}, {-1, 1, 1, -1}, {1, 1, 1, -1}, {-1, -1, -1, 1}, {1, -1, -1, 1}, {-1, 1, -1, 1}, {1, 1, -1, 1}, {-1, -1, 1, 1}, {1, -1, 1, 1}, {-1, 1, 1, 1}, {1, 1, 1, 1}};
+	robo.stepbit = true;
 	while(1){
-		//if((GetLocalTime()-lasttime)>100){
-		//	lasttime=GetLocalTime();
-		//	led_a.Toggle();
-		//}
-		//robo.controlbit = true;
-		if(GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_2))
-			led_c.On();
-		else
-			led_c.Off();
-		robo._nrf24->InterruptCallback();
-		usb_device_class_cdc_vcp.GetData(_usbserialbuffer, 1024);
-
-		if(robo.InTestMode()){
-			robo.interruptTestMode();
-			delay_ms(2);
-		}
-		else {
-			if(_usbserialbuffer.Ocupied()){
-				robo.interruptTransmitter();
+		for(int ii=0; ii<16; ii++){
+			int16_t PWM[4];
+			for(int jj=0; jj<4; jj++){
+				PWM[jj] = 1000*answer[ii][jj];
 			}
-			if(nrf24.RxSize()){
-				robo.interruptReceive();
-				robo.interruptAckPayload();
-				robo.last_packet_ms = GetLocalTime();
-				robo.controlbit = true;
-			}
-			if((GetLocalTime()-robo.last_packet_ms)>100){
-				robo.controlbit = false;
-			}
+			robo.setPWM(PWM);
+			delay_ms(125);
 		}
 	}
 }
