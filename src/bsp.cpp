@@ -61,7 +61,7 @@ Pwm ahpwm1(GPIOA, GPIO_Pin_8, TIM1, GPIO_PinSource8, GPIO_AF_TIM1, 1, false);
 GPIO algpio1(GPIOE, GPIO_Pin_6);
 Pwm bhpwm1(GPIOC, GPIO_Pin_8, TIM8, GPIO_PinSource8, GPIO_AF_TIM8, 3, false);
 GPIO blgpio1(GPIOE, GPIO_Pin_4);
-Encoder encoder1(GPIOA, GPIOB, GPIO_Pin_15, GPIO_Pin_3, TIM2, GPIO_PinSource15, GPIO_PinSource3, GPIO_AF_TIM2);
+Encoder encoder1(GPIOA, GPIOB, GPIO_Pin_14, GPIO_Pin_3, TIM2, GPIO_PinSource15, GPIO_PinSource3, GPIO_AF_TIM2);
 INA220 mina221(i2c_a, 0x82);//trocado
 Motor motor1(&ahpwm1, &algpio1, &bhpwm1, &blgpio1, &encoder1, &robo_timer, &mina221);
 
@@ -111,7 +111,7 @@ extern "C" void TIM6_DAC_IRQHandler(){
 }
 
 IO_Pin_STM32 I2C_A_SDA_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOB, GPIO_Pin_9, GPIO_PuPd_NOPULL, GPIO_OType_OD, GPIO_AF_I2C1);
-IO_Pin_STM32 I2C_A_SCL_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOB, GPIO_Pin_8, GPIO_PuPd_NOPULL, GPIO_OType_OD, GPIO_AF_I2C1);
+IO_Pin_STM32 I2C_A_SCL_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOB, GPIO_Pin_8, GPIO_PuPd_UP, GPIO_OType_OD, GPIO_AF_I2C1);
 I2C_STM32 i2c_a(I2C_A_SDA_PIN, I2C_A_SCL_PIN, I2C1, 100000, 0x4000);
 
 

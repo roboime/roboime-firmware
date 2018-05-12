@@ -32,7 +32,7 @@ SPI_STM32::SPI_STM32(SPI_TypeDef *spi, IO_Pin &SS_PIN):
     SPI_InitStructure.SPI_CRCPolynomial=0;
     SPI_InitStructure.SPI_FirstBit=SPI_FirstBit_MSB;
     SPI_InitStructure.SPI_NSS=SPI_NSS_Soft;
-    SPI_InitStructure.SPI_BaudRatePrescaler=SPI_BaudRatePrescaler_16;
+    SPI_InitStructure.SPI_BaudRatePrescaler=SPI_BaudRatePrescaler_128;
 	SPI_Init(_spi, &SPI_InitStructure);
 	SPI_CalculateCRC(_spi, DISABLE);
 	SPI_Cmd(_spi, ENABLE);

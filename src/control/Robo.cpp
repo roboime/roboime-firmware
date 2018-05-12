@@ -79,7 +79,7 @@ void Robo::control_pos(){
 	}
 }
 void Robo::control_speed(){
-  vBat = 4.3*roboAdc->adc_getConversion();
+  //vBat = 4.3*roboAdc->adc_getConversion();
 //testa e corrige eventual deslizamento
   float v0= motors[0]->real_wheel_speed;
   float v1= motors[1]->real_wheel_speed;
@@ -88,20 +88,20 @@ void Robo::control_speed(){
 
   //float M1 = 0.2*(v0-v3)+0.24495*(v1-v2);
   //float M2 = -0.24495*(v0-v3)+0.3*(v1-v2);
-  float proj=-0.5477*v0+0.4472*v1+0.5477*v2-0.4472*v3;
+  //float proj=-0.5477*v0+0.4472*v1+0.5477*v2-0.4472*v3;
   //vBat=7;
-  if(vBat>6.2){
-    if(proj<1 && proj>-1){
+  //if(vBat>6.2){
+    //if(proj<1 && proj>-1){
     	for(int i=0; i<4; i++){
     		motors[i]->Control_Speed(speed[i]); //manda a velocidade speed[i] pro motor[i] na unidade m/s
     	}
-    }
-    else {
+    //}
+    /*else {
     	//nem o valor de alfa nem a massa interferem no espaço nulo.
-    	/*speed[0]=v0*0.8+0.2*v2+0.245*(v1-v3);
+    	speed[0]=v0*0.8+0.2*v2+0.245*(v1-v3);
     	speed[2]=v2*0.8+0.2*v0-0.245*(v1-v3);
     	speed[3]=v3*0.7+0.245*(v2-v0)+0.3*v1;
-    	speed[1]=v1*0.7-0.245*(v2-v0)+0.3*v3;*/
+    	speed[1]=v1*0.7-0.245*(v2-v0)+0.3*v3;
     	speed[0]=v0-(-0.5477*v0+0.4472*v1+0.5477*v2-0.4472*v3)*(-0.5477);
     	speed[1]=v1-(-0.5477*v0+0.4472*v1+0.5477*v2-0.4472*v3)*(0.4472);
     	speed[2]=v2-(-0.5477*v0+0.4472*v1+0.5477*v2-0.4472*v3)*(0.5477);
@@ -109,13 +109,13 @@ void Robo::control_speed(){
     	for(int i=0; i<4; i++){
      		motors[i]->Control_Speed(speed[i]); //manda a velocidade speed[i] pro motor[i] na unidade m/s
      	}
-    }//*/
-  }
-  else{//medida de proteção: se a bateria estiver fraca, o robô para
+    }*/
+  //}
+  /*else{//medida de proteção: se a bateria estiver fraca, o robô para
     for(int i=0; i<4; i++){
 	  motors[i]->SetDutyCycle(0);
     }
-  }
+  }*/
 }
 
 //armazena as velocidades lineares dos centros das RODAS em ptr
@@ -213,7 +213,7 @@ void Robo::interruptReceive(){
 		}
 	}
 	if((GetLocalTime()-last_packet_ms)>100){
-		controlbit = false;
+		//controlbit = false;
 	}
 }
 void Robo::interruptTestMode(){

@@ -25,7 +25,7 @@
 
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
   SPI_InitTypeDef SPI_InitStruct;
-  SPI_InitStruct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_16;
+  SPI_InitStruct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_128;
   SPI_InitStruct.SPI_CPHA = SPI_CPHA_1Edge;
   SPI_InitStruct.SPI_CPOL = SPI_CPOL_Low;
   SPI_InitStruct.SPI_DataSize = SPI_DataSize_8b;
