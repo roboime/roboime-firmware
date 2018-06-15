@@ -24,7 +24,7 @@ void adc::ADC_Config(){
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
   GPIO_Init(GPIOC, &GPIO_InitStructure);
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
-  GPIO_Init(GPIOB, &GPIO_InitStructure);
+  //GPIO_Init(GPIOB, &GPIO_InitStructure);
 
   /* DMA2 Stream0 channel0 configuration **************************************/
   DMA_InitTypeDef DMA_InitStructure;

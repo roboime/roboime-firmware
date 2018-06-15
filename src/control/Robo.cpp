@@ -69,6 +69,7 @@ void Robo::ChuteBaixo(float power){
 			delay_ticks((uint32_t) (power*611)); //611 = Gustavo's magic number
 			chute_baixo->Reset();
 			last_kick_time = GetLocalTime();
+			CT.Set();
 		}
 	}
 }

@@ -100,6 +100,8 @@ int main(void){
 	mina220.ReadCurrent();
 	robo.motors[0]->mina22->ReadCurrent();
 
+	uint32_t last_charge_en=0;
+
 	while(1){
 		if(GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_2))
 			led_c.On();
@@ -107,6 +109,11 @@ int main(void){
 			led_c.Off();
 		robo._nrf24->InterruptCallback();
 		usb_device_class_cdc_vcp.GetData(_usbserialbuffer, 1024);
+
+		if(GetLocalTime() - last_charge_en > 6000){
+			last_charge_en=GetLocalTime();
+			CT.Set();
+		}
 
 		if(robo.InTestMode()){
 			robo.interruptTestMode();
