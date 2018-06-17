@@ -102,6 +102,9 @@ int main(void){
 
 	uint32_t last_charge_en=0;
 
+	IO_Pin_STM32 CT(IO_Pin::IO_Pin_Mode_OUT, GPIOD, GPIO_Pin_8, GPIO_PuPd_UP, GPIO_OType_PP);
+	//mudanca de plca: CA -> CT e CT -> CA
+
 	while(1){
 		if(GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_2))
 			led_c.On();
@@ -110,9 +113,11 @@ int main(void){
 		robo._nrf24->InterruptCallback();
 		usb_device_class_cdc_vcp.GetData(_usbserialbuffer, 1024);
 
+		CT.Set();
+
 		if(GetLocalTime() - last_charge_en > 6000){
 			last_charge_en=GetLocalTime();
-			CT.Set();
+			CT.Reset();
 		}
 
 		if(robo.InTestMode()){

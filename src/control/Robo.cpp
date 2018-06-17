@@ -32,7 +32,7 @@ Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboM
 
 	drible = new dibre();
 
-	high_kick = new GPIO(GPIOD, GPIO_Pin_8);
+	high_kick = new GPIO(GPIOB, GPIO_Pin_0);
 	chute_baixo = new GPIO(GPIOD, GPIO_Pin_10);
 
 	_id = Switch->id;
@@ -62,14 +62,17 @@ void Robo::HighKick(float power){
 	}
 }
 
+IO_Pin_STM32 CT(IO_Pin::IO_Pin_Mode_OUT, GPIOD, GPIO_Pin_8, GPIO_PuPd_UP, GPIO_OType_PP);
+
 void Robo::ChuteBaixo(float power){
 	if((GetLocalTime()-last_kick_time)>700){
 		if(GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_2)){
+			CT.Set();
 			chute_baixo->Set();
 			delay_ticks((uint32_t) (power*611)); //611 = Gustavo's magic number
 			chute_baixo->Reset();
 			last_kick_time = GetLocalTime();
-			CT.Set();
+			CT.Reset();
 		}
 	}
 }
