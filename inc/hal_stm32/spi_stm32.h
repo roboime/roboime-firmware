@@ -8,7 +8,7 @@
 class SPI_STM32: public SPI
 {
 public:
-	SPI_STM32(SPI_TypeDef *spi, IO_Pin &SS_PIN);
+	SPI_STM32(SPI_TypeDef *spi, IO_Pin &SS_PIN, uint16_t SPI_BaudRatePrescaler);
 	SPI_STM32(const SPI_STM32 &spi_stm32, IO_Pin &SS_PIN);
 	uint8_t WriteByte(uint8_t byte);
 	uint8_t WriteBuffer(uint8_t *buffer, uint16_t size);

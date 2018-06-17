@@ -17,7 +17,7 @@
 #define Massa 3
 #define Raio 0.09*/
 
-Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, NRF24L01P *mynrf24, Switch *Switch, adc *sensorAdc, bool testmode):
+Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, NRF24L01P *mynrf24, uint8_t ID, adc *sensorAdc, bool testmode):
 	_nrf24(mynrf24),
 	_testmode(testmode),
 	printv(false)
@@ -35,9 +35,9 @@ Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboM
 	high_kick = new GPIO(GPIOB, GPIO_Pin_0);
 	chute_baixo = new GPIO(GPIOD, GPIO_Pin_10);
 
-	_id = Switch->id;
+	_id = ID;
 
-	channel=92;
+	channel=43;
 	address=0xE7E7E7E700;
 	last_packet_ms = 0;
 }
@@ -54,19 +54,24 @@ void Robo::init(){
 	_nrf24->StartRX_ESB(channel, address + GetId(), 32, 1);
 }
 
-void Robo::HighKick(float power){
-	if(GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_2)){
-		high_kick->Set();
-		for(int i=0;i<0xeee2;i++);
-		high_kick->Reset();
-	}
-}
-
 IO_Pin_STM32 CT(IO_Pin::IO_Pin_Mode_OUT, GPIOD, GPIO_Pin_8, GPIO_PuPd_UP, GPIO_OType_PP);
+
+void Robo::HighKick(float power){
+	if((GetLocalTime()-last_kick_time)>700){
+			if(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_11)){
+				CT.Set();
+				high_kick->Set();
+				for(int i=0;i<0xeee2;i++);
+				high_kick->Reset();
+				last_kick_time = GetLocalTime();
+				CT.Reset();
+			}
+		}
+}
 
 void Robo::ChuteBaixo(float power){
 	if((GetLocalTime()-last_kick_time)>700){
-		if(GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_2)){
+		if(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_11)){
 			CT.Set();
 			chute_baixo->Set();
 			delay_ticks((uint32_t) (power*611)); //611 = Gustavo's magic number
@@ -183,10 +188,6 @@ void Robo::interrupt_control(){
 		_usbserialbuffer2.In((uint8_t*)buffer, (uint16_t) ostream.bytes_written);
 	}
 	if ((!printv)&&(printI)){
-		robotcmd_test.kickspeedx = motors[0]->mina22->ReadCurrent();
-		robotcmd_test.kickspeedz = motors[1]->mina22->ReadCurrent();
-		robotcmd_test.veltangent = motors[2]->mina22->ReadCurrent();
-		robotcmd_test.velnormal = motors[3]->mina22->ReadCurrent();
 		robotcmd_test.velangular=(float)GetLocalTime();
 		robotcmd_test.spinner=false;
 		uint8_t buffer[32];

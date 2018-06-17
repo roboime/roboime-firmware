@@ -34,8 +34,7 @@ public:
 			Pwm *B_High,
 			GPIO *B_Low,
 			Encoder *Enc,
-			Timer_Time2 *MTimer,
-			INA220 *ina220);
+			Timer_Time2 *MTimer);
 	void Control_Pos(float hold_position);
 	void Control_Speed(float hold_speed);
 	void Calc_Speed();
@@ -43,7 +42,6 @@ public:
 	int16_t Get_Desloc();//retorna o deslocamento do eixo do motor, unidade: divisões de encoder
 	static void SetPID(float p, float i, float d);
 	static void GetPID(float c[]);
-	INA220 *mina22;
 
 	float real_wheel_speed;
 private:

@@ -3,7 +3,7 @@
 
 const uint32_t SPI_STM32::SPI_TIMEOUT=0x4000;
 
-SPI_STM32::SPI_STM32(SPI_TypeDef *spi, IO_Pin &SS_PIN):
+SPI_STM32::SPI_STM32(SPI_TypeDef *spi, IO_Pin &SS_PIN, uint16_t SPI_BaudRatePrescaler):
 	_spi(spi),
 	_SS_PIN(&SS_PIN)
 {
@@ -32,7 +32,32 @@ SPI_STM32::SPI_STM32(SPI_TypeDef *spi, IO_Pin &SS_PIN):
     SPI_InitStructure.SPI_CRCPolynomial=0;
     SPI_InitStructure.SPI_FirstBit=SPI_FirstBit_MSB;
     SPI_InitStructure.SPI_NSS=SPI_NSS_Soft;
-    SPI_InitStructure.SPI_BaudRatePrescaler=SPI_BaudRatePrescaler_16;
+    if(SPI_BaudRatePrescaler==SPI_BaudRatePrescaler_2) {
+    	SPI_InitStructure.SPI_BaudRatePrescaler=SPI_BaudRatePrescaler_2;
+    }
+    else if(SPI_BaudRatePrescaler==SPI_BaudRatePrescaler_4){
+    	SPI_InitStructure.SPI_BaudRatePrescaler=SPI_BaudRatePrescaler_4;
+    }
+    else if(SPI_BaudRatePrescaler==SPI_BaudRatePrescaler_8){
+    	SPI_InitStructure.SPI_BaudRatePrescaler=SPI_BaudRatePrescaler_8;
+    }
+    else if(SPI_BaudRatePrescaler==SPI_BaudRatePrescaler_16){
+    	SPI_InitStructure.SPI_BaudRatePrescaler=SPI_BaudRatePrescaler_16;
+    }
+    else if(SPI_BaudRatePrescaler==SPI_BaudRatePrescaler_32){
+    	SPI_InitStructure.SPI_BaudRatePrescaler=SPI_BaudRatePrescaler_32;
+    }
+    else if(SPI_BaudRatePrescaler==SPI_BaudRatePrescaler_64){
+    	SPI_InitStructure.SPI_BaudRatePrescaler=SPI_BaudRatePrescaler_64;
+    }
+    else if(SPI_BaudRatePrescaler==SPI_BaudRatePrescaler_128){
+    	SPI_InitStructure.SPI_BaudRatePrescaler=SPI_BaudRatePrescaler_128;
+    }
+    else if(SPI_BaudRatePrescaler==SPI_BaudRatePrescaler_256){
+    	SPI_InitStructure.SPI_BaudRatePrescaler=SPI_BaudRatePrescaler_256;
+    } else{
+    	return;
+    }
 	SPI_Init(_spi, &SPI_InitStructure);
 	SPI_CalculateCRC(_spi, DISABLE);
 	SPI_Cmd(_spi, ENABLE);
