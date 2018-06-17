@@ -37,7 +37,7 @@ Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboM
 
 	_id = Switch->id;
 
-	channel=92;
+	channel=43;
 	address=0xE7E7E7E700;
 	last_packet_ms = 0;
 }
