@@ -98,6 +98,18 @@ int main(void){
 	IO_Pin_STM32 CT(IO_Pin::IO_Pin_Mode_OUT, GPIOD, GPIO_Pin_8, GPIO_PuPd_UP, GPIO_OType_PP);
 	//mudanca de plca: CA -> CT e CT -> CA
 
+	//TESTE STMPE
+		uint8_t i2c_ta_ai = i2c_a.ReadRegByte(0x82, 0x00);
+		i2c_ta_ai++;
+
+	//TESTE MPU
+		uint8_t buf[]={0xF5,0XFF};
+		spi_mpu.Assert();
+		spi_mpu.WriteBuffer(buf,1);
+		uint8_t resp_mpu = spi_mpu.WriteBuffer(buf+1,1);
+		spi_mpu.Release();
+		resp_mpu++;
+
 	while(1){
 		if(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_11))
 			led_c.On();

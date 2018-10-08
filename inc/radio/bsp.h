@@ -78,7 +78,9 @@ extern RF_POWER_CTRL rf_power_ctrl;
 extern SCPI SCPI_USB;
 
 extern NRF24L01P nrf24;
-extern IO_Pin_STM32 Botao;
+extern IO_Pin_STM32 ID_button;
+extern SPI_STM32 spi_mpu;
+extern SPI_STM32 spi_sdcard;
 extern IO_Pin_STM32 LIS3DSH_CSN;
 extern Motor motor0;
 extern Motor motor1;
