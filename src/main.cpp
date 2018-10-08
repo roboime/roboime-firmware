@@ -42,7 +42,6 @@ void Delay_ms(uint32_t time_ms);
 uint8_t scanned[256];
 
 
-
 #include <stm32f4xx_wwdg.h>
 
 
@@ -79,26 +78,6 @@ pb_istream_t pb_istream_from_circularbuffer(CircularBuffer<uint8_t> *circularbuf
 	return stream;
 }
 
-IO_Pin_STM32 SPI1_SCK_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOA, GPIO_Pin_5, GPIO_PuPd_NOPULL, GPIO_OType_PP, GPIO_AF_SPI1);
-IO_Pin_STM32 SPI1_MISO_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOA, GPIO_Pin_6, GPIO_PuPd_NOPULL, GPIO_OType_PP, GPIO_AF_SPI1);
-IO_Pin_STM32 SPI1_MOSI_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOA, GPIO_Pin_7, GPIO_PuPd_NOPULL, GPIO_OType_PP, GPIO_AF_SPI1);
-IO_Pin_STM32 NRF24_SS_PIN(IO_Pin::IO_Pin_Mode_OUT, GPIOD, GPIO_Pin_0, GPIO_PuPd_NOPULL, GPIO_OType_PP);
-IO_Pin_STM32 NRF24_CE_PIN(IO_Pin::IO_Pin_Mode_OUT, GPIOC, GPIO_Pin_12, GPIO_PuPd_NOPULL, GPIO_OType_PP);
-IO_Pin_STM32 NRF24_IRQN_PIN(IO_Pin::IO_Pin_Mode_IN, GPIOC, GPIO_Pin_5, GPIO_PuPd_UP, GPIO_OType_OD);
-
-SPI_STM32 spi_nrf(SPI1, NRF24_SS_PIN, SPI_BaudRatePrescaler_32);
-
-NRF24L01P nrf24(spi, NRF24_SS_PIN, NRF24_CE_PIN, NRF24_IRQN_PIN);
-
-IO_Pin_STM32 SPI2_SCK_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOB, GPIO_Pin_13, GPIO_PuPd_NOPULL, GPIO_OType_PP, GPIO_AF_SPI2);
-IO_Pin_STM32 SPI2_MISO_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOB, GPIO_Pin_14, GPIO_PuPd_NOPULL, GPIO_OType_PP, GPIO_AF_SPI2);
-IO_Pin_STM32 SPI2_MOSI_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOB, GPIO_Pin_15, GPIO_PuPd_NOPULL, GPIO_OType_PP, GPIO_AF_SPI2);
-IO_Pin_STM32 SDCARD_SS_PIN(IO_Pin::IO_Pin_Mode_OUT, GPIOD, GPIO_Pin_3, GPIO_PuPd_UP, GPIO_OType_PP);
-IO_Pin_STM32 MPU9250_SS_PIN(IO_Pin::IO_Pin_Mode_OUT, GPIOC, GPIO_Pin_10, GPIO_PuPd_UP, GPIO_OType_PP);
-
-SPI_STM32 spi_mpu(SPI2, MPU9250_SS_PIN, SPI_BaudRatePrescaler_128);
-SPI_STM32 spi_sdcard(SPI2, SDCARD_SS_PIN, SPI_BaudRatePrescaler_128);
-
 int main(void){
 	LIS3DSH_CSN.Set();
 
@@ -112,6 +91,7 @@ int main(void){
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
 	GPIO_Init(GPIOC ,&GPIO_InitStructure);
+
 
 	uint32_t last_charge_en=0;
 
