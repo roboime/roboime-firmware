@@ -77,10 +77,51 @@ pb_istream_t pb_istream_from_circularbuffer(CircularBuffer<uint8_t> *circularbuf
 	stream.errmsg = NULL;
 	return stream;
 }
+int ShowNumber(int number){
 
+	uint8_t numero[17];
+	numero[16]=0x0;
+	numero[0]=0x77;//10+20+40+04+02+01
+	numero[1]=0x06;//02+04
+	numero[2]=0xB5;//10+20+04+01+80
+	numero[3]=0x97;//01+02+04+80+10
+	numero[4]=0xC6;//40+80+04+02
+	numero[5]=0xD3;//01+02+10+40+80
+	numero[6]=0xF3;//01+02+10+20+40+80
+	numero[7]=0x07;//01+02+04
+	numero[8]=0xF7;//todos menos o 0x08
+	numero[9]=0xD7;//01+02+08+10+40+04
+	numero[10]=0xE7;
+	//numero[11]=0xF2;
+	//numero[12]=0x71;
+	//numero[13]=0xB6;
+	//numero[14]=0xF1;
+	//numero[15]=0xE1;
+	//int k=0;
+	uint8_t a;
+	//int i=0;
+
+	a=numero[number];
+
+	i2c_a.WriteRegByte(0x82, 0x04, ~0x04);
+	i2c_a.WriteRegByte(0x82, 0x17, a);
+	i2c_a.WriteRegByte(0x82, 0x13, a);
+	i2c_a.WriteRegByte(0x82, 0x10, a);
+
+	return 0;
+}
 int main(void){
-	LIS3DSH_CSN.Set();
 
+
+	uint32_t x1 = GetLocalTime();
+	uint32_t x2= GetLocalTime();
+	//ShowNumber(robo.GetId());
+	uint8_t bitStatus3 = (uint8_t)Bit_RESET;//adicionado pra tentar a logica do botão
+	uint8_t bitStatus2 = (uint8_t)Bit_SET;//adicionado pra tentar a logica do botão
+	uint8_t bitStatus= (uint8_t)Bit_SET;//adicionado pra tentar a logica do botão
+
+	LIS3DSH_CSN.Set();
+	//robo.drible->Set_Vel(0); não da certo
 	SysTick_Config(SystemCoreClock/1000);
 	usb.Init();
 	robo.init();
@@ -95,7 +136,7 @@ int main(void){
 
 	uint32_t last_charge_en=0;
 
-	IO_Pin_STM32 CT(IO_Pin::IO_Pin_Mode_OUT, GPIOD, GPIO_Pin_8, GPIO_PuPd_UP, GPIO_OType_PP);
+	IO_Pin_STM32 CT(IO_Pin::IO_Pin_Mode_OUT, GPIOD, GPIO_Pin_8, GPIO_PuPd_UP, GPIO_OType_PP);//tem que confirmar
 	//mudanca de plca: CA -> CT e CT -> CA
 
 	//TESTE STMPE
@@ -111,13 +152,43 @@ int main(void){
 		resp_mpu++;
 
 	while(1){
-		if(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_11))
+		if(GetLocalTime()-x1>2000){
+			ShowNumber(16);
+			x1=GetLocalTime();
+		}
+		//x1=GetLocalTime();
+		//robo.drible->Set_Vel(0);
+		//TIM_SetCompare4(TIM8,500);
+		/* inicio de tentativa de logica para o botão*/
+
+		if(GetLocalTime()-x2>100){
+			bitStatus=ID_Button.Read();
+			if(bitStatus==bitStatus3){
+				if(bitStatus!=bitStatus2){
+					if(bitStatus==(uint8_t)Bit_RESET){
+						if(robo.GetId()<10){
+							robo.IncId();
+							ShowNumber(robo.GetId());
+						}
+						else{
+							robo.ZeraId();
+							ShowNumber(robo.GetId());
+						}
+					}
+					bitStatus2=bitStatus;
+				}
+			}
+			bitStatus3=bitStatus;
+			x2=GetLocalTime();
+		}
+		if(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_11)){
 			led_c.On();
+			robo.drible->Set_Vel(0);
+		}
 		else
 			led_c.Off();
 		robo._nrf24->InterruptCallback();
 		usb_device_class_cdc_vcp.GetData(_usbserialbuffer, 1024);
-
 		CT.Set();
 
 		if(GetLocalTime() - last_charge_en > 6000){
@@ -145,6 +216,7 @@ int main(void){
 		}
 	}
 }
+
 
 extern uint32_t LocalTime;
 

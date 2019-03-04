@@ -7,7 +7,8 @@
 #include "my_spi.h"
 
  MySpi::MySpi(){
-  CS_Gpio = new GPIO(GPIOA, GPIO_Pin_4);
+  //CS_Gpio = new GPIO(GPIOA, GPIO_Pin_4);
+  CS_Gpio = new GPIO(GPIOD, GPIO_Pin_0);//ok
   Spi_TimeOut=0x4000;
 
   //MOSI, MISO, SCK GPIO configuration
@@ -17,11 +18,11 @@
   GPIO_SPI_Pins_initstruct.GPIO_OType = GPIO_OType_PP;
   GPIO_SPI_Pins_initstruct.GPIO_PuPd	= GPIO_PuPd_NOPULL;
   GPIO_SPI_Pins_initstruct.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_SPI_Pins_initstruct.GPIO_Pin = GPIO_Pin_5|GPIO_Pin_6|GPIO_Pin_7;
-  GPIO_Init(GPIOA, &GPIO_SPI_Pins_initstruct);
-  GPIO_PinAFConfig(GPIOA , GPIO_PinSource5 , GPIO_AF_SPI1);
-  GPIO_PinAFConfig(GPIOA, GPIO_PinSource6, GPIO_AF_SPI1);
-  GPIO_PinAFConfig(GPIOA, GPIO_PinSource7, GPIO_AF_SPI1);
+  GPIO_SPI_Pins_initstruct.GPIO_Pin = GPIO_Pin_5|GPIO_Pin_6|GPIO_Pin_7;//ok
+  GPIO_Init(GPIOA, &GPIO_SPI_Pins_initstruct);//ok
+  GPIO_PinAFConfig(GPIOA , GPIO_PinSource5 , GPIO_AF_SPI1);//ok
+  GPIO_PinAFConfig(GPIOA, GPIO_PinSource6, GPIO_AF_SPI1);//ok
+  GPIO_PinAFConfig(GPIOA, GPIO_PinSource7, GPIO_AF_SPI1);//ok
 
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
   SPI_InitTypeDef SPI_InitStruct;

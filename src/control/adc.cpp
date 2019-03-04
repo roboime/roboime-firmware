@@ -19,11 +19,11 @@ void adc::ADC_Config(){
   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
   /* Configure ADC3 Channelx pin as analog input ******************************/
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;//ok
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
-  GPIO_Init(GPIOC, &GPIO_InitStructure);
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
+  GPIO_Init(GPIOC, &GPIO_InitStructure);//ok
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;//ok
   //GPIO_Init(GPIOB, &GPIO_InitStructure);
 
   /* DMA2 Stream0 channel0 configuration **************************************/

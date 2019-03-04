@@ -1,6 +1,5 @@
 #include <stm32f4xx_gpio.h>
 #include <stm32f4xx_usart.h>
-
 #include <radio/bsp.h>
 #include <radio/serialnumber.h>
 #include <hal_stm32/interrupt_stm32.h>
@@ -9,21 +8,20 @@
 #include <control/Robo.h>
 #include <control/Switch.h>
 #include "TimerTime.h"
-
 extern "C"{
 	#include "usb_dcd_int.h"
 	#include "usb_hcd_int.h"
 }
+LED led_a(new IO_Pin_STM32 (IO_Pin::IO_Pin_Mode_OUT, GPIOD, GPIO_Pin_12));// led verde transmissão
+LED led_b(new IO_Pin_STM32 (IO_Pin::IO_Pin_Mode_OUT, GPIOD, GPIO_Pin_13));// led laranja erro na transmissão
+LED led_c(new IO_Pin_STM32 (IO_Pin::IO_Pin_Mode_OUT, GPIOD, GPIO_Pin_14));// led vermelho erro de comunicação
+LED led_d(new IO_Pin_STM32 (IO_Pin::IO_Pin_Mode_OUT, GPIOD, GPIO_Pin_15));//led azul, comunicação
+//Pwm led_d2(GPIOD,GPIO_Pin_15,TIM4,GPIO_PinSource15,GPIO_AF_TIM4,4,false);
+//Pwm ahpwm0(GPIOC, GPIO_Pin_9, TIM8, GPIO_PinSource9, GPIO_AF_TIM8, 4, false);//ok
+IO_Pin_STM32 ID_Button(IO_Pin::IO_Pin_Mode_IN, GPIOE, GPIO_Pin_2, GPIO_PuPd_UP);
 
-LED led_a(new IO_Pin_STM32 (IO_Pin::IO_Pin_Mode_OUT, GPIOD, GPIO_Pin_12));
-LED led_b(new IO_Pin_STM32 (IO_Pin::IO_Pin_Mode_OUT, GPIOD, GPIO_Pin_13));
-LED led_c(new IO_Pin_STM32 (IO_Pin::IO_Pin_Mode_OUT, GPIOD, GPIO_Pin_14));
-LED led_d(new IO_Pin_STM32 (IO_Pin::IO_Pin_Mode_OUT, GPIOD, GPIO_Pin_15));
-
-IO_Pin_STM32 ID_Button(IO_Pin::IO_Pin_Mode_IN, GPIOE, GPIO_Pin_2, GPIO_PuPd_NOPULL);
-
-IO_Pin_STM32 USB_DP(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOA, GPIO_Pin_12, GPIO_PuPd_NOPULL, GPIO_OType_PP, GPIO_AF_OTG_FS);
-IO_Pin_STM32 USB_DM(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOA, GPIO_Pin_11, GPIO_PuPd_NOPULL, GPIO_OType_PP, GPIO_AF_OTG_FS);
+IO_Pin_STM32 USB_DP(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOA, GPIO_Pin_12, GPIO_PuPd_NOPULL, GPIO_OType_PP, GPIO_AF_OTG_FS);//ok
+IO_Pin_STM32 USB_DM(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOA, GPIO_Pin_11, GPIO_PuPd_NOPULL, GPIO_OType_PP, GPIO_AF_OTG_FS);//ok
 
 //USB_DEVICE_CLASS_CDC_RNDIS usb_device_class_cdc_rndis(1);
 
@@ -31,68 +29,71 @@ std::list<USB_DEVICE_CLASS*> USB_DEVICE_CLASS::_usb_device_classes_list;
 USB_DEVICE_CLASS_CDC_VCP usb_device_class_cdc_vcp({"RoboIME Serial Port"},1);
 USB_STM32 usb(0x29BC, 0x2000, "IME", "RoboIME", SerialNumberGetHexaString());
 
-IO_Pin_STM32 SPI1_SCK_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOA, GPIO_Pin_5, GPIO_PuPd_NOPULL, GPIO_OType_PP, GPIO_AF_SPI1);
-IO_Pin_STM32 SPI1_MISO_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOA, GPIO_Pin_6, GPIO_PuPd_NOPULL, GPIO_OType_PP, GPIO_AF_SPI1);
-IO_Pin_STM32 SPI1_MOSI_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOA, GPIO_Pin_7, GPIO_PuPd_NOPULL, GPIO_OType_PP, GPIO_AF_SPI1);
-IO_Pin_STM32 NRF24_SS_PIN(IO_Pin::IO_Pin_Mode_OUT, GPIOD, GPIO_Pin_0, GPIO_PuPd_NOPULL, GPIO_OType_PP);
-IO_Pin_STM32 NRF24_CE_PIN(IO_Pin::IO_Pin_Mode_OUT, GPIOC, GPIO_Pin_12, GPIO_PuPd_NOPULL, GPIO_OType_PP);
-IO_Pin_STM32 NRF24_IRQN_PIN(IO_Pin::IO_Pin_Mode_IN, GPIOC, GPIO_Pin_5, GPIO_PuPd_UP, GPIO_OType_OD);
-
+IO_Pin_STM32 SPI1_SCK_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOA, GPIO_Pin_5, GPIO_PuPd_NOPULL, GPIO_OType_PP, GPIO_AF_SPI1);//ok
+IO_Pin_STM32 SPI1_MISO_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOA, GPIO_Pin_6, GPIO_PuPd_NOPULL, GPIO_OType_PP, GPIO_AF_SPI1);//ok
+IO_Pin_STM32 SPI1_MOSI_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOA, GPIO_Pin_7, GPIO_PuPd_NOPULL, GPIO_OType_PP, GPIO_AF_SPI1);//ok
+IO_Pin_STM32 NRF24_SS_PIN(IO_Pin::IO_Pin_Mode_OUT, GPIOD, GPIO_Pin_0, GPIO_PuPd_NOPULL, GPIO_OType_PP);//a principio todas as ocorrências foram mudadas
+//IO_Pin_STM32 NRF24_SS_PIN(IO_Pin::IO_Pin_Mode_OUT, GPIOA, GPIO_Pin_4, GPIO_PuPd_NOPULL, GPIO_OType_PP);
+IO_Pin_STM32 NRF24_CE_PIN(IO_Pin::IO_Pin_Mode_OUT, GPIOC, GPIO_Pin_12, GPIO_PuPd_NOPULL, GPIO_OType_PP);//acho que troquei todas as ocorrencias
+//IO_Pin_STM32 NRF24_CE_PIN(IO_Pin::IO_Pin_Mode_OUT, GPIOA, GPIO_Pin_3, GPIO_PuPd_NOPULL, GPIO_OType_PP);
+IO_Pin_STM32 NRF24_IRQN_PIN(IO_Pin::IO_Pin_Mode_IN, GPIOC, GPIO_Pin_5, GPIO_PuPd_UP, GPIO_OType_OD);//ok
+//IO_Pin_STM32 NRF24_IRQN_PIN(IO_Pin::IO_Pin_Mode_IN, GPIOC, GPIO_Pin_5, GPIO_PuPd_UP, GPIO_OType_OD);
 SPI_STM32 spi_nrf(SPI1, NRF24_SS_PIN, SPI_BaudRatePrescaler_32);
 
 NRF24L01P nrf24(spi_nrf, NRF24_SS_PIN, NRF24_CE_PIN, NRF24_IRQN_PIN);
 
-IO_Pin_STM32 SPI2_SCK_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOB, GPIO_Pin_13, GPIO_PuPd_NOPULL, GPIO_OType_PP, GPIO_AF_SPI2);
-IO_Pin_STM32 SPI2_MISO_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOB, GPIO_Pin_14, GPIO_PuPd_NOPULL, GPIO_OType_PP, GPIO_AF_SPI2);
-IO_Pin_STM32 SPI2_MOSI_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOB, GPIO_Pin_15, GPIO_PuPd_NOPULL, GPIO_OType_PP, GPIO_AF_SPI2);
-IO_Pin_STM32 SDCARD_SS_PIN(IO_Pin::IO_Pin_Mode_OUT, GPIOD, GPIO_Pin_3, GPIO_PuPd_UP, GPIO_OType_PP);
-IO_Pin_STM32 MPU9250_SS_PIN(IO_Pin::IO_Pin_Mode_OUT, GPIOC, GPIO_Pin_10, GPIO_PuPd_UP, GPIO_OType_PP);
+IO_Pin_STM32 SPI2_SCK_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOB, GPIO_Pin_13, GPIO_PuPd_NOPULL, GPIO_OType_PP, GPIO_AF_SPI2);//ok
+IO_Pin_STM32 SPI2_MISO_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOB, GPIO_Pin_14, GPIO_PuPd_NOPULL, GPIO_OType_PP, GPIO_AF_SPI2);//ok
+IO_Pin_STM32 SPI2_MOSI_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, /*GPIOB*/GPIOE, /*GPIO_Pin_15*/GPIO_Pin_5, GPIO_PuPd_NOPULL, GPIO_OType_PP, GPIO_AF_SPI2);//ok
+IO_Pin_STM32 SDCARD_SS_PIN(IO_Pin::IO_Pin_Mode_OUT, GPIOD, GPIO_Pin_3, GPIO_PuPd_UP, GPIO_OType_PP);//ok
+IO_Pin_STM32 MPU9250_SS_PIN(IO_Pin::IO_Pin_Mode_OUT, GPIOC, GPIO_Pin_10, GPIO_PuPd_UP, GPIO_OType_PP);//ok
 
 SPI_STM32 spi_mpu(SPI2, MPU9250_SS_PIN, SPI_BaudRatePrescaler_128);
 SPI_STM32 spi_sdcard(SPI2, SDCARD_SS_PIN, SPI_BaudRatePrescaler_128);
 
-IO_Pin_STM32 LIS3DSH_CSN(IO_Pin::IO_Pin_Mode_IN, GPIOE, GPIO_Pin_3, GPIO_PuPd_NOPULL, GPIO_OType_OD);
+IO_Pin_STM32 LIS3DSH_CSN(IO_Pin::IO_Pin_Mode_IN, GPIOE, GPIO_Pin_3, GPIO_PuPd_NOPULL, GPIO_OType_OD);//não foi declarado na pinagem da placa mãe nova
 
-IO_Pin_STM32 I2C_A_SDA_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOB, GPIO_Pin_9, GPIO_PuPd_NOPULL, GPIO_OType_OD, GPIO_AF_I2C1);
-IO_Pin_STM32 I2C_A_SCL_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOB, GPIO_Pin_8, GPIO_PuPd_UP, GPIO_OType_OD, GPIO_AF_I2C1);
+IO_Pin_STM32 I2C_A_SDA_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOB, GPIO_Pin_9, GPIO_PuPd_NOPULL, GPIO_OType_OD, GPIO_AF_I2C1);//ok
+IO_Pin_STM32 I2C_A_SCL_PIN(IO_Pin::IO_Pin_Mode_SPECIAL, GPIOB, GPIO_Pin_8, GPIO_PuPd_UP, GPIO_OType_OD, GPIO_AF_I2C1);//ok
 I2C_STM32 i2c_a(I2C_A_SDA_PIN, I2C_A_SCL_PIN, I2C1, 100000, 0x4000);
 
 //INTERRUPT_STM32 nrf24_irqn_exti_interrupt(NRF24_IRQN_PIN.GetIRQChannel(), 0x0C, 0x0C, DISABLE);
 Timer_Time2 robo_timer;
-
-Pwm ahpwm0(GPIOC, GPIO_Pin_9, TIM8, GPIO_PinSource9, GPIO_AF_TIM8, 4, false);
-GPIO algpio0(GPIOD, GPIO_Pin_7);
-Pwm bhpwm0(GPIOC, GPIO_Pin_7, TIM8, GPIO_PinSource7, GPIO_AF_TIM8, 2, false);
-GPIO blgpio0(GPIOC, GPIO_Pin_13);
-Encoder encoder0(GPIOB, GPIOB, GPIO_Pin_4, GPIO_Pin_5, TIM3, GPIO_PinSource4, GPIO_PinSource5, GPIO_AF_TIM3);
+//GPIO_Pin_5
+Pwm ahpwm0(GPIOC, GPIO_Pin_9, TIM8, GPIO_PinSource9, GPIO_AF_TIM8, 4, false);//ok
+GPIO algpio0(GPIOD, GPIO_Pin_7);//a principio não tem outra ocorrência
+Pwm bhpwm0(GPIOC, GPIO_Pin_7, TIM8, GPIO_PinSource7, GPIO_AF_TIM8, 2, false);//ok
+GPIO blgpio0(GPIOC, GPIO_Pin_13);//ok
+Encoder encoder0(GPIOB, GPIOB, GPIO_Pin_4, GPIO_Pin_5, TIM3, GPIO_PinSource4, GPIO_PinSource5, GPIO_AF_TIM3);//ok
 Motor motor0(&ahpwm0, &algpio0, &bhpwm0, &blgpio0, &encoder0, &robo_timer);
 
-Pwm ahpwm1(GPIOA, GPIO_Pin_8, TIM1, GPIO_PinSource8, GPIO_AF_TIM1, 1, false);
-GPIO algpio1(GPIOE, GPIO_Pin_6);
-Pwm bhpwm1(GPIOC, GPIO_Pin_8, TIM8, GPIO_PinSource8, GPIO_AF_TIM8, 3, false);
-GPIO blgpio1(GPIOE, GPIO_Pin_4);
-Encoder encoder1(GPIOA, GPIOB, GPIO_Pin_15, GPIO_Pin_3, TIM2, GPIO_PinSource15, GPIO_PinSource3, GPIO_AF_TIM2);
+Pwm ahpwm1(GPIOA, GPIO_Pin_8, TIM1, GPIO_PinSource8, GPIO_AF_TIM1, 1, false);//ok
+GPIO algpio1(GPIOE, GPIO_Pin_6);//ok
+Pwm bhpwm1(GPIOC, GPIO_Pin_8, TIM8, GPIO_PinSource8, GPIO_AF_TIM8, 3, false);//ok
+GPIO blgpio1(GPIOE, GPIO_Pin_4);//ok
+Encoder encoder1(GPIOA, GPIOB, GPIO_Pin_15, GPIO_Pin_3, TIM2, GPIO_PinSource15, GPIO_PinSource3, GPIO_AF_TIM2);//tem que verificar o timer aqui
 Motor motor1(&ahpwm1, &algpio1, &bhpwm1, &blgpio1, &encoder1, &robo_timer);
 
-Pwm ahpwm2(GPIOC, GPIO_Pin_6, TIM8, GPIO_PinSource6, GPIO_AF_TIM8, 1, false);
-GPIO algpio2(GPIOC, GPIO_Pin_2);
-Pwm bhpwm2(GPIOE, GPIO_Pin_11, TIM1, GPIO_PinSource11, GPIO_AF_TIM1, 2, false);
-GPIO blgpio2(GPIOB, GPIO_Pin_1);
-Encoder encoder2(GPIOA, GPIOA, GPIO_Pin_0, GPIO_Pin_1, TIM5, GPIO_PinSource0, GPIO_PinSource1, GPIO_AF_TIM5);
+Pwm ahpwm2(GPIOC, GPIO_Pin_6, TIM8, GPIO_PinSource6, GPIO_AF_TIM8, 1, false);//ok
+GPIO algpio2(GPIOC, GPIO_Pin_2);//ok
+Pwm bhpwm2(GPIOE, GPIO_Pin_11, TIM1, GPIO_PinSource11, GPIO_AF_TIM1, 2, false);//ok
+GPIO blgpio2(GPIOB, GPIO_Pin_1);//ok
+Encoder encoder2(GPIOA, GPIOA, GPIO_Pin_0, GPIO_Pin_1, TIM5, GPIO_PinSource0, GPIO_PinSource1, GPIO_AF_TIM5);//ok
 Motor motor2(&ahpwm2, &algpio2, &bhpwm2, &blgpio2, &encoder2, &robo_timer);
 
-Pwm ahpwm3(GPIOE, GPIO_Pin_14, TIM1, GPIO_PinSource14, GPIO_AF_TIM1, 4, false);
-GPIO algpio3(GPIOB, GPIO_Pin_12);
-Pwm bhpwm3(GPIOE, GPIO_Pin_13, TIM1, GPIO_PinSource13, GPIO_AF_TIM1, 3, false);
-GPIO blgpio3(GPIOB, GPIO_Pin_11);
-Encoder encoder3(GPIOB, GPIOB, GPIO_Pin_6, GPIO_Pin_7, TIM4, GPIO_PinSource6, GPIO_PinSource7, GPIO_AF_TIM4);
+Pwm ahpwm3(GPIOE, GPIO_Pin_14, TIM1, GPIO_PinSource14, GPIO_AF_TIM1, 4, false);//ok
+GPIO algpio3(GPIOB, GPIO_Pin_12);//ok
+Pwm bhpwm3(GPIOE, GPIO_Pin_13, TIM1, GPIO_PinSource13, GPIO_AF_TIM1, 3, false);//ok
+GPIO blgpio3(GPIOB, GPIO_Pin_11);//ok
+Encoder encoder3(GPIOB, GPIOB, GPIO_Pin_6, GPIO_Pin_7, TIM4, GPIO_PinSource6, GPIO_PinSource7, GPIO_AF_TIM4);//ok
 Motor motor3(&ahpwm3, &algpio3, &bhpwm3, &blgpio3, &encoder3, &robo_timer);
 
 adc sensorAdc; //adc ainda não implementado.
+dibre drible2;
 
 uint8_t ID = 0;
-
-Robo robo(&motor0, &motor1, &motor2, &motor3, &nrf24, ID, &sensorAdc, false);
+//uint8_t ID = ID_Button.Read();
+Robo robo(&motor0, &motor1, &motor2, &motor3, &nrf24, ID, &sensorAdc, &drible2, false);
 
 INTERRUPT_STM32 timer_robot(TIM6_DAC_IRQn, 0x0C, 0x0C, ENABLE);
 CircularBuffer<uint8_t> _usbserialbuffer(0,2048);

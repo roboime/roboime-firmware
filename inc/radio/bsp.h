@@ -49,6 +49,7 @@ extern LED led_a;
 extern LED led_b;
 extern LED led_c;
 extern LED led_d;
+extern IO_Pin_STM32 ID_Button;
 extern GPS gps;
 extern INA220 ina220;
 extern FM24V10 radio_memory;

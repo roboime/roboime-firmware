@@ -1217,8 +1217,8 @@ static void Codec_GPIO_Init(void)
 
   if (CurrAudioInterface != AUDIO_INTERFACE_DAC) 
   {
-    GPIO_InitStructure.GPIO_Pin = CODEC_I2S_WS_PIN ;
-    GPIO_Init(CODEC_I2S_WS_GPIO, &GPIO_InitStructure); 
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0/*CODEC_I2S_WS_PIN*/ ;//modificado
+    GPIO_Init(GPIOD/*CODEC_I2S_WS_GPIO*/, &GPIO_InitStructure);//modificado
     GPIO_PinAFConfig(CODEC_I2S_GPIO, CODEC_I2S_SD_PINSRC, CODEC_I2S_GPIO_AF);
   }
   else
@@ -1227,10 +1227,12 @@ static void Codec_GPIO_Init(void)
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
    
     /* DAC channel 1 & 2 (DAC_OUT1 = PA.4) configuration */
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
+    //GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
     GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-    GPIO_Init(GPIOA, &GPIO_InitStructure);
+    //GPIO_Init(GPIOA, &GPIO_InitStructure);
+    GPIO_Init(GPIOD, &GPIO_InitStructure);
   }
 
 #ifdef CODEC_MCLK_ENABLED
@@ -1263,11 +1265,12 @@ static void Codec_GPIO_DeInit(void)
   GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_NOPULL;
   GPIO_Init(CODEC_I2S_GPIO, &GPIO_InitStructure);  
   
-  GPIO_InitStructure.GPIO_Pin = CODEC_I2S_WS_PIN ;
-  GPIO_Init(CODEC_I2S_WS_GPIO, &GPIO_InitStructure); 
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0/*CODEC_I2S_WS_PIN*/;//modificado
+  GPIO_Init(GPIOD/*CODEC_I2S_WS_GPIO*/, &GPIO_InitStructure); //modificado
      
   /* Disconnect pins from I2S peripheral  */
-  GPIO_PinAFConfig(CODEC_I2S_WS_GPIO, CODEC_I2S_WS_PINSRC, 0x00);  
+  //GPIO_PinAFConfig(CODEC_I2S_WS_GPIO, CODEC_I2S_WS_PINSRC, 0x00);
+  GPIO_PinAFConfig(GPIO_Pin_0, GPIOD, 0x00); //modificado a partir do de cima
   GPIO_PinAFConfig(CODEC_I2S_GPIO, CODEC_I2S_SCK_PINSRC, 0x00);
   GPIO_PinAFConfig(CODEC_I2S_GPIO, CODEC_I2S_SD_PINSRC, 0x00);  
   
@@ -1623,10 +1626,12 @@ void DAC_Config(void)
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_DAC, ENABLE);
 
   /* DAC channel 1 & 2 (DAC_OUT1 = PA.4) configuration */
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
+  //GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-  GPIO_Init(GPIOA, &GPIO_InitStructure);
+  //GPIO_Init(GPIOA, &GPIO_InitStructure);
+  GPIO_Init(GPIOD, &GPIO_InitStructure);
 
   /* DAC channel1 Configuration */
   DAC_InitStructure.DAC_Trigger = DAC_Trigger_None;

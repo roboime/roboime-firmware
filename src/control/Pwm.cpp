@@ -22,9 +22,21 @@ Pwm::Pwm(GPIO_TypeDef* Port, uint32_t Pin, TIM_TypeDef * Tim, uint8_t Af_Pin, ui
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
 	if(Tim == TIM8)
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM8, ENABLE);
+	if(Tim == TIM9)
+		RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM9, ENABLE);
 	if(Tim == TIM12)
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM12, ENABLE);
+	/*if(Port==GPIOE && Pin==GPIO_Pin_5){
+		GPIO_InitTypeDef GPIO_InitStructure;
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+		GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+		GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;// sera que é a solução?
 
+		GPIO_InitStructure.GPIO_Pin =  Pin;
+		GPIO_Init(Port, &GPIO_InitStructure); //onias
+		GPIO_PinAFConfig(Port, Af_Pin, Af);
+	}*/
 	GPIO_InitTypeDef GPIO_InitStructure;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
@@ -39,9 +51,9 @@ Pwm::Pwm(GPIO_TypeDef* Port, uint32_t Pin, TIM_TypeDef * Tim, uint8_t Af_Pin, ui
 
 	TIM_TimeBaseStructure.TIM_ClockDivision=TIM_CKD_DIV1;
 	TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up;
-	TIM_TimeBaseStructure.TIM_Prescaler=(SystemCoreClock/20000000)-1;
-	TIM_TimeBaseStructure.TIM_Period=168000000/168000;
-
+	TIM_TimeBaseStructure.TIM_Prescaler=(SystemCoreClock/20000000)-1;//7.4
+	TIM_TimeBaseStructure.TIM_Period=168000000/168000 - 1;//1000 sugestão é subtrair 1 do periodo para a frequencia pwm ficar exata
+	//PWM_frequency = timer_tick_frequency / (TIM_Period + 1),  e timer_tick_frequency=20000000
 	TIM_TimeBaseInit(Tim, &TIM_TimeBaseStructure);
 	TIM_OCInitTypeDef TIM_OCInitStructure;
 	TIM_OCInitStructure.TIM_OCMode=TIM_OCMode_PWM1;
@@ -82,6 +94,8 @@ Pwm::Pwm(GPIO_TypeDef* Port, uint32_t Pin, TIM_TypeDef * Tim, uint8_t Af_Pin, ui
 	TIM_CtrlPWMOutputs(Tim,ENABLE);
 	PWM_Tim = Tim;
 	PWM_Channel = Channel;
+	//alteração que deve ser retirada:
+	//TIM_SetCompare4(PWM_Tim,500);
 };
 
 void Pwm::set_DutyCycle(uint16_t duty_cycle1){

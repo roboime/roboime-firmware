@@ -30,7 +30,7 @@
 
 class Robo {
 public:
-	Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, NRF24L01P *mynrf24, uint8_t ID, adc *sensorAdc, bool testmode=1);
+	Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, NRF24L01P *mynrf24, uint8_t ID, adc *sensorAdc, dibre *_drible, bool testmode=1);
 	GPIO *high_kick;
 	GPIO *chute_baixo;
 	void HighKick(float power);
@@ -55,6 +55,8 @@ public:
     bool InTestMode(){return _testmode;};
     void SetTestMode(bool testmode) {_testmode=testmode;}
     uint8_t GetId(){return _id;}
+    void IncId();//foi adicionado na tentativa de logica do botão
+    void ZeraId();//foi adicionado na tentativa de logica do botão
     void interrupt_control();
     void interruptReceive();
     void interruptTestMode();

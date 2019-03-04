@@ -7,7 +7,7 @@
 
 #include "Robo.h"
 #include "pins.h"
-
+//extern IO_Pin_STM32 ID_Button(IO_Pin::IO_Pin_Mode_IN, GPIOE, GPIO_Pin_2, GPIO_PuPd_NOPULL);
 #define sin_phi 0.50
 #define cos_phi 0.866
 #define sin_theta 0.707
@@ -17,7 +17,8 @@
 #define Massa 3
 #define Raio 0.09*/
 
-Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, NRF24L01P *mynrf24, uint8_t ID, adc *sensorAdc, bool testmode):
+Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboMotor3, NRF24L01P *mynrf24, uint8_t ID, adc *sensorAdc, dibre *_drible, bool testmode):
+	//uint8_t bitStatus2 = 0;
 	_nrf24(mynrf24),
 	_testmode(testmode),
 	printv(false)
@@ -26,18 +27,38 @@ Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboM
 	motors[1]=roboMotor1;
 	motors[2]=roboMotor2;
 	motors[3]=roboMotor3;
-
 	roboAdc = sensorAdc;
 	roboAdc->ADC_Config();
-
-	drible = new dibre();
-
+	_id=ID;
+	//_id=0;
+	drible = _drible;
 	high_kick = new GPIO(GPIOB, GPIO_Pin_0);
 	chute_baixo = new GPIO(GPIOD, GPIO_Pin_10);
-
-	_id = ID;
-
-	channel=43;
+	/* inicio de tentativa de logica para o botão*/
+	/*uint8_t bitStatus2 = (uint8_t)Bit_RESET;
+	uint8_t bitStatus=ID_Button.Read();
+	if(bitStatus2!=bitStatus){
+		if(bitStatus==(uint8_t)Bit_SET){
+			//char *buffer = "voce apertou o botao\n";
+			//CDC_Transmit_FS((uint8_t *) buffer, 22);
+			if(_id<15){
+				_id=_id+1;
+			}
+			else{
+				_id=0;
+			}
+		}
+		else{
+			//char *buffer = "voce soltou o botao\n";
+			//CDC_Transmit_FS((uint8_t *) buffer, 21);
+		}
+		bitStatus2=ID_Button.Read();
+	}*/
+   // osDelay(100);
+    /*fim de tentativa de logica para o botão*/
+	//_id=0;
+	//channel=43;
+	channel=117;
 	address=0xE7E7E7E700;
 	last_packet_ms = 0;
 }
@@ -239,7 +260,10 @@ void Robo::processPacket(){
 	if(robotcmd.kickspeedz!=0)
 		robo.HighKick(robotcmd.kickspeedz);
 	if(robotcmd.spinner)
-	robo.drible->Set_Vel(100);
+		robo.drible->Set_Vel(800);
+	//robo.drible->Set_Vel(100);
+	else if(!robotcmd.spinner)
+		robo.drible->Set_Vel(0);
 }
 
 //  5º dia: ainda estou na classe robo
@@ -256,7 +280,7 @@ void Robo::interruptTransmitter(){
 		pb_ostream_t ostream=pb_ostream_from_buffer(buffer, sizeof(buffer));
 		pb_encode(&ostream, grSim_Robot_Command_fields, &robotcmd);//escreve em ostream os dados de robotcmd
 		uint8_t size=ostream.bytes_written;
-		_nrf24->TxPackage_ESB(channel, address | robotid, 0, buffer, size);
+		_nrf24->TxPackage_ESB(channel, address | robotid, 1, buffer, size);//aqui foi um lugar que foi coloca 1 no campo "no_ack" para resolver o problema da comunicação
 		while(_nrf24->Busy()){
 			_nrf24->InterruptCallback();
 		}
@@ -271,3 +295,11 @@ void Robo::interruptAckPayload(){
 	_nrf24->write_ack_payload((uint8_t *) ackBuffer, ackSize);
 }
 
+void Robo::IncId(){
+	_id=_id+1;
+	_nrf24->StartRX_ESB(channel, address + GetId(), 32, 1);
+}
+void Robo::ZeraId(){
+	_id=0;
+	_nrf24->StartRX_ESB(channel, address + GetId(), 32, 1);
+}
