@@ -57,6 +57,7 @@ public:
     uint8_t GetId(){return _id;}
     void IncId();//foi adicionado na tentativa de logica do botão
     void ZeraId();//foi adicionado na tentativa de logica do botão
+    void SetId(int id);
     void interrupt_control();
     void interruptReceive();
     void interruptTestMode();

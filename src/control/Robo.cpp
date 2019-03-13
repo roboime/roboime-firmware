@@ -29,7 +29,7 @@ Robo::Robo(Motor *roboMotor0, Motor *roboMotor1, Motor *roboMotor2, Motor *roboM
 	motors[3]=roboMotor3;
 	roboAdc = sensorAdc;
 	roboAdc->ADC_Config();
-	_id=ID;
+	//_id=ID;
 	//_id=0;
 	drible = _drible;
 	high_kick = new GPIO(GPIOB, GPIO_Pin_0);
@@ -302,4 +302,8 @@ void Robo::IncId(){
 void Robo::ZeraId(){
 	_id=0;
 	_nrf24->StartRX_ESB(channel, address + GetId(), 32, 1);
+}
+void Robo::SetId(int id){
+	_id=id;
+	_nrf24->StartRX_ESB(channel, address + id, 32, 1);
 }
